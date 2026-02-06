@@ -1,0 +1,45 @@
+.detailed-services {
+  padding: 4rem 1.5rem;
+  background: #0d0d0d;
+  border-top: 1px solid #1f2937;
+}
+
+.detailed-services-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.detailed-services-img-placeholder {
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, #1f2937 0%, #111 100%);
+  border-radius: 8px;
+  border: 1px solid #374151;
+}
+
+.detailed-services-panel {
+  background: #111;
+  padding: 2.5rem;
+  border-radius: 8px;
+  border: 1px solid #1f2937;
+}
+
+.detailed-services-panel h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .detailed-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detailed-services-image {
+    order: -1;
+  }
+}

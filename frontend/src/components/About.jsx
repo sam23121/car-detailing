@@ -1,0 +1,29 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './About.css';
+
+function About() {
+  return (
+    <section id="about" className="about">
+      <div className="about-grid">
+        <div className="about-content">
+          <h2>About Quality Mobile Detailing – How It Started</h2>
+          <p className="section-subtext">
+            Quality Mobile Detailing was built on a simple idea: bring professional-grade auto detailing 
+            to our customers wherever they are. Serving Maryland and the DC area, we focus on interior and 
+            exterior care, paint correction, and ceramic coating so your vehicle looks and stays like new.
+          </p>
+          <div className="about-buttons">
+            <Link to="/booking" className="btn btn-primary">Book Now</Link>
+            <a href="/#contact" className="btn btn-secondary">Contact Us</a>
+          </div>
+        </div>
+        <div className="about-image">
+          <div className="about-image-placeholder" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default About;

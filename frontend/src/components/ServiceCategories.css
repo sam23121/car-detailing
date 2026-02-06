@@ -1,0 +1,38 @@
+.service-categories {
+  padding: 3rem 1.5rem;
+  background: #000;
+  border-top: 1px solid #1f2937;
+}
+
+.service-categories-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.service-category-card {
+  background: #111;
+  border: 1px solid #374151;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.service-category-card:hover {
+  background: #1f2937;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .service-categories-inner {
+    grid-template-columns: 1fr;
+  }
+}

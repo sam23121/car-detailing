@@ -1,0 +1,45 @@
+.about {
+  padding: 4rem 1.5rem;
+  background: #111;
+  border-top: 1px solid #1f2937;
+}
+
+.about-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.about-content h2 {
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.about-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.about-image-placeholder {
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, #1f2937 0%, #0d0d0d 100%);
+  border-radius: 8px;
+  border: 1px solid #374151;
+}
+
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-image {
+    order: -1;
+  }
+}

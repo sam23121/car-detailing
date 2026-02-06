@@ -1,0 +1,33 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './ServicesOverview.css';
+
+function ServicesOverview() {
+  return (
+    <section className="services-overview">
+      <div className="services-overview-grid">
+        <div className="services-overview-images">
+          <div className="services-image-grid">
+            <div className="services-img-placeholder" />
+            <div className="services-img-placeholder" />
+            <div className="services-img-placeholder" />
+            <div className="services-img-placeholder" />
+          </div>
+        </div>
+        <div className="services-overview-panel">
+          <h2>Quality Mobile Detailing – Full Detailing and Daily Driver Care</h2>
+          <p className="section-subtext">
+            We bring professional interior and exterior detailing to your home or office across Maryland and DC. 
+            From full corrections to quick maintenance washes, our mobile service keeps your vehicle looking its best.
+          </p>
+          <div className="services-overview-buttons">
+            <Link to="/booking" className="btn btn-primary">Book Now</Link>
+            <a href="/#process" className="btn btn-secondary">Our Process</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default ServicesOverview;
