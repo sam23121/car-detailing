@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
+import { getAdminHeaders } from './AdminLoginPage';
 import './AdminBookingsPage.css';
 
 function AdminBookingsPage() {
@@ -13,7 +14,7 @@ function AdminBookingsPage() {
   const fetchBookings = () => {
     setError(null);
     axios
-      .get(`${API_BASE}/api/bookings/with-details?limit=100`)
+      .get(`${API_BASE}/api/bookings/with-details?limit=100`, { headers: getAdminHeaders() })
       .then((res) => setBookings(res.data))
       .catch((err) => setError(err.message || 'Failed to load bookings'))
       .finally(() => setLoading(false));
@@ -28,13 +29,17 @@ function AdminBookingsPage() {
     if (!b) return;
     setUpdatingId(bookingId);
     axios
-      .put(`${API_BASE}/api/bookings/${bookingId}`, {
-        customer_id: b.customer_id,
-        package_id: b.package_id,
-        scheduled_date: b.scheduled_date,
-        status: newStatus,
-        notes: b.notes || null,
-      })
+      .put(
+        `${API_BASE}/api/bookings/${bookingId}`,
+        {
+          customer_id: b.customer_id,
+          package_id: b.package_id,
+          scheduled_date: b.scheduled_date,
+          status: newStatus,
+          notes: b.notes || null,
+        },
+        { headers: getAdminHeaders() }
+      )
       .then(() => fetchBookings())
       .catch((err) => setError(err.response?.data?.detail || err.message))
       .finally(() => setUpdatingId(null));

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { API_BASE } from '../config';
+import { API_BASE, BUSINESS } from '../config';
 import './Contact.css';
 
 function Contact({ id }) {
@@ -41,10 +41,10 @@ function Contact({ id }) {
         <div className="contact-content">
           <div className="contact-info">
             <h3>Contact Information</h3>
-            <p><strong>Phone:</strong> <a href="tel:(410)575-4616">(410) 575-4616</a></p>
-            <p><strong>Email:</strong> <a href="mailto:KevinQualityMobileDetailing@gmail.com">KevinQualityMobileDetailing@gmail.com</a></p>
-            <p><strong>Address:</strong> 911 Autumn Valley Ln, Gambrills, MD 21054</p>
-            <p><strong>Hours:</strong> Monday - Sunday: 6:00 AM - 8:00 PM</p>
+            <p><strong>Phone:</strong> <a href={`tel:${BUSINESS.phone.replace(/\D/g, '')}`}>{BUSINESS.phone}</a></p>
+            <p><strong>Email:</strong> <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a></p>
+            <p><strong>Address:</strong> {BUSINESS.address}</p>
+            <p><strong>Hours:</strong> {BUSINESS.hours}</p>
           </div>
           <form onSubmit={handleSubmit} className="contact-form">
             {submitted && <p className="success-message">Thank you! We'll be in touch soon.</p>}

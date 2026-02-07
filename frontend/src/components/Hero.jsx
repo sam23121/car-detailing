@@ -2,18 +2,28 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Hero.css';
 
+const HERO_DESCRIPTION =
+  'We deliver reliable, efficient detailing for personal cars and fleets—restoring showroom shine, extending vehicle life, and protecting your investment.';
+
 function Hero() {
   return (
     <section className="hero hero-dark">
       <div className="hero-bg" />
       <div className="hero-overlay" />
       <div className="hero-content">
-        <h1>Professional Interior & Exterior Mobile Detailing Services in Maryland</h1>
-        <div className="hero-buttons">
-          <Link to="/book" className="btn btn-primary">Book Now</Link>
-          <a href="/#services" className="btn btn-secondary">Learn More</a>
+        <div className="hero-grid">
+          <div className="hero-left">
+            <p className="hero-label">MOBILE DETAILING SERVICE</p>
+            <h1>
+              <span className="hero-title-main">The Ultimate Car</span>
+              <span className="hero-title-accent"> Detailing Service</span>
+            </h1>
+          </div>
+          <div className="hero-right">
+            <p className="hero-description">{HERO_DESCRIPTION}</p>
+            <Link to="/book" className="btn btn-primary hero-cta">Book Now</Link>
+          </div>
         </div>
-        <p className="hero-tagline">Book your next mobile detail service.</p>
       </div>
     </section>
   );

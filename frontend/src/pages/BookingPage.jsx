@@ -57,7 +57,7 @@ function BookingPage() {
     const to = new Date();
     to.setDate(to.getDate() + 30);
     axios
-      .get(`${API_BASE}/api/availability/`, {
+      .get(`${API_BASE}/api/availability`, {
         params: { from_date: from.toISOString(), to_date: to.toISOString() }
       })
       .then((res) => {

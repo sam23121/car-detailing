@@ -1,12 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { clearAdminSecret } from './AdminLoginPage';
 import './AdminDashboardPage.css';
 
 function AdminDashboardPage() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    clearAdminSecret();
+    navigate('/admin/login', { replace: true });
+  };
+
   return (
     <main className="admin-dashboard">
       <div className="admin-dashboard-container">
-        <h1>Admin</h1>
+        <div className="admin-dashboard-header">
+          <h1>Admin</h1>
+          <button type="button" className="admin-dashboard-logout" onClick={handleLogout}>
+            Log out
+          </button>
+        </div>
         <p className="admin-dashboard-intro">
           Manage bookings and set when customers can book.
         </p>

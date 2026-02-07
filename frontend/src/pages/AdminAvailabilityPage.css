@@ -78,6 +78,70 @@
   font-size: 1rem;
 }
 
+.admin-availability-datepicker {
+  width: 100%;
+  max-width: 220px;
+  padding: 0.5rem 0.75rem;
+  background: #0d0d0d;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.admin-availability-datepicker:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* DatePicker dropdown dark theme */
+.admin-availability .react-datepicker-popper {
+  z-index: 1000;
+}
+
+.admin-availability .react-datepicker {
+  font-family: inherit;
+  background: #111 !important;
+  border: 1px solid #374151 !important;
+  border-radius: 8px;
+}
+
+.admin-availability .react-datepicker__header {
+  background: #1f2937 !important;
+  border-color: #374151;
+}
+
+.admin-availability .react-datepicker__current-month,
+.admin-availability .react-datepicker__day-name,
+.admin-availability .react-datepicker__day {
+  color: #e5e7eb;
+}
+
+.admin-availability .react-datepicker__day:hover {
+  background: #374151;
+  color: #fff;
+}
+
+.admin-availability .react-datepicker__day--selected,
+.admin-availability .react-datepicker__day--in-range {
+  background: #2563eb;
+  color: #fff;
+}
+
+.admin-availability .react-datepicker__day--range-start,
+.admin-availability .react-datepicker__day--range-end {
+  background: #2563eb;
+  color: #fff;
+}
+
+.admin-availability .react-datepicker__day--outside-month {
+  color: #6b7280;
+}
+
+.admin-availability .react-datepicker__day--disabled {
+  color: #4b5563;
+}
+
 .admin-availability-checkbox label {
   display: flex;
   align-items: center;

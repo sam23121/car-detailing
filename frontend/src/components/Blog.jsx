@@ -19,7 +19,7 @@ function Blog({ id }) {
     <section id={id} className="blog-section">
       <div className="blog-container">
         <h2>From Our Blog</h2>
-        <p>Tips and updates from Quality Mobile Detailing</p>
+        <p>Tips and updates from YMB Habesha</p>
         {loading ? (
           <p className="loading">Loading...</p>
         ) : (

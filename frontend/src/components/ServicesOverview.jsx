@@ -15,7 +15,7 @@ function ServicesOverview() {
           </div>
         </div>
         <div className="services-overview-panel">
-          <h2>Quality Mobile Detailing – Full Detailing and Daily Driver Care</h2>
+          <h2>YMB Habesha – Full Detailing and Daily Driver Care</h2>
           <p className="section-subtext">
             We bring professional interior and exterior detailing to your home or office across Maryland and DC. 
             From full corrections to quick maintenance washes, our mobile service keeps your vehicle looking its best.

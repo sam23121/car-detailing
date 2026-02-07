@@ -9,10 +9,33 @@
   margin: 0 auto;
 }
 
+.admin-dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .admin-dashboard h1 {
   font-size: 1.75rem;
-  margin-bottom: 0.5rem;
+  margin: 0;
   color: #fff;
+}
+
+.admin-dashboard-logout {
+  background: none;
+  border: 1px solid #374151;
+  color: #9ca3af;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.admin-dashboard-logout:hover {
+  color: #fff;
+  border-color: #6b7280;
 }
 
 .admin-dashboard-intro {

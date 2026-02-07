@@ -1,4 +1,5 @@
 import React from 'react';
+import { BUSINESS } from '../config';
 import './Footer.css';
 
 function Footer() {
@@ -6,7 +7,7 @@ function Footer() {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-section">
-          <h4>Quality Mobile Detailing</h4>
+          <h4>YMB Habesha</h4>
           <p>Professional auto detailing services in Maryland and DC</p>
         </div>
         <div className="footer-section">
@@ -20,8 +21,8 @@ function Footer() {
         </div>
         <div className="footer-section">
           <h4>Contact</h4>
-          <p>Phone: <a href="tel:(410)575-4616">(410) 575-4616</a></p>
-          <p>Email: <a href="mailto:KevinQualityMobileDetailing@gmail.com">Kevin...</a></p>
+          <p>Phone: <a href={`tel:${BUSINESS.phone.replace(/\D/g, '')}`}>{BUSINESS.phone}</a></p>
+          <p>Email: <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a></p>
         </div>
         <div className="footer-section">
           <h4>Owner</h4>
@@ -29,7 +30,7 @@ function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2024 Quality Mobile Detailing. All rights reserved.</p>
+        <p>&copy; 2026 YMB Habesha. All rights reserved.</p>
       </div>
     </footer>
   );

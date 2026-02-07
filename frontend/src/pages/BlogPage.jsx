@@ -20,7 +20,7 @@ function BlogPage() {
     <main className="blog-page">
       <div className="blog-page-container">
         <h1>Blog</h1>
-        <p className="subtitle">Tips and updates from Quality Mobile Detailing</p>
+        <p className="subtitle">Tips and updates from YMB Habesha</p>
         {posts.length > 0 ? (
           <div className="blog-posts-list">
             {posts.map((post) => (

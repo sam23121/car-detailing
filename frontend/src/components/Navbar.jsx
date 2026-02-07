@@ -9,14 +9,14 @@ function Navbar() {
     <nav className="navbar navbar-dark">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <span className="navbar-logo-icon">QMD</span>
-          <span className="navbar-logo-text">Quality Mobile Detailing</span>
+          <img src="/images/logo.png" alt="YMB Habesha" className="navbar-logo-img" />
+          <span className="navbar-logo-text">YMB Habesha</span>
         </Link>
         <ul className="nav-menu">
           <li><Link to="/">Home</Link></li>
           <li><a href="/#services">Services</a></li>
           {/* <li><a href="/#reviews">Reviews</a></li> */}
-          <li><a href="/#blog">Blog</a></li>
+          {/* <li><a href="/#blog">Blog</a></li> */}
           <li><a href="/#faq">FAQ</a></li>
           <li><a href="/#contact">Contact</a></li>
           {count > 0 && (
