@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 
 # Customer Schemas
 class CustomerBase(BaseModel):
@@ -59,20 +59,19 @@ class BookingCreate(BookingBase):
     customer_id: int
     package_id: int
 
+
+class BookingCreateMulti(BookingBase):
+    """Create one booking with multiple packages (cart/checkout)."""
+    customer_id: int
+    package_ids: list[int]
+
+
 class Booking(BookingBase):
     id: int
     customer_id: int
-    package_id: int
+    package_id: Optional[int] = None
     created_at: datetime
     updated_at: datetime
-    model_config = ConfigDict(from_attributes=True)
-
-
-class BookingCustomerInfo(BaseModel):
-    id: int
-    name: str
-    email: str
-    phone: Optional[str] = None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -84,14 +83,31 @@ class BookingPackageInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class BookingItemInfo(BaseModel):
+    id: int
+    package_id: int
+    quantity: int
+    package: Optional[BookingPackageInfo] = None
+    model_config = ConfigDict(from_attributes=True)
+
+
+class BookingCustomerInfo(BaseModel):
+    id: int
+    name: str
+    email: str
+    phone: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
+
+
 class BookingWithDetails(BookingBase):
     id: int
     customer_id: int
-    package_id: int
+    package_id: Optional[int] = None
     created_at: datetime
     updated_at: datetime
     customer: Optional[BookingCustomerInfo] = None
     package: Optional[BookingPackageInfo] = None
+    booking_items: list[BookingItemInfo] = []
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -136,6 +152,19 @@ class BusinessInfoCreate(BaseModel):
 class BusinessInfo(BusinessInfoCreate):
     id: int
     model_config = ConfigDict(from_attributes=True)
+
+# Available Slot Schemas
+class AvailableSlotCreate(BaseModel):
+    slot_start: datetime
+    slot_end: Optional[datetime] = None
+
+class AvailableSlot(BaseModel):
+    id: int
+    slot_start: datetime
+    slot_end: Optional[datetime] = None
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
 
 # FAQ Schemas
 class FAQCreate(BaseModel):

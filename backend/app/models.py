@@ -43,13 +43,25 @@ class Package(Base):
 
     service = relationship("Service", back_populates="packages")
     bookings = relationship("Booking", back_populates="package")
+    booking_items = relationship("BookingItem", back_populates="package")
+
+class BookingItem(Base):
+    __tablename__ = "booking_items"
+
+    id = Column(Integer, primary_key=True, index=True)
+    booking_id = Column(Integer, ForeignKey("bookings.id"), nullable=False)
+    package_id = Column(Integer, ForeignKey("packages.id"), nullable=False)
+    quantity = Column(Integer, default=1)
+
+    booking = relationship("Booking", back_populates="booking_items")
+    package = relationship("Package", back_populates="booking_items")
 
 class Booking(Base):
     __tablename__ = "bookings"
 
     id = Column(Integer, primary_key=True, index=True)
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
-    package_id = Column(Integer, ForeignKey("packages.id"), nullable=False)
+    package_id = Column(Integer, ForeignKey("packages.id"), nullable=True)  # first/primary package; items hold full list
     scheduled_date = Column(DateTime, nullable=False)
     status = Column(String(50), default="pending")
     notes = Column(Text)
@@ -58,6 +70,7 @@ class Booking(Base):
 
     customer = relationship("Customer", back_populates="bookings")
     package = relationship("Package", back_populates="bookings")
+    booking_items = relationship("BookingItem", back_populates="booking")
 
 class Review(Base):
     __tablename__ = "reviews"
@@ -110,6 +123,14 @@ class BusinessInfo(Base):
     business_hours_monday_close = Column(String(10))
     business_hours_sunday_open = Column(String(10))
     business_hours_sunday_close = Column(String(10))
+
+class AvailableSlot(Base):
+    __tablename__ = "available_slots"
+
+    id = Column(Integer, primary_key=True, index=True)
+    slot_start = Column(DateTime, nullable=False)
+    slot_end = Column(DateTime, nullable=True)  # optional; if null, treat as single time
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 class FAQ(Base):
     __tablename__ = "faqs"

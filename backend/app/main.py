@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, get_db, Base
 from app import models
-from app.routers import services, bookings, reviews, contact, blog, business, customers
+from app.routers import services, bookings, reviews, contact, blog, business, customers, availability
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -49,6 +49,7 @@ app.include_router(reviews.router, prefix="/api/reviews", tags=["Reviews"])
 app.include_router(contact.router, prefix="/api/contact", tags=["Contact"])
 app.include_router(blog.router, prefix="/api/blog", tags=["Blog"])
 app.include_router(business.router, prefix="/api/business", tags=["Business"])
+app.include_router(availability.router, prefix="/api/availability", tags=["Availability"])
 
 @app.get("/")
 def read_root():
