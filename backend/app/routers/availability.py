@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -9,8 +10,8 @@ router = APIRouter()
 
 @router.get("", response_model=list[schemas.AvailableSlot])
 def list_available_slots(
-    from_date: datetime | None = Query(None, description="Start (ISO)"),
-    to_date: datetime | None = Query(None, description="End (ISO)"),
+    from_date: Optional[datetime] = Query(None, description="Start (ISO)"),
+    to_date: Optional[datetime] = Query(None, description="End (ISO)"),
     db: Session = Depends(get_db),
 ):
     """Public: list slots for booking. Defaults to next 30 days from now."""
