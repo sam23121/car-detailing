@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE } from '../config';
 import './FAQ.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const DEFAULT_FAQS = [
   { id: '1', question: 'What is mobile auto detailing?', answer: 'We come to your home or office with all equipment and products to clean, correct, and protect your vehicle’s interior and exterior—no need to drive anywhere.' },

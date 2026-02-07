@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE } from '../config';
 import './ServicePage.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function ServicePage() {
   const { slug } = useParams();
