@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.auth import require_admin
+from app.auth import require_admin, is_admin
 from app import models, schemas
 
 router = APIRouter()
@@ -13,8 +13,9 @@ def list_available_slots(
     from_date: Optional[datetime] = Query(None, description="Start (ISO)"),
     to_date: Optional[datetime] = Query(None, description="End (ISO)"),
     db: Session = Depends(get_db),
+    admin: bool = Depends(is_admin),
 ):
-    """Public: list slots for booking. Defaults to next 30 days from now."""
+    """List slots. Excludes taken slots unless admin (X-Admin-Secret)."""
     now = datetime.utcnow()
     start = from_date or now
     end = to_date or (now + timedelta(days=30))
@@ -24,6 +25,17 @@ def list_available_slots(
         .filter(models.AvailableSlot.slot_start <= end)
         .order_by(models.AvailableSlot.slot_start)
     )
+    if not admin:
+        taken_ids = [
+            r[0]
+            for r in db.query(models.Booking.available_slot_id)
+            .filter(models.Booking.available_slot_id.isnot(None))
+            .filter(models.Booking.status != "cancelled")
+            .distinct()
+            .all()
+        ]
+        if taken_ids:
+            q = q.filter(~models.AvailableSlot.id.in_(taken_ids))
     return q.all()
 
 @router.post("", response_model=schemas.AvailableSlot)

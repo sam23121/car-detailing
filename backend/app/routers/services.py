@@ -21,6 +21,7 @@ def get_service_by_slug(slug: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Service not found")
     return db_service
 
+
 @router.get("/{service_id}", response_model=schemas.Service)
 def get_service(service_id: int, db: Session = Depends(get_db)):
     db_service = crud_services.get_service(db, service_id=service_id)

@@ -37,8 +37,17 @@ class PackageBase(BaseModel):
     name: str
     description: Optional[str] = None
     price: Optional[float] = None
+    price_small: Optional[float] = None
+    price_medium: Optional[float] = None
+    price_large: Optional[float] = None
+    price_original_small: Optional[float] = None
+    price_original_medium: Optional[float] = None
+    price_original_large: Optional[float] = None
     duration_minutes: Optional[int] = None
+    turnaround_hours: Optional[int] = None
     details: Optional[str] = None
+    image_url: Optional[str] = None
+    display_order: Optional[int] = None
 
 class PackageCreate(PackageBase):
     service_id: int
@@ -49,27 +58,55 @@ class Package(PackageBase):
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
+
+class PackageWithService(BaseModel):
+    """Package with service info for detail page."""
+    id: int
+    service_id: int
+    name: str
+    description: Optional[str] = None
+    price: Optional[float] = None
+    price_small: Optional[float] = None
+    price_medium: Optional[float] = None
+    price_large: Optional[float] = None
+    price_original_small: Optional[float] = None
+    price_original_medium: Optional[float] = None
+    price_original_large: Optional[float] = None
+    duration_minutes: Optional[int] = None
+    turnaround_hours: Optional[int] = None
+    details: Optional[str] = None
+    image_url: Optional[str] = None
+    display_order: Optional[int] = None
+    created_at: datetime
+    service_name: Optional[str] = None
+    service_slug: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
+
 # Booking Schemas
 class BookingBase(BaseModel):
     scheduled_date: datetime
     status: str = "pending"
+    location: Optional[str] = None
     notes: Optional[str] = None
 
 class BookingCreate(BookingBase):
     customer_id: int
     package_id: int
+    available_slot_id: Optional[int] = None
 
 
 class BookingCreateMulti(BookingBase):
     """Create one booking with multiple packages (cart/checkout)."""
     customer_id: int
     package_ids: list[int]
+    available_slot_id: Optional[int] = None
 
 
 class Booking(BookingBase):
     id: int
     customer_id: int
     package_id: Optional[int] = None
+    available_slot_id: Optional[int] = None
     created_at: datetime
     updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
@@ -103,6 +140,7 @@ class BookingWithDetails(BookingBase):
     id: int
     customer_id: int
     package_id: Optional[int] = None
+    available_slot_id: Optional[int] = None
     created_at: datetime
     updated_at: datetime
     customer: Optional[BookingCustomerInfo] = None

@@ -4,10 +4,40 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, get_db, Base
 from app import models
-from app.routers import services, bookings, reviews, contact, blog, business, customers, availability
+from app.routers import services, bookings, reviews, contact, blog, business, customers, availability, packages
 
 # Create tables
 Base.metadata.create_all(bind=engine)
+
+# One-off migration: add booking.location if missing (create_all does not add new columns)
+try:
+    from sqlalchemy import text
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS location VARCHAR(500)"))
+except Exception:
+    pass
+
+# One-off migration: add package tiered pricing and display fields
+try:
+    from sqlalchemy import text
+    with engine.begin() as conn:
+        for stmt in [
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_small FLOAT",
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_medium FLOAT",
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_large FLOAT",
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_small FLOAT",
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_medium FLOAT",
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_large FLOAT",
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS turnaround_hours INTEGER",
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS image_url VARCHAR(500)",
+            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0",
+        ]:
+            try:
+                conn.execute(text(stmt))
+            except Exception:
+                pass
+except Exception:
+    pass
 
 # Seed default services/packages on startup (e.g. for Render free tier with no Shell).
 # Set RUN_SEED_ON_STARTUP=false in env to disable.
@@ -44,6 +74,7 @@ app.add_middleware(
 
 app.include_router(customers.router, prefix="/api/customers", tags=["Customers"])
 app.include_router(services.router, prefix="/api/services", tags=["Services"])
+app.include_router(packages.router, prefix="/api/packages", tags=["Packages"])
 app.include_router(bookings.router, prefix="/api/bookings", tags=["Bookings"])
 app.include_router(reviews.router, prefix="/api/reviews", tags=["Reviews"])
 app.include_router(contact.router, prefix="/api/contact", tags=["Contact"])

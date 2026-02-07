@@ -34,4 +34,25 @@ def delete_service(db: Session, service_id: int):
     return db_service
 
 def get_service_packages(db: Session, service_id: int):
-    return db.query(models.Package).filter(models.Package.service_id == service_id).all()
+    return (
+        db.query(models.Package)
+        .filter(models.Package.service_id == service_id)
+        .order_by(models.Package.display_order.asc(), models.Package.id.asc())
+        .all()
+    )
+
+
+def get_package(db: Session, package_id: int):
+    return db.query(models.Package).filter(models.Package.id == package_id).first()
+
+
+def get_package_with_service(db: Session, package_id: int):
+    """Return package with service name and slug attached (for detail page)."""
+    pkg = (
+        db.query(models.Package)
+        .filter(models.Package.id == package_id)
+        .first()
+    )
+    if not pkg:
+        return None
+    return pkg

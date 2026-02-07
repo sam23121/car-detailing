@@ -35,6 +35,8 @@ def _booking_summary(booking):
         parts.append("Packages: " + ", ".join(names))
     elif booking.package:
         parts.append(f"Package: {booking.package.name}")
+    if getattr(booking, "location", None):
+        parts.append(f"Location: {booking.location}")
     if booking.notes:
         parts.append(f"Notes: {booking.notes}")
     return "\n".join(parts)
@@ -57,19 +59,42 @@ def _send_email(to: str, subject: str, body_text: str):
         logger.exception("Resend send failed to %s: %s", to, e)
 
 
+def _normalize_phone_e164(phone: str, default_country_code: str = "1") -> str:
+    """Strip to digits only; if 10 digits assume US (+1)."""
+    digits = "".join(c for c in phone.strip() if c.isdigit())
+    if not digits:
+        return ""
+    if len(digits) == 10 and default_country_code == "1":
+        return "+1" + digits
+    if len(digits) == 11 and digits.startswith("1"):
+        return "+" + digits
+    return "+" + digits if not digits.startswith("+") else digits
+
+
 def _send_sms(to: str, body: str):
     if not TWILIO_ACCOUNT_SID or not TWILIO_AUTH_TOKEN or not TWILIO_FROM_NUMBER:
-        logger.warning("Twilio not configured; skipping SMS to %s", to)
+        logger.warning("Twilio not configured (set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER); skipping SMS to %s", to)
         return
-    to_e164 = to.strip()
-    if not to_e164.startswith("+"):
-        to_e164 = "+1" + to_e164.replace("-", "").replace(" ", "")
+    to_e164 = _normalize_phone_e164(to)
+    if not to_e164:
+        logger.warning("Twilio: invalid phone number %r; skipping SMS", to)
+        return
+    # Twilio FROM must be E.164; ensure no spaces
+    from_e164 = TWILIO_FROM_NUMBER.strip()
+    if not from_e164.startswith("+"):
+        from_e164 = _normalize_phone_e164(from_e164) or ("+" + "".join(c for c in TWILIO_FROM_NUMBER if c.isdigit()))
     try:
         from twilio.rest import Client
         client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-        client.messages.create(from_=TWILIO_FROM_NUMBER, to=to_e164, body=body)
+        client.messages.create(from_=from_e164, to=to_e164, body=body)
+        logger.info("Twilio SMS sent to %s", to_e164)
     except Exception as e:
-        logger.exception("Twilio send failed to %s: %s", to_e164, e)
+        logger.exception("Twilio SMS failed to %s: %s", to_e164, e)
+        # Log Twilio error details if present (e.g. 21211 invalid 'To', 21608 unverified trial)
+        if getattr(e, "msg", None):
+            logger.error("Twilio error msg: %s", e.msg)
+        if getattr(e, "code", None):
+            logger.error("Twilio error code: %s", e.code)
 
 
 def send_booking_notifications(db, booking_id: int):

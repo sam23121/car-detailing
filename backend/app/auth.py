@@ -13,3 +13,10 @@ def require_admin(x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Se
     if not x_admin_secret or x_admin_secret != ADMIN_SECRET:
         raise HTTPException(status_code=401, detail="Admin access required")
     return
+
+
+def is_admin(x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Secret")) -> bool:
+    """Return True if request has valid admin secret (no raise)."""
+    if not ADMIN_SECRET:
+        return True
+    return bool(x_admin_secret and x_admin_secret == ADMIN_SECRET)

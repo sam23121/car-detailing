@@ -36,9 +36,18 @@ class Package(Base):
     service_id = Column(Integer, ForeignKey("services.id"), nullable=False)
     name = Column(String(255), nullable=False)
     description = Column(Text)
-    price = Column(Float)
-    duration_minutes = Column(Integer)
+    price = Column(Float)  # single price fallback when no tiered pricing
+    price_small = Column(Float)  # small coupe/sedan
+    price_medium = Column(Float)  # medium SUV/truck 4-5 seater
+    price_large = Column(Float)  # large minivan/van 6-8 seater
+    price_original_small = Column(Float)  # optional strikethrough price
+    price_original_medium = Column(Float)
+    price_original_large = Column(Float)
+    duration_minutes = Column(Integer)  # used for turnaround display
+    turnaround_hours = Column(Integer)  # optional override (e.g. 4 hours)
     details = Column(Text)
+    image_url = Column(String(500))
+    display_order = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     service = relationship("Service", back_populates="packages")
@@ -62,8 +71,10 @@ class Booking(Base):
     id = Column(Integer, primary_key=True, index=True)
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
     package_id = Column(Integer, ForeignKey("packages.id"), nullable=True)  # first/primary package; items hold full list
+    available_slot_id = Column(Integer, ForeignKey("available_slots.id"), nullable=True)  # slot taken by this booking
     scheduled_date = Column(DateTime, nullable=False)
     status = Column(String(50), default="pending")
+    location = Column(String(500))  # service address / where to perform the job
     notes = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

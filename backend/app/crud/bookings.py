@@ -18,8 +18,10 @@ def create_booking_multi(db: Session, payload: schemas.BookingCreateMulti):
     db_booking = models.Booking(
         customer_id=payload.customer_id,
         package_id=first_id,
+        available_slot_id=payload.available_slot_id,
         scheduled_date=payload.scheduled_date,
         status=payload.status,
+        location=payload.location,
         notes=payload.notes,
     )
     db.add(db_booking)
@@ -75,7 +77,7 @@ def get_customer_bookings(db: Session, customer_id: int):
 def update_booking(db: Session, booking_id: int, booking: schemas.BookingCreate):
     db_booking = get_booking(db, booking_id)
     if db_booking:
-        for key, value in booking.model_dump().items():
+        for key, value in booking.model_dump(exclude_unset=True).items():
             setattr(db_booking, key, value)
         db_booking.updated_at = datetime.utcnow()
         db.commit()
