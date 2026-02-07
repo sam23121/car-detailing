@@ -9,7 +9,7 @@ def run_seed():
     """Insert default services and packages (levels) if missing. Safe to call multiple times."""
     db = SessionLocal()
     try:
-        # Remove any legacy "Complete" package (e.g. "Complete In & Out")
+        # Remove only legacy "Complete" packages (e.g. "Complete In & Out"). Do NOT remove Full Detailing levels (Level 1, 2, 3).
         db.query(models.Package).filter(models.Package.name.ilike("%complete%")).delete(synchronize_session="fetch")
         db.commit()
 
