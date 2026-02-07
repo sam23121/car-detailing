@@ -7,7 +7,7 @@ from app import models, schemas
 
 router = APIRouter()
 
-@router.get("/", response_model=list[schemas.AvailableSlot])
+@router.get("", response_model=list[schemas.AvailableSlot])
 def list_available_slots(
     from_date: datetime | None = Query(None, description="Start (ISO)"),
     to_date: datetime | None = Query(None, description="End (ISO)"),
@@ -25,7 +25,7 @@ def list_available_slots(
     )
     return q.all()
 
-@router.post("/", response_model=schemas.AvailableSlot)
+@router.post("", response_model=schemas.AvailableSlot)
 def create_available_slot(
     slot: schemas.AvailableSlotCreate,
     db: Session = Depends(get_db),
