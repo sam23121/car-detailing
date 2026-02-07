@@ -209,6 +209,33 @@
   color: #fff;
 }
 
+.booking-submit-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.booking-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: booking-spin 0.7s linear infinite;
+}
+
+@keyframes booking-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.booking-form button:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
 .success-message {
   color: #34d399;
   background: rgba(52, 211, 153, 0.15);

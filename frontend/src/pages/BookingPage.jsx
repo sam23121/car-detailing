@@ -22,6 +22,7 @@ function BookingPage() {
   const [slotsLoading, setSlotsLoading] = useState(true);
   const [selectedSlotId, setSelectedSlotId] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -91,6 +92,7 @@ function BookingPage() {
       return;
     }
     const scheduledDate = new Date(slot.slot_start);
+    setSubmitting(true);
     try {
       const customerRes = await axios.post(`${API_BASE}/api/customers/`, {
         name: formData.name,
@@ -128,6 +130,8 @@ function BookingPage() {
           ? detail
           : 'Failed to create booking. Please try again.';
       setError(message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -210,7 +214,15 @@ function BookingPage() {
                 )}
                 <label>Notes</label>
                 <textarea name="notes" value={formData.notes} onChange={handleChange} rows="3" />
-                <button type="submit" className="btn btn-primary">Submit booking request</button>
+                <button type="submit" className="btn btn-primary" disabled={submitting}>
+                  {submitting ? (
+                    <span className="booking-submit-loading">
+                      <span className="booking-spinner" aria-hidden="true" /> Submitting…
+                    </span>
+                  ) : (
+                    'Submit booking request'
+                  )}
+                </button>
               </form>
             )}
           </>
