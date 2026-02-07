@@ -10,7 +10,7 @@ function Hero() {
       <div className="hero-content">
         <h1>Professional Interior & Exterior Mobile Detailing Services in Maryland</h1>
         <div className="hero-buttons">
-          <Link to="/booking" className="btn btn-primary">Book Now</Link>
+          <Link to="/book" className="btn btn-primary">Book Now</Link>
           <a href="/#services" className="btn btn-secondary">Learn More</a>
         </div>
         <p className="hero-tagline">Book your next mobile detail service.</p>

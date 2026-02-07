@@ -16,6 +16,82 @@
   color: #fff;
 }
 
+.booking-empty {
+  text-align: center;
+  padding: 2rem;
+  background: #111;
+  border-radius: 8px;
+  border: 1px solid #1f2937;
+}
+
+.booking-empty p {
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.booking-cart {
+  background: #111;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #1f2937;
+  margin-bottom: 1.5rem;
+}
+
+.booking-cart h2 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.booking-cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.booking-cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #1f2937;
+  color: #d1d5db;
+}
+
+.booking-cart-item:last-child {
+  border-bottom: none;
+}
+
+.booking-cart-price {
+  color: #34d399;
+  margin-left: 0.5rem;
+}
+
+.booking-cart-remove {
+  background: none;
+  border: none;
+  color: #f87171;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.booking-cart-remove:hover {
+  text-decoration: underline;
+}
+
+.booking-cart-note {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.booking-form h2 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
 .booking-form {
   display: flex;
   flex-direction: column;
@@ -49,6 +125,88 @@
 .booking-form textarea:focus {
   outline: none;
   border-color: #2563eb;
+}
+
+.booking-datepicker {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: #0d0d0d;
+  color: #fff;
+}
+
+.booking-datepicker:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.booking-slots-loading,
+.booking-no-slots {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  padding: 0.5rem 0;
+}
+
+.booking-no-slots {
+  color: #fbbf24;
+}
+
+.booking-slots-select {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Calendar dropdown dark theme */
+.react-datepicker-popper {
+  z-index: 1000;
+}
+
+.react-datepicker {
+  font-family: inherit;
+  background: #111 !important;
+  border: 1px solid #374151 !important;
+  border-radius: 8px;
+}
+
+.react-datepicker__header {
+  background: #1f2937 !important;
+  border-color: #374151;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name,
+.react-datepicker__day {
+  color: #e5e7eb;
+}
+
+.react-datepicker__day:hover {
+  background: #374151;
+  color: #fff;
+}
+
+.react-datepicker__day--selected {
+  background: #2563eb;
+  color: #fff;
+}
+
+.react-datepicker__day--outside-month {
+  color: #6b7280;
+}
+
+.react-datepicker__time-container .react-datepicker__time-box {
+  background: #111;
+}
+
+.react-datepicker__time-list-item {
+  color: #e5e7eb;
+}
+
+.react-datepicker__time-list-item:hover {
+  background: #374151;
+  color: #fff;
 }
 
 .success-message {

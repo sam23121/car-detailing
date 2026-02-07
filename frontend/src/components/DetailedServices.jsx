@@ -15,7 +15,7 @@ function DetailedServices() {
             From interior deep cleans to paint correction and ceramic coating, we offer a full range of mobile detailing 
             services to suit your vehicle and budget. All work is done at your location with professional equipment and products.
           </p>
-          <Link to="/booking" className="btn btn-primary">Book a Service</Link>
+          <Link to="/book" className="btn btn-primary">Book a Service</Link>
         </div>
       </div>
     </section>

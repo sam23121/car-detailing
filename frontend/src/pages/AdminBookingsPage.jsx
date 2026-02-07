@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
 import './AdminBookingsPage.css';
@@ -54,6 +55,9 @@ function AdminBookingsPage() {
   return (
     <main className="admin-bookings">
       <div className="admin-bookings-container">
+        <p className="admin-bookings-back">
+          <Link to="/admin">← Admin</Link>
+        </p>
         <h1>Bookings (Owner)</h1>
         <p className="admin-bookings-intro">
           New requests appear here. Confirm or cancel from this page. Data is stored in your database (customers + bookings tables).
@@ -88,9 +92,24 @@ function AdminBookingsPage() {
                       )}
                     </td>
                     <td>
-                      {b.package?.name ?? `Package #${b.package_id}`}
-                      {b.package?.price != null && (
-                        <span className="admin-price"> ${Number(b.package.price).toFixed(2)}</span>
+                      {b.booking_items && b.booking_items.length > 0 ? (
+                        <ul className="admin-packages-list">
+                          {b.booking_items.map((item) => (
+                            <li key={item.id}>
+                              {item.package?.name ?? `#${item.package_id}`}
+                              {item.package?.price != null && (
+                                <span className="admin-price"> ${Number(item.package.price).toFixed(2)}</span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <>
+                          {b.package?.name ?? (b.package_id ? `Package #${b.package_id}` : '—')}
+                          {b.package?.price != null && (
+                            <span className="admin-price"> ${Number(b.package.price).toFixed(2)}</span>
+                          )}
+                        </>
                       )}
                     </td>
                     <td>

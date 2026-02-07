@@ -29,7 +29,7 @@ function Process() {
             ))}
           </ul>
           <div className="process-buttons">
-            <Link to="/booking" className="btn btn-primary">Book Now</Link>
+            <Link to="/book" className="btn btn-primary">Book Now</Link>
             <a href="/#services" className="btn btn-secondary">View Services</a>
           </div>
         </div>

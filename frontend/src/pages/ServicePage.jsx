@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
+import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 import './ServicePage.css';
 
 function ServicePage() {
   const { slug } = useParams();
+  const { items: cartItems, addItem } = useCart();
+  const { showToast } = useToast();
   const [service, setService] = useState(null);
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,10 +46,16 @@ function ServicePage() {
   return (
     <main className="service-page">
       <div className="service-container">
+        <Link to="/book" className="back-link back-link-top">← Back to services</Link>
         <h1>{service.name}</h1>
-        {service.description && <p className="service-desc">{service.description}</p>}
+        {service.description && (
+          <div className="service-detail-block">
+            <h2 className="service-detail-heading">About this service</h2>
+            <p className="service-desc">{service.description}</p>
+          </div>
+        )}
         <div className="packages-section">
-          <h2>Packages</h2>
+          <h2>Packages & pricing</h2>
           {packages.length > 0 ? (
             <div className="packages-grid">
               {packages.map((pkg) => (
@@ -55,7 +65,23 @@ function ServicePage() {
                   {pkg.price != null && <p className="price">${Number(pkg.price).toFixed(2)}</p>}
                   {pkg.duration_minutes && <p className="duration">{pkg.duration_minutes} min</p>}
                   {pkg.details && <p className="details">{pkg.details}</p>}
-                  <Link to={`/booking?package=${pkg.id}`} className="btn btn-primary">Book This Package</Link>
+                  <div className="package-card-actions">
+                    <button
+                      type="button"
+                      className={`btn ${cartItems.some((i) => i.id === pkg.id) ? 'btn-added' : 'btn-primary'}`}
+                      onClick={() => {
+                        if (cartItems.some((i) => i.id === pkg.id)) {
+                          showToast('Already in your booking');
+                          return;
+                        }
+                        addItem({ id: pkg.id, name: pkg.name, price: pkg.price, service_name: service.name });
+                        showToast('Added to booking');
+                      }}
+                    >
+                      {cartItems.some((i) => i.id === pkg.id) ? 'In booking' : 'Add to booking'}
+                    </button>
+                    <Link to="/booking" className="btn btn-secondary">Go to checkout</Link>
+                  </div>
                 </div>
               ))}
             </div>
@@ -63,7 +89,7 @@ function ServicePage() {
             <p>No packages for this service yet. <Link to="/booking">Request a quote</Link>.</p>
           )}
         </div>
-        <Link to="/" className="back-link">← Back to Home</Link>
+        <Link to="/book" className="back-link">← Back to services</Link>
       </div>
     </main>
   );

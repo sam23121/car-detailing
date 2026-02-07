@@ -1,0 +1,144 @@
+.admin-availability {
+  padding: 2rem 1.5rem 4rem;
+  background: #0d0d0d;
+  min-height: 60vh;
+}
+
+.admin-availability-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.admin-availability-back {
+  margin-bottom: 1rem;
+}
+
+.admin-availability-back a {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.admin-availability-back a:hover {
+  color: #fff;
+}
+
+.admin-availability h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.admin-availability-intro {
+  color: #9ca3af;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.admin-availability-form-section,
+.admin-availability-list-section {
+  margin-bottom: 2.5rem;
+}
+
+.admin-availability-form-section h2,
+.admin-availability-list-section h2 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.admin-availability-form {
+  background: #111;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.admin-availability-form-row {
+  margin-bottom: 1rem;
+}
+
+.admin-availability-form-row label {
+  display: block;
+  font-size: 0.9rem;
+  color: #d1d5db;
+  margin-bottom: 0.35rem;
+}
+
+.admin-availability-form-row input[type="date"],
+.admin-availability-form-row input[type="time"] {
+  width: 100%;
+  max-width: 200px;
+  padding: 0.5rem;
+  background: #0d0d0d;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.admin-availability-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.admin-availability-checkbox input[type="checkbox"] {
+  width: auto;
+}
+
+.admin-availability-add-error {
+  color: #f87171;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.admin-availability-empty {
+  color: #9ca3af;
+  padding: 1rem 0;
+}
+
+.admin-availability-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: #111;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-availability-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #1f2937;
+  color: #d1d5db;
+}
+
+.admin-availability-item:last-child {
+  border-bottom: none;
+}
+
+.admin-availability-slot-label {
+  font-size: 0.95rem;
+}
+
+.admin-availability.loading,
+.admin-availability.error {
+  text-align: center;
+  color: #9ca3af;
+  padding: 3rem;
+}
+
+.admin-availability.error {
+  color: #f87171;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}

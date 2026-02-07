@@ -14,7 +14,7 @@ function About() {
             exterior care, paint correction, and ceramic coating so your vehicle looks and stays like new.
           </p>
           <div className="about-buttons">
-            <Link to="/booking" className="btn btn-primary">Book Now</Link>
+            <Link to="/book" className="btn btn-primary">Book Now</Link>
             <a href="/#contact" className="btn btn-secondary">Contact Us</a>
           </div>
         </div>

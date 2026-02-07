@@ -58,6 +58,11 @@
   color: #fff;
 }
 
+.navbar-cart {
+  color: #34d399 !important;
+  font-weight: 600;
+}
+
 .schedule-btn {
   background-color: #2563eb !important;
   color: white !important;

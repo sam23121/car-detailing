@@ -9,17 +9,39 @@
   margin: 0 auto;
 }
 
+.back-link-top {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
 .service-container h1 {
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   margin-bottom: 1rem;
   color: #fff;
 }
 
+.service-detail-block {
+  background: #111;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.service-detail-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .service-desc {
   font-size: 1.1rem;
-  color: #9ca3af;
+  color: #d1d5db;
   line-height: 1.6;
-  margin-bottom: 2.5rem;
+  margin: 0;
 }
 
 .packages-section h2 {
@@ -64,8 +86,14 @@
   font-size: 0.9rem;
 }
 
-.package-card .btn {
+.package-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-top: 1rem;
+}
+
+.package-card-actions .btn {
   display: inline-block;
 }
 

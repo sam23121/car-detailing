@@ -21,7 +21,7 @@ function ServicesOverview() {
             From full corrections to quick maintenance washes, our mobile service keeps your vehicle looking its best.
           </p>
           <div className="services-overview-buttons">
-            <Link to="/booking" className="btn btn-primary">Book Now</Link>
+            <Link to="/book" className="btn btn-primary">Book Now</Link>
             <a href="/#process" className="btn btn-secondary">Our Process</a>
           </div>
         </div>

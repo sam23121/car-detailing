@@ -9,6 +9,20 @@
   margin: 0 auto;
 }
 
+.admin-bookings-back {
+  margin-bottom: 1rem;
+}
+
+.admin-bookings-back a {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.admin-bookings-back a:hover {
+  color: #fff;
+}
+
 .admin-bookings h1 {
   font-size: 1.75rem;
   margin-bottom: 0.5rem;
@@ -70,6 +84,16 @@
 .admin-price {
   color: #9ca3af;
   font-size: 0.9em;
+}
+
+.admin-packages-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-packages-list li {
+  margin-bottom: 0.25rem;
 }
 
 .admin-status {

@@ -25,7 +25,7 @@ function Footer() {
         </div>
         <div className="footer-section">
           <h4>Owner</h4>
-          <p><a href="/admin/bookings">View & confirm bookings</a></p>
+          <p><a href="/admin">Admin (bookings & availability)</a></p>
         </div>
       </div>
       <div className="footer-bottom">

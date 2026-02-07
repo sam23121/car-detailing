@@ -1,0 +1,66 @@
+.admin-dashboard {
+  padding: 2rem 1.5rem 4rem;
+  background: #0d0d0d;
+  min-height: 60vh;
+}
+
+.admin-dashboard-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.admin-dashboard h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.admin-dashboard-intro {
+  color: #9ca3af;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.admin-dashboard-links {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-dashboard-card {
+  display: block;
+  padding: 1.25rem 1.5rem;
+  background: #111;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.admin-dashboard-card:hover {
+  border-color: #374151;
+  background: #161616;
+}
+
+.admin-dashboard-card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.35rem;
+  color: #fff;
+}
+
+.admin-dashboard-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.admin-dashboard-card .back-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.admin-dashboard-card .back-link:hover {
+  color: #fff;
+}

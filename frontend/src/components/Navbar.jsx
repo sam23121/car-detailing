@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import './Navbar.css';
 
 function Navbar() {
+  const { count } = useCart();
   return (
     <nav className="navbar navbar-dark">
       <div className="navbar-container">
@@ -17,7 +19,14 @@ function Navbar() {
           <li><a href="/#blog">Blog</a></li>
           <li><a href="/#faq">FAQ</a></li>
           <li><a href="/#contact">Contact</a></li>
-          <li><Link to="/booking" className="schedule-btn">Book Now</Link></li>
+          {count > 0 && (
+            <li>
+              <Link to="/booking" className="navbar-cart">
+                Booking ({count})
+              </Link>
+            </li>
+          )}
+          <li><Link to="/book" className="schedule-btn">Book Now</Link></li>
         </ul>
       </div>
     </nav>
