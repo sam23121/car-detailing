@@ -45,6 +45,4 @@ def delete_service(service_id: int, db: Session = Depends(get_db)):
 @router.get("/{service_id}/packages", response_model=list[schemas.Package])
 def get_service_packages(service_id: int, db: Session = Depends(get_db)):
     packages = crud_services.get_service_packages(db, service_id=service_id)
-    if not packages:
-        raise HTTPException(status_code=404, detail="No packages found for this service")
     return packages

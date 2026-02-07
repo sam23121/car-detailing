@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,6 +8,17 @@ from app.routers import services, bookings, reviews, contact, blog, business, cu
 
 # Create tables
 Base.metadata.create_all(bind=engine)
+
+# Seed default services/packages on startup (e.g. for Render free tier with no Shell).
+# Set RUN_SEED_ON_STARTUP=false in env to disable.
+if os.getenv("RUN_SEED_ON_STARTUP", "true").lower() != "false":
+    try:
+        from app.seed import run_seed
+        run_seed()
+    except Exception as e:
+        # Log but don't crash the app if DB isn't ready or seed fails
+        import logging
+        logging.getLogger("app.main").warning("Startup seed skipped or failed: %s", e)
 
 app = FastAPI(
     title="Quality Mobile Detailing API",
