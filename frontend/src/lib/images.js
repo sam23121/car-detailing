@@ -14,6 +14,7 @@ export const PATHS = {
   // Backgrounds
   homeBg: `${IMAGES_DIR}/home-bg.jpg`,
   heroBg: `${IMAGES_DIR}/hero-bg.png`,
+  heroLambergini: `${IMAGES_DIR}/lambergini.jpg`,
 
   // Service / package imagery (by category)
   cars1: `${IMAGES_DIR}/cars_1.jpg`,

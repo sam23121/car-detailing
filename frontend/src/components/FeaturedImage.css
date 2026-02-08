@@ -1,0 +1,33 @@
+.featured-image-section {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+
+.featured-image-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.featured-image-img {
+  width: 100%;
+  display: block;
+  max-height: 70vh;
+  object-fit: cover;
+  object-position: center;
+}
+
+.featured-image-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+/* Content below slides up over the sticky image */
+.featured-image-slide-over {
+  position: relative;
+  z-index: 1;
+  background: #0d0d0d;
+}
