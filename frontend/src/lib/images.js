@@ -51,11 +51,12 @@ export const PLACEHOLDER_IMAGE = PATHS.homeBg;
 export function getServiceImagePath(serviceSlug) {
   const map = {
     'full-detailing': PATHS.fullDetailing,
-    'interior-detailing': PATHS.interior1,
     'exterior-detailing': PATHS.exterior1,
-    'ceramic-coating': PATHS.ceramicCoating,
-    'paint-correction': PATHS.painting,
+    'interior-detailing': PATHS.interior1,
     'monthly-maintenance': PATHS.maintenance,
+    'paint-correction': PATHS.painting,
+    'ceramic-coating': PATHS.ceramicCoating,
+    'fleet-detailing': PATHS.fleetDetailing,
   };
   return map[serviceSlug] || PLACEHOLDER_IMAGE;
 }
@@ -67,11 +68,12 @@ export function getServiceImagePath(serviceSlug) {
 export function getPackageImagePath(serviceSlug, displayOrder = 0) {
   const byService = {
     'full-detailing': [PATHS.fullDetailing, PATHS.fullDetailing2, PATHS.beforeAfter],
-    'interior-detailing': [PATHS.interior1, PATHS.interior3, PATHS.interior4],
     'exterior-detailing': [PATHS.exterior1, PATHS.exterior2, PATHS.exterior3],
-    'ceramic-coating': [PATHS.ceramicCoating, PATHS.ceramicCoating2, PATHS.ceramicCoating],
-    'paint-correction': [PATHS.painting, PATHS.painting2],
+    'interior-detailing': [PATHS.interior1, PATHS.interior3, PATHS.interior4],
     'monthly-maintenance': [PATHS.maintenance, PATHS.maintenance2],
+    'paint-correction': [PATHS.painting, PATHS.painting2],
+    'ceramic-coating': [PATHS.ceramicCoating, PATHS.ceramicCoating2, PATHS.ceramicCoating],
+    'fleet-detailing': [PATHS.fleetDetailing],
   };
   const list = byService[serviceSlug];
   if (!list || list.length === 0) return getServiceImagePath(serviceSlug);

@@ -29,6 +29,9 @@ function FAQ({ id }) {
   return (
     <section id={id} className="faq faq-dark">
       <div className="faq-grid">
+        <div className="faq-image">
+          <div className="faq-image-placeholder" />
+        </div>
         <div className="faq-content">
           <h2>Auto Detailing FAQs</h2>
           {loading ? (
@@ -60,9 +63,6 @@ function FAQ({ id }) {
               })}
             </div>
           )}
-        </div>
-        <div className="faq-image">
-          <div className="faq-image-placeholder" />
         </div>
       </div>
     </section>

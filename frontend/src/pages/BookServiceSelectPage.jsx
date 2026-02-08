@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
 import { resolveServiceImage } from '../lib/images';
+import { getServiceDisplayName } from '../lib/services';
 import './BookServiceSelectPage.css';
 
 function BookServiceSelectPage() {
@@ -37,10 +38,10 @@ function BookServiceSelectPage() {
             <div className="book-service-card-image">
               <img
                 src={resolveServiceImage(service)}
-                alt={service.name}
+                alt={getServiceDisplayName(service)}
               />
             </div>
-            <h2 className="book-service-card-title">{service.name}</h2>
+            <h2 className="book-service-card-title">{getServiceDisplayName(service)}</h2>
             <span className="book-service-card-cta">View details & book →</span>
           </Link>
         ))}

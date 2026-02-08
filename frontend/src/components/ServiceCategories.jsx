@@ -3,7 +3,29 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
 import { resolveServiceImage } from '../lib/images';
+import { getServiceDisplayName } from '../lib/services';
 import './ServiceCategories.css';
+
+// Display order on home: full → exterior → interior → monthly maintenance → paint correction → ceramic → fleet
+const SERVICE_SLUG_ORDER = [
+  'full-detailing',
+  'exterior-detailing',
+  'interior-detailing',
+  'monthly-maintenance',
+  'paint-correction',
+  'ceramic-coating',
+  'fleet-detailing',
+];
+
+function sortServicesByOrder(services) {
+  if (!Array.isArray(services) || services.length === 0) return services;
+  const orderMap = Object.fromEntries(SERVICE_SLUG_ORDER.map((s, i) => [s, i]));
+  return [...services].sort((a, b) => {
+    const ai = orderMap[a.slug] ?? 999;
+    const bi = orderMap[b.slug] ?? 999;
+    return ai - bi;
+  });
+}
 
 function ServiceCategories() {
   const [services, setServices] = useState([]);
@@ -12,7 +34,7 @@ function ServiceCategories() {
   useEffect(() => {
     axios
       .get(`${API_BASE}/api/services/`)
-      .then((res) => setServices(res.data))
+      .then((res) => setServices(sortServicesByOrder(res.data)))
       .catch(() => setServices([]))
       .finally(() => setLoading(false));
   }, []);
@@ -39,10 +61,10 @@ function ServiceCategories() {
             <div className="service-category-card-image">
               <img
                 src={resolveServiceImage(service)}
-                alt={service.name}
+                alt={getServiceDisplayName(service)}
               />
             </div>
-            <span className="service-category-card-name">{service.name}</span>
+            <span className="service-category-card-name">{getServiceDisplayName(service)}</span>
           </Link>
         ))}
       </div>

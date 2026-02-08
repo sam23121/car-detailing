@@ -6,6 +6,7 @@ import { BUSINESS } from '../config';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import { resolvePackageImage } from '../lib/images';
+import { getServiceDisplayName } from '../lib/services';
 import './ServicePage.css';
 const VEHICLE_SIZES = [
   { key: 'small', label: 'Small Coupe/Sedans', priceKey: 'price_small', originalKey: 'price_original_small' },
@@ -122,7 +123,7 @@ function ServicePage() {
     <main className="service-page">
       <div className="service-container">
         <Link to="/book" className="back-link back-link-top">← Back to services</Link>
-        <h1>{service.name}</h1>
+        <h1>{getServiceDisplayName(service)}</h1>
         {service.description && (
           <div className="service-detail-block">
             <p className="service-desc">{service.description}</p>
