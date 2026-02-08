@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
 import { resolveServiceImage } from '../lib/images';
-import { getServiceDisplayName } from '../lib/services';
+import { getServiceDisplayName, filterVisibleServices } from '../lib/services';
 import './ServiceCategories.css';
 
 // Display order on home: full → exterior → interior → monthly maintenance → paint correction → ceramic → fleet
@@ -17,10 +17,11 @@ const SERVICE_SLUG_ORDER = [
   'fleet-detailing',
 ];
 
-function sortServicesByOrder(services) {
+function filterAndSortServices(services) {
   if (!Array.isArray(services) || services.length === 0) return services;
+  const filtered = filterVisibleServices(services);
   const orderMap = Object.fromEntries(SERVICE_SLUG_ORDER.map((s, i) => [s, i]));
-  return [...services].sort((a, b) => {
+  return [...filtered].sort((a, b) => {
     const ai = orderMap[a.slug] ?? 999;
     const bi = orderMap[b.slug] ?? 999;
     return ai - bi;
@@ -34,7 +35,7 @@ function ServiceCategories() {
   useEffect(() => {
     axios
       .get(`${API_BASE}/api/services/`)
-      .then((res) => setServices(sortServicesByOrder(res.data)))
+      .then((res) => setServices(filterAndSortServices(res.data)))
       .catch(() => setServices([]))
       .finally(() => setLoading(false));
   }, []);

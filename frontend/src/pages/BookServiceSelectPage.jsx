@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
 import { resolveServiceImage } from '../lib/images';
-import { getServiceDisplayName } from '../lib/services';
+import { getServiceDisplayName, filterVisibleServices } from '../lib/services';
 import './BookServiceSelectPage.css';
 
 function BookServiceSelectPage() {
@@ -14,7 +14,7 @@ function BookServiceSelectPage() {
   useEffect(() => {
     axios
       .get(`${API_BASE}/api/services/`)
-      .then((res) => setServices(res.data))
+      .then((res) => setServices(filterVisibleServices(res.data)))
       .catch(() => setError('Could not load services'))
       .finally(() => setLoading(false));
   }, []);
