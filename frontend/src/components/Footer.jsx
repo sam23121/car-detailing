@@ -8,7 +8,7 @@ function Footer() {
       <div className="footer-container">
         <div className="footer-section">
           <h4>YMB Habesha</h4>
-          <p>Professional auto detailing services in Maryland and DC</p>
+          <p>Professional auto detailing services in DC, Maryland, and Virginia</p>
         </div>
         <div className="footer-section">
           <h4>Quick Links</h4>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Hero.css';
 
 const HERO_DESCRIPTION =
-  'We deliver reliable, efficient detailing for personal cars and fleets—restoring showroom shine, extending vehicle life, and protecting your investment.';
+  'We deliver reliable, efficient detailing for personal cars and fleets by our certified professionals—restoring showroom shine, extending vehicle life, and protecting your investment.';
 
 function Hero() {
   return (

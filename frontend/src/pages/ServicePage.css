@@ -421,6 +421,16 @@
     direction: ltr;
   }
 
+  /* On mobile: image above, text below for every level (no alternating) */
+  .service-level-inner .service-level-image-wrap,
+  .service-level-inner--reverse .service-level-image-wrap {
+    order: 1;
+  }
+  .service-level-inner .service-level-content,
+  .service-level-inner--reverse .service-level-content {
+    order: 2;
+  }
+
   .service-level-image-wrap {
     min-height: 220px;
   }
