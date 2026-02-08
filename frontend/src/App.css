@@ -23,12 +23,12 @@ body {
 }
 
 .btn-primary {
-  background-color: #2563eb;
+  background-color: #dc2626;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
+  background-color: #b91c1c;
   transform: translateY(-1px);
 }
 

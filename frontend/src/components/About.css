@@ -27,9 +27,10 @@
   flex-wrap: wrap;
 }
 
-.about-image-placeholder {
+.about-image-img {
+  width: 100%;
   aspect-ratio: 4/3;
-  background: linear-gradient(135deg, #1f2937 0%, #0d0d0d 100%);
+  object-fit: cover;
   border-radius: 8px;
   border: 1px solid #374151;
 }

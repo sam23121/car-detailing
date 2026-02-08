@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PATHS } from '../lib/images';
 import './DetailedServices.css';
 
 function DetailedServices() {
@@ -7,7 +8,7 @@ function DetailedServices() {
     <section className="detailed-services">
       <div className="detailed-services-grid">
         <div className="detailed-services-image">
-          <div className="detailed-services-img-placeholder" />
+          <img src={PATHS.cars1} alt="Our detailing services" className="detailed-services-img" />
         </div>
         <div className="detailed-services-panel">
           <h2>Our Services</h2>

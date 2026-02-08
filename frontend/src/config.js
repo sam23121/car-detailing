@@ -4,7 +4,7 @@
  * No trailing slash.
  */
 export const API_BASE =
-  import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:8000';
+   import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'https://localhost:8000';
 
 /**
  * Business contact info – change here to update everywhere (Contact, Footer, etc.).

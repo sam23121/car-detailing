@@ -36,6 +36,7 @@ function AdminBookingsPage() {
           package_id: b.package_id,
           scheduled_date: b.scheduled_date,
           status: newStatus,
+          location: b.location || null,
           notes: b.notes || null,
         },
         { headers: getAdminHeaders() }
@@ -96,6 +97,7 @@ function AdminBookingsPage() {
                         </>
                       )}
                     </td>
+                    <td>{b.location ? <span className="admin-location">{b.location}</span> : '—'}</td>
                     <td>
                       {b.booking_items && b.booking_items.length > 0 ? (
                         <ul className="admin-packages-list">

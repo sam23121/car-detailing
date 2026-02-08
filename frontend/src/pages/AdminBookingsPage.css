@@ -14,13 +14,23 @@
 }
 
 .admin-bookings-back a {
-  color: #9ca3af;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #d1d5db;
   text-decoration: none;
   font-size: 0.95rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #374151;
+  background: rgba(17, 17, 17, 0.8);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
 
 .admin-bookings-back a:hover {
   color: #fff;
+  border-color: #4b5563;
+  background: #1f2937;
 }
 
 .admin-bookings h1 {

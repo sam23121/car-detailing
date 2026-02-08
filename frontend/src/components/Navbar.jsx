@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { PATHS } from '../lib/images';
 import './Navbar.css';
+
+const SCROLL_THRESHOLD = 24;
 
 function Navbar() {
   const { count } = useCart();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <nav className="navbar navbar-dark">
+    <nav className={`navbar navbar-dark${scrolled ? ' navbar-scrolled' : ''}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <img src="/images/logo.png" alt="YMB Habesha" className="navbar-logo-img" />
+          <span className="navbar-logo-img-wrap">
+            <img src={PATHS.logo} alt="YMB Habesha" className="navbar-logo-img" />
+          </span>
           <span className="navbar-logo-text">YMB Habesha</span>
         </Link>
         <ul className="nav-menu">

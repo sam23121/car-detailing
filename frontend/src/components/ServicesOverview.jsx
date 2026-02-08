@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PATHS } from '../lib/images';
 import './ServicesOverview.css';
+
+const OVERVIEW_IMAGES = [PATHS.fullDetailing, PATHS.interior1, PATHS.exterior1, PATHS.ceramicCoating];
 
 function ServicesOverview() {
   return (
@@ -8,10 +11,11 @@ function ServicesOverview() {
       <div className="services-overview-grid">
         <div className="services-overview-images">
           <div className="services-image-grid">
-            <div className="services-img-placeholder" />
-            <div className="services-img-placeholder" />
-            <div className="services-img-placeholder" />
-            <div className="services-img-placeholder" />
+            {OVERVIEW_IMAGES.map((src, i) => (
+              <div key={i} className="services-img-wrap">
+                <img src={src} alt="" className="services-img" />
+              </div>
+            ))}
           </div>
         </div>
         <div className="services-overview-panel">

@@ -24,8 +24,17 @@ export function CartProvider({ children }) {
 
   const addItem = useCallback((pkg) => {
     setItems((prev) => {
-      if (prev.some((i) => i.id === pkg.id)) return prev;
-      return [...prev, { id: pkg.id, name: pkg.name, price: pkg.price, service_name: pkg.service_name }];
+      const vehicleSize = pkg.vehicleSize ?? null;
+      const same = prev.find((i) => i.id === pkg.id && (i.vehicleSize ?? null) === vehicleSize);
+      if (same) return prev;
+      const rest = prev.filter((i) => i.id !== pkg.id);
+      return [...rest, {
+        id: pkg.id,
+        name: pkg.name,
+        price: pkg.price,
+        service_name: pkg.service_name || '',
+        ...(vehicleSize ? { vehicleSize } : {}),
+      }];
     });
   }, []);
 

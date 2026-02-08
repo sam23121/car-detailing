@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PATHS } from '../lib/images';
 import './Process.css';
 
 function Process() {
@@ -34,7 +35,7 @@ function Process() {
           </div>
         </div>
         <div className="process-image">
-          <div className="process-image-placeholder" />
+          <img src={PATHS.steps2} alt="Our process" className="process-image-img" />
         </div>
       </div>
     </section>

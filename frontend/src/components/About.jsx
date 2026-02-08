@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PATHS } from '../lib/images';
 import './About.css';
 
 function About() {
@@ -19,7 +20,7 @@ function About() {
           </div>
         </div>
         <div className="about-image">
-          <div className="about-image-placeholder" />
+          <img src={PATHS.beforeAfter} alt="Before and after detailing" className="about-image-img" />
         </div>
       </div>
     </section>

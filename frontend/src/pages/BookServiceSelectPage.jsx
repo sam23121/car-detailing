@@ -2,16 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
+import { resolveServiceImage } from '../lib/images';
 import './BookServiceSelectPage.css';
-
-const SERVICE_IMAGES = {
-  'ceramic-coating': '🛡️',
-  'full-detailing': '✨',
-  'interior-detailing': '🧼',
-  'exterior-detailing': '🚗',
-  'fleet-detailing': '🚐',
-  'maintenance-detailing': '🔧',
-};
 
 function BookServiceSelectPage() {
   const [services, setServices] = useState([]);
@@ -43,13 +35,10 @@ function BookServiceSelectPage() {
             className="book-service-card"
           >
             <div className="book-service-card-image">
-              {service.image_url ? (
-                <img src={service.image_url} alt={service.name} />
-              ) : (
-                <span className="book-service-card-icon">
-                  {SERVICE_IMAGES[service.slug] || '✨'}
-                </span>
-              )}
+              <img
+                src={resolveServiceImage(service)}
+                alt={service.name}
+              />
             </div>
             <h2 className="book-service-card-title">{service.name}</h2>
             <span className="book-service-card-cta">View details & book →</span>

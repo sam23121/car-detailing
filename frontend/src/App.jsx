@@ -14,6 +14,7 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminBookingsPage from './pages/AdminBookingsPage';
 import AdminAvailabilityPage from './pages/AdminAvailabilityPage';
 import BookServiceSelectPage from './pages/BookServiceSelectPage';
+import PackageDetailPage from './pages/PackageDetailPage';
 import './App.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/book" element={<BookServiceSelectPage />} />
         <Route path="/services/:slug" element={<ServicePage />} />
+        <Route path="/services/:slug/packages/:packageId" element={<PackageDetailPage />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />

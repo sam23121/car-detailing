@@ -16,6 +16,7 @@ function BookingPage() {
     name: '',
     email: '',
     phone: '',
+    location: '',
     notes: ''
   });
   const [availableSlots, setAvailableSlots] = useState([]);
@@ -100,25 +101,28 @@ function BookingPage() {
         phone: formData.phone || null
       });
       const customerId = customerRes.data.id;
+      const slotIdNum = parseInt(selectedSlotId, 10);
       const payload = {
         customer_id: customerId,
         scheduled_date: scheduledDate.toISOString(),
         notes: formData.notes || null,
-        package_ids: packageIds
+        package_ids: packageIds,
+        available_slot_id: slotIdNum
       };
       if (packageIds.length === 1) {
         await axios.post(`${API_BASE}/api/bookings/`, {
           customer_id: customerId,
           package_id: packageIds[0],
           scheduled_date: payload.scheduled_date,
-          notes: payload.notes
+          notes: payload.notes,
+          available_slot_id: slotIdNum
         });
       } else {
         await axios.post(`${API_BASE}/api/bookings/multi`, payload);
       }
       clearCart();
       setSubmitted(true);
-      setFormData({ name: '', email: '', phone: '', notes: '' });
+      setFormData({ name: '', email: '', phone: '', location: '', notes: '' });
       setSelectedSlotId('');
       showToast("Booking submitted! We'll confirm soon.");
     } catch (err) {
@@ -186,6 +190,14 @@ function BookingPage() {
                 <input type="email" name="email" value={formData.email} onChange={handleChange} required />
                 <label>Phone</label>
                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
+                <label>Service location (address where you want the service)</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  placeholder="e.g. 123 Main St, City"
+                />
                 <label>Preferred Date & Time *</label>
                 {slotsLoading ? (
                   <p className="booking-slots-loading">Loading available times…</p>

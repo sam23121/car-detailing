@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -6,6 +6,23 @@ import axios from 'axios';
 import { API_BASE } from '../config';
 import { getAdminHeaders, clearAdminSecret } from './AdminLoginPage';
 import './AdminAvailabilityPage.css';
+
+const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+function monthDays(year, month) {
+  const first = new Date(year, month, 1);
+  const last = new Date(year, month + 1, 0);
+  const startPad = first.getDay();
+  const daysInMonth = last.getDate();
+  const pad = Array(startPad).fill(null);
+  const days = Array.from({ length: daysInMonth }, (_, i) => new Date(year, month, i + 1));
+  return [...pad, ...days];
+}
+
+function dateKey(d) {
+  if (!d) return '';
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
 function AdminAvailabilityPage() {
   const navigate = useNavigate();
@@ -15,12 +32,32 @@ function AdminAvailabilityPage() {
   const [deletingId, setDeletingId] = useState(null);
   const [addDateStart, setAddDateStart] = useState(null);
   const [addDateEnd, setAddDateEnd] = useState(null);
-  const [addAsDayRange, setAddAsDayRange] = useState(false);
+  const [addAsDayRange, setAddAsDayRange] = useState(true);
   const [addTimeStart, setAddTimeStart] = useState('09:00');
   const [addTimeEnd, setAddTimeEnd] = useState('');
   const [addAsTimeRange, setAddAsTimeRange] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [addError, setAddError] = useState(null);
+  const [calendarMonth, setCalendarMonth] = useState(() => {
+    const n = new Date();
+    return { year: n.getFullYear(), month: n.getMonth() };
+  });
+
+  const slotsByDate = useMemo(() => {
+    const map = {};
+    slots.forEach((slot) => {
+      const d = new Date(slot.slot_start);
+      const key = dateKey(d);
+      if (!map[key]) map[key] = [];
+      map[key].push(slot);
+    });
+    return map;
+  }, [slots]);
+
+  const calendarDays = useMemo(
+    () => monthDays(calendarMonth.year, calendarMonth.month),
+    [calendarMonth.year, calendarMonth.month]
+  );
 
   const fetchSlots = () => {
     setError(null);
@@ -31,7 +68,8 @@ function AdminAvailabilityPage() {
     const toStr = to.toISOString();
     axios
       .get(`${API_BASE}/api/availability`, {
-        params: { from_date: fromStr, to_date: toStr }
+        params: { from_date: fromStr, to_date: toStr },
+        headers: getAdminHeaders()
       })
       .then((res) => setSlots(res.data))
       .catch((err) => setError(err.message || 'Failed to load slots'))
@@ -157,16 +195,6 @@ function AdminAvailabilityPage() {
         <section className="admin-availability-form-section">
           <h2>Add a slot</h2>
           <form onSubmit={handleAdd} className="admin-availability-form">
-            <div className="admin-availability-form-row admin-availability-checkbox">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={addAsDayRange}
-                  onChange={(e) => setAddAsDayRange(e.target.checked)}
-                />
-                Add a range of days (same time each day)
-              </label>
-            </div>
             {addAsDayRange ? (
               <>
                 <div className="admin-availability-form-row">
@@ -240,6 +268,16 @@ function AdminAvailabilityPage() {
                 Add as time range (optional end time)
               </label>
             </div>
+            <div className="admin-availability-form-row admin-availability-checkbox">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={addAsDayRange}
+                  onChange={(e) => setAddAsDayRange(e.target.checked)}
+                />
+                Add a range of days (same time each day)
+              </label>
+            </div>
             {addError && <p className="admin-availability-add-error">{addError}</p>}
             <button type="submit" className="btn btn-primary" disabled={submitting}>
               {submitting ? 'Adding…' : addAsDayRange && addDateStart && addDateEnd
@@ -249,26 +287,104 @@ function AdminAvailabilityPage() {
           </form>
         </section>
 
+        <section className="admin-availability-calendar-section">
+          <h2>Calendar view</h2>
+          <div className="admin-availability-calendar-wrap">
+            <div className="admin-availability-calendar-nav">
+              <button
+                type="button"
+                className="admin-calendar-prev"
+                onClick={() =>
+                  setCalendarMonth((m) =>
+                    m.month === 0 ? { year: m.year - 1, month: 11 } : { year: m.year, month: m.month - 1 }
+                  )
+                }
+              >
+                ←
+              </button>
+              <span className="admin-calendar-title">
+                {new Date(calendarMonth.year, calendarMonth.month).toLocaleString(undefined, {
+                  month: 'long',
+                  year: 'numeric'
+                })}
+              </span>
+              <button
+                type="button"
+                className="admin-calendar-next"
+                onClick={() =>
+                  setCalendarMonth((m) =>
+                    m.month === 11 ? { year: m.year + 1, month: 0 } : { year: m.year, month: m.month + 1 }
+                  )
+                }
+              >
+                →
+              </button>
+            </div>
+            <div className="admin-availability-calendar-grid">
+              {DAY_NAMES.map((day) => (
+                <div key={day} className="admin-calendar-cell admin-calendar-day-name">
+                  {day}
+                </div>
+              ))}
+              {calendarDays.map((d, i) => {
+                const key = d ? dateKey(d) : `empty-${i}`;
+                const daySlots = d ? slotsByDate[key] || [] : [];
+                const count = daySlots.length;
+                const isToday = d && dateKey(d) === dateKey(new Date());
+                return (
+                  <div
+                    key={key}
+                    className={`admin-calendar-cell ${!d ? 'admin-calendar-empty' : ''} ${count ? 'admin-calendar-has-slots' : ''} ${isToday ? 'admin-calendar-today' : ''}`}
+                  >
+                    {d && (
+                      <>
+                        <span className="admin-calendar-date-num">{d.getDate()}</span>
+                        {count > 0 && <span className="admin-calendar-slot-count">{count}</span>}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         <section className="admin-availability-list-section">
-          <h2>Upcoming slots (next 60 days)</h2>
+          <h2>Upcoming slots by date (next 60 days)</h2>
           {slots.length === 0 ? (
             <p className="admin-availability-empty">No slots yet. Add some above so customers can book.</p>
           ) : (
-            <ul className="admin-availability-list">
-              {slots.map((slot) => (
-                <li key={slot.id} className="admin-availability-item">
-                  <span className="admin-availability-slot-label">{formatSlot(slot)}</span>
-                  <button
-                    type="button"
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => handleDelete(slot.id)}
-                    disabled={deletingId === slot.id}
-                  >
-                    {deletingId === slot.id ? '…' : 'Remove'}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <div className="admin-availability-by-date">
+              {Object.keys(slotsByDate)
+                .sort()
+                .map((key) => (
+                  <div key={key} className="admin-availability-date-group">
+                    <h3 className="admin-availability-date-heading">
+                      {new Date(key + 'T12:00:00').toLocaleDateString(undefined, {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </h3>
+                    <ul className="admin-availability-list">
+                      {slotsByDate[key].map((slot) => (
+                        <li key={slot.id} className="admin-availability-item">
+                          <span className="admin-availability-slot-label">{formatSlot(slot)}</span>
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => handleDelete(slot.id)}
+                            disabled={deletingId === slot.id}
+                          >
+                            {deletingId === slot.id ? '…' : 'Remove'}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+            </div>
           )}
         </section>
       </div>

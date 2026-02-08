@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
+import { BUSINESS } from '../config';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
+import { resolvePackageImage } from '../lib/images';
 import './ServicePage.css';
+const VEHICLE_SIZES = [
+  { key: 'small', label: 'Small Coupe/Sedans', priceKey: 'price_small', originalKey: 'price_original_small' },
+  { key: 'medium', label: 'Medium SUV/Truck (4-5 Seater)', priceKey: 'price_medium', originalKey: 'price_original_medium' },
+  { key: 'large', label: 'Large Minivan/Van (6-8 Seater)', priceKey: 'price_large', originalKey: 'price_original_large' },
+];
 
 function ServicePage() {
   const { slug } = useParams();
@@ -14,6 +21,7 @@ function ServicePage() {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedSizeByPkg, setSelectedSizeByPkg] = useState({});
 
   useEffect(() => {
     const fetch = async () => {
@@ -31,13 +39,80 @@ function ServicePage() {
     if (slug) fetch();
   }, [slug]);
 
-  if (loading) return <div className="loading">Loading...</div>;
+  const setSizeForPkg = (pkgId, size) => {
+    setSelectedSizeByPkg((prev) => ({ ...prev, [pkgId]: size }));
+  };
+
+  const hasTieredPricing = (pkg) =>
+    pkg && (pkg.price_small != null || pkg.price_medium != null || pkg.price_large != null);
+
+  const getPriceForPkg = (pkg, sizeKey) => {
+    if (!pkg) return null;
+    const priceKey = sizeKey === 'small' ? 'price_small' : sizeKey === 'medium' ? 'price_medium' : 'price_large';
+    const price = pkg[priceKey] ?? pkg.price;
+    return price;
+  };
+
+  const turnaround = (pkg) => {
+    if (!pkg) return null;
+    if (pkg.turnaround_hours != null) return `${pkg.turnaround_hours} HOUR${pkg.turnaround_hours !== 1 ? 'S' : ''}`;
+    if (pkg.duration_minutes) {
+      const h = Math.round(pkg.duration_minutes / 60);
+      return `${h} HOUR${h !== 1 ? 'S' : ''}`;
+    }
+    return null;
+  };
+
+  /** Turn description/details into bullet items (split on newlines or use as single item). */
+  const serviceListItems = (pkg) => {
+    const parts = [];
+    if (pkg.description) parts.push(pkg.description);
+    if (pkg.details) {
+      const lines = pkg.details.split(/\n/).map((s) => s.trim()).filter(Boolean);
+      parts.push(...lines);
+    }
+    return parts.length ? parts : [];
+  };
+
+  const handleScheduleNow = (pkg) => {
+    const sizeKey = selectedSizeByPkg[pkg.id] ?? 'small';
+    const tiered = hasTieredPricing(pkg);
+    const price = tiered ? getPriceForPkg(pkg, sizeKey) : pkg.price;
+    if (price == null) {
+      showToast('Please select vehicle size');
+      return;
+    }
+    if (cartItems.some((i) => i.id === pkg.id && (tiered ? i.vehicleSize === sizeKey : true))) {
+      showToast('Already in your booking');
+      return;
+    }
+    const fullSizeLabel = tiered && VEHICLE_SIZES.find((s) => s.key === sizeKey);
+    const name = tiered && fullSizeLabel
+      ? `${pkg.name} (${fullSizeLabel.label})`
+      : pkg.name;
+    addItem({
+      id: pkg.id,
+      name,
+      price,
+      service_name: service?.name || '',
+      ...(tiered ? { vehicleSize: sizeKey } : {}),
+    });
+    showToast('Added to booking');
+  };
+
+  const inCart = (pkg) => {
+    const sizeKey = selectedSizeByPkg[pkg.id] ?? 'small';
+    const tiered = hasTieredPricing(pkg);
+    return cartItems.some((i) => i.id === pkg.id && (tiered ? i.vehicleSize === sizeKey : true));
+  };
+
+  if (loading) return <div className="service-page loading">Loading...</div>;
   if (error || !service) {
     return (
       <main className="service-page">
         <div className="service-container">
           <p>{error || 'Service not found'}</p>
-          <Link to="/">Back to Home</Link>
+          <Link to="/book">Back to services</Link>
         </div>
       </main>
     );
@@ -50,43 +125,97 @@ function ServicePage() {
         <h1>{service.name}</h1>
         {service.description && (
           <div className="service-detail-block">
-            <h2 className="service-detail-heading">About this service</h2>
             <p className="service-desc">{service.description}</p>
           </div>
         )}
+
         <div className="packages-section">
-          <h2>Packages & pricing</h2>
-          {packages.length > 0 ? (
-            <div className="packages-grid">
-              {packages.map((pkg) => (
-                <div key={pkg.id} className="package-card">
-                  <h3>{pkg.name}</h3>
-                  {pkg.description && <p>{pkg.description}</p>}
-                  {pkg.price != null && <p className="price">${Number(pkg.price).toFixed(2)}</p>}
-                  {pkg.duration_minutes && <p className="duration">{pkg.duration_minutes} min</p>}
-                  {pkg.details && <p className="details">{pkg.details}</p>}
-                  <div className="package-card-actions">
-                    <button
-                      type="button"
-                      className={`btn ${cartItems.some((i) => i.id === pkg.id) ? 'btn-added' : 'btn-primary'}`}
-                      onClick={() => {
-                        if (cartItems.some((i) => i.id === pkg.id)) {
-                          showToast('Already in your booking');
-                          return;
-                        }
-                        addItem({ id: pkg.id, name: pkg.name, price: pkg.price, service_name: service.name });
-                        showToast('Added to booking');
-                      }}
-                    >
-                      {cartItems.some((i) => i.id === pkg.id) ? 'In booking' : 'Add to booking'}
-                    </button>
-                    <Link to="/booking" className="btn btn-secondary">Go to checkout</Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
+          <h2>Choose a level</h2>
+          {packages.length === 0 ? (
             <p>No packages for this service yet. <Link to="/booking">Request a quote</Link>.</p>
+          ) : (
+            <div className="service-levels-list">
+              {packages.map((pkg, index) => {
+                const tiered = hasTieredPricing(pkg);
+                const sizeKey = selectedSizeByPkg[pkg.id] ?? 'small';
+                const price = tiered ? getPriceForPkg(pkg, sizeKey) : pkg.price;
+                const isPopular = index === 1;
+                const items = serviceListItems(pkg);
+                return (
+                  <article key={pkg.id} className="service-level-block">
+                    {isPopular && <span className="service-level-badge">Most popular</span>}
+                    <div className={`service-level-inner ${index % 2 === 1 ? 'service-level-inner--reverse' : ''}`}>
+                      <div className="service-level-image-wrap">
+                        <img src={resolvePackageImage(pkg, service)} alt={pkg.name} />
+                      </div>
+                      <div className="service-level-content">
+                        <h3 className="service-level-title">{pkg.name.toUpperCase()} PACKAGE</h3>
+
+                        {tiered ? (
+                          <div className="service-level-price-boxes">
+                            {VEHICLE_SIZES.map((size) => {
+                              const p = pkg[size.priceKey] ?? pkg.price;
+                              const orig = pkg[size.originalKey];
+                              if (p == null) return null;
+                              return (
+                                <button
+                                  type="button"
+                                  key={size.key}
+                                  className={`service-level-price-box ${sizeKey === size.key ? 'selected' : ''}`}
+                                  onClick={() => setSizeForPkg(pkg.id, size.key)}
+                                >
+                                  <span className="service-level-price-label">{size.label}</span>
+                                  <span className="service-level-price-row">
+                                    <span className="service-level-price-start">STARTING AT:</span>
+                                    {orig != null && (
+                                      <span className="service-level-price-original">${Number(orig).toFixed(0)}</span>
+                                    )}
+                                    <span className="service-level-price-current">${Number(p).toFixed(0)}</span>
+                                  </span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          price != null && (
+                            <div className="service-level-single-price-block">
+                              <span className="service-level-price-start">STARTING AT:</span>
+                              <span className="service-level-price-current">${Number(price).toFixed(0)}</span>
+                            </div>
+                          )
+                        )}
+
+                        {turnaround(pkg) && (
+                          <p className="service-level-turnaround">TURNAROUND: {turnaround(pkg)}</p>
+                        )}
+
+                        {items.length > 0 && (
+                          <ul className="service-level-list">
+                            {items.map((line, i) => (
+                              <li key={i}>{line}</li>
+                            ))}
+                          </ul>
+                        )}
+
+                        <div className="service-level-actions">
+                          <a href={`tel:${BUSINESS.phone}`} className="btn service-level-btn-call">
+                            CALL NOW
+                          </a>
+                          <button
+                            type="button"
+                            className="btn service-level-btn-schedule"
+                            onClick={() => handleScheduleNow(pkg)}
+                            disabled={inCart(pkg)}
+                          >
+                            {inCart(pkg) ? 'IN BOOKING' : 'SCHEDULE NOW'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           )}
         </div>
         <Link to="/book" className="back-link">← Back to services</Link>
