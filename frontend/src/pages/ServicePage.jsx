@@ -30,7 +30,11 @@ function ServicePage() {
         const serviceRes = await axios.get(`${API_BASE}/api/services/slug/${slug}`);
         setService(serviceRes.data);
         const pkgRes = await axios.get(`${API_BASE}/api/services/${serviceRes.data.id}/packages`);
-        setPackages(pkgRes.data);
+        // Do not show "Complete" package or similar legacy packages
+        const list = (pkgRes.data || []).filter(
+          (p) => p?.name && !p.name.toLowerCase().includes('complete')
+        );
+        setPackages(list);
       } catch (err) {
         setError('Service not found');
       } finally {
@@ -140,7 +144,8 @@ function ServicePage() {
                 const tiered = hasTieredPricing(pkg);
                 const sizeKey = selectedSizeByPkg[pkg.id] ?? 'small';
                 const price = tiered ? getPriceForPkg(pkg, sizeKey) : pkg.price;
-                const isPopular = index === 1;
+                // "Most popular" is Level 2 (by name or display_order), not by array index
+const isPopular = (pkg.name && pkg.name.trim().toLowerCase() === 'level 2') || pkg.display_order === 1;
                 const items = serviceListItems(pkg);
                 return (
                   <article key={pkg.id} className="service-level-block">
