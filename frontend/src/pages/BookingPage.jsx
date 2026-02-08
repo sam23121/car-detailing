@@ -155,7 +155,7 @@ function BookingPage() {
         ) : (
           <>
             {submitted && (
-              <p className="success-message">Booking request submitted! We'll confirm soon. Payment can be arranged when we confirm.</p>
+              <p className="success-message">Booking request submitted! We'll confirm soon. We accept payment in person.</p>
             )}
             {error && <p className="error-message">{error}</p>}
 
@@ -177,7 +177,7 @@ function BookingPage() {
                 ))}
               </ul>
               {cartItems.length > 0 && (
-                <p className="booking-cart-note">Payment can be added when we confirm your booking.</p>
+                <p className="booking-cart-note">We accept payment in person.</p>
               )}
             </section>
 

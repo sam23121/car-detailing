@@ -72,7 +72,7 @@ function PackageDetailPage() {
       service_name: pkg.service_name || '',
       ...(hasTieredPricing ? { vehicleSize: selectedSize } : {}),
     });
-    showToast('Added to booking');
+    showToast('Added to booking. We accept payment in person.');
   };
 
   if (loading) return <div className="package-detail-page loading">Loading...</div>;

@@ -1,6 +1,7 @@
 import React from 'react';
 import Hero from '../components/Hero';
 import FeaturedImage from '../components/FeaturedImage';
+import WelcomeSection from '../components/WelcomeSection';
 import ServicesOverview from '../components/ServicesOverview';
 import Process from '../components/Process';
 import ServiceCategories from '../components/ServiceCategories';
@@ -15,6 +16,7 @@ function Home() {
       <Hero />
       <FeaturedImage />
       <div className="featured-image-slide-over">
+        <WelcomeSection />
         <ServiceCategories />
         <ServicesOverview />
         <Process />

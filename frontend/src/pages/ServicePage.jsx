@@ -30,10 +30,15 @@ function ServicePage() {
         const serviceRes = await axios.get(`${API_BASE}/api/services/slug/${slug}`);
         setService(serviceRes.data);
         const pkgRes = await axios.get(`${API_BASE}/api/services/${serviceRes.data.id}/packages`);
-        // Do not show "Complete" package or similar legacy packages
-        const list = (pkgRes.data || []).filter(
-          (p) => p?.name && !p.name.toLowerCase().includes('complete')
-        );
+        // Do not show "Complete" or other legacy packages; for level-based services only show Level 1/2/3
+        const levelSlugs = ['full-detailing', 'interior-detailing', 'exterior-detailing'];
+        const levelNames = ['Level 1', 'Level 2', 'Level 3'];
+        const list = (pkgRes.data || []).filter((p) => {
+          if (!p?.name) return false;
+          if (p.name.toLowerCase().includes('complete')) return false;
+          if (levelSlugs.includes(slug) && !levelNames.includes(p.name.trim())) return false;
+          return true;
+        });
         setPackages(list);
       } catch (err) {
         setError('Service not found');
@@ -81,34 +86,30 @@ function ServicePage() {
 
   const handleScheduleNow = (pkg) => {
     const sizeKey = selectedSizeByPkg[pkg.id] ?? 'small';
-    const tiered = hasTieredPricing(pkg);
-    const price = tiered ? getPriceForPkg(pkg, sizeKey) : pkg.price;
+    const price = getPriceForPkg(pkg, sizeKey);
     if (price == null) {
       showToast('Please select vehicle size');
       return;
     }
-    if (cartItems.some((i) => i.id === pkg.id && (tiered ? i.vehicleSize === sizeKey : true))) {
+    if (cartItems.some((i) => i.id === pkg.id && i.vehicleSize === sizeKey)) {
       showToast('Already in your booking');
       return;
     }
-    const fullSizeLabel = tiered && VEHICLE_SIZES.find((s) => s.key === sizeKey);
-    const name = tiered && fullSizeLabel
-      ? `${pkg.name} (${fullSizeLabel.label})`
-      : pkg.name;
+    const fullSizeLabel = VEHICLE_SIZES.find((s) => s.key === sizeKey);
+    const name = fullSizeLabel ? `${pkg.name} (${fullSizeLabel.label})` : pkg.name;
     addItem({
       id: pkg.id,
       name,
       price,
       service_name: service?.name || '',
-      ...(tiered ? { vehicleSize: sizeKey } : {}),
+      vehicleSize: sizeKey,
     });
-    showToast('Added to booking');
+    showToast('Added to booking. We accept payment in person.');
   };
 
   const inCart = (pkg) => {
     const sizeKey = selectedSizeByPkg[pkg.id] ?? 'small';
-    const tiered = hasTieredPricing(pkg);
-    return cartItems.some((i) => i.id === pkg.id && (tiered ? i.vehicleSize === sizeKey : true));
+    return cartItems.some((i) => i.id === pkg.id && i.vehicleSize === sizeKey);
   };
 
   if (loading) return <div className="service-page loading">Loading...</div>;
@@ -141,11 +142,9 @@ function ServicePage() {
           ) : (
             <div className="service-levels-list">
               {packages.map((pkg, index) => {
-                const tiered = hasTieredPricing(pkg);
                 const sizeKey = selectedSizeByPkg[pkg.id] ?? 'small';
-                const price = tiered ? getPriceForPkg(pkg, sizeKey) : pkg.price;
                 // "Most popular" is Level 2 (by name or display_order), not by array index
-const isPopular = (pkg.name && pkg.name.trim().toLowerCase() === 'level 2') || pkg.display_order === 1;
+                const isPopular = (pkg.name && pkg.name.trim().toLowerCase() === 'level 2') || pkg.display_order === 1;
                 const items = serviceListItems(pkg);
                 return (
                   <article key={pkg.id} className="service-level-block">
@@ -157,39 +156,30 @@ const isPopular = (pkg.name && pkg.name.trim().toLowerCase() === 'level 2') || p
                       <div className="service-level-content">
                         <h3 className="service-level-title">{pkg.name.toUpperCase()} PACKAGE</h3>
 
-                        {tiered ? (
-                          <div className="service-level-price-boxes">
-                            {VEHICLE_SIZES.map((size) => {
-                              const p = pkg[size.priceKey] ?? pkg.price;
-                              const orig = pkg[size.originalKey];
-                              if (p == null) return null;
-                              return (
-                                <button
-                                  type="button"
-                                  key={size.key}
-                                  className={`service-level-price-box ${sizeKey === size.key ? 'selected' : ''}`}
-                                  onClick={() => setSizeForPkg(pkg.id, size.key)}
-                                >
-                                  <span className="service-level-price-label">{size.label}</span>
-                                  <span className="service-level-price-row">
-                                    <span className="service-level-price-start">STARTING AT:</span>
-                                    {orig != null && (
-                                      <span className="service-level-price-original">${Number(orig).toFixed(0)}</span>
-                                    )}
-                                    <span className="service-level-price-current">${Number(p).toFixed(0)}</span>
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        ) : (
-                          price != null && (
-                            <div className="service-level-single-price-block">
-                              <span className="service-level-price-start">STARTING AT:</span>
-                              <span className="service-level-price-current">${Number(price).toFixed(0)}</span>
-                            </div>
-                          )
-                        )}
+                        <div className="service-level-price-boxes">
+                          {VEHICLE_SIZES.map((size) => {
+                            const p = getPriceForPkg(pkg, size.key);
+                            const orig = pkg[size.originalKey];
+                            if (p == null) return null;
+                            return (
+                              <button
+                                type="button"
+                                key={size.key}
+                                className={`service-level-price-box ${sizeKey === size.key ? 'selected' : ''}`}
+                                onClick={() => setSizeForPkg(pkg.id, size.key)}
+                              >
+                                <span className="service-level-price-label">{size.label}</span>
+                                <span className="service-level-price-row">
+                                  <span className="service-level-price-start">STARTING AT:</span>
+                                  {orig != null && (
+                                    <span className="service-level-price-original">${Number(orig).toFixed(0)}</span>
+                                  )}
+                                  <span className="service-level-price-current">${Number(p).toFixed(0)}</span>
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
 
                         {turnaround(pkg) && (
                           <p className="service-level-turnaround">TURNAROUND: {turnaround(pkg)}</p>
