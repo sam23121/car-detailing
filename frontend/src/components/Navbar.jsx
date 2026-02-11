@@ -28,11 +28,11 @@ function Navbar() {
         </Link>
         <ul className="nav-menu">
           <li><Link to="/">Home</Link></li>
-          <li><a href="/#services">Services</a></li>
-          {/* <li><a href="/#reviews">Reviews</a></li> */}
-          {/* <li><a href="/#blog">Blog</a></li> */}
-          <li><a href="/#faq">FAQ</a></li>
-          <li><a href="/#contact">Contact</a></li>
+          <li><Link to="/#services">Services</Link></li>
+          {/* <li><Link to="/#reviews">Reviews</Link></li> */}
+          {/* <li><Link to="/#blog">Blog</Link></li> */}
+          <li><Link to="/#faq">FAQ</Link></li>
+          <li><Link to="/#contact">Contact</Link></li>
           {count > 0 && (
             <li>
               <Link to="/booking" className="navbar-cart">

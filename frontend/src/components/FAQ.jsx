@@ -5,10 +5,9 @@ import './FAQ.css';
 
 const DEFAULT_FAQS = [
   { id: '1', question: 'What is mobile auto detailing?', answer: 'We come to your home or office with all equipment and products to clean, correct, and protect your vehicle’s interior and exterior—no need to drive anywhere.' },
-  { id: '2', question: 'What areas do you service?', answer: 'We serve Maryland and the Washington DC area. Contact us to confirm we cover your location.' },
-  { id: '3', question: 'Do I need a water/electricity source?', answer: 'We bring our own water and power where possible. For some services we may need access to a hose or outlet—we’ll confirm when you book.' },
-  { id: '4', question: 'What should I prepare?', answer: 'Clear personal items from the interior and ensure we have space to work around the vehicle. We’ll handle the rest.' },
-  { id: '5', question: 'How long will it take?', answer: 'It depends on the service—from a quick wash to a full correction and coating. We’ll give you an estimate when you book.' },
+  { id: '2', question: 'What areas do you service?', answer: 'We serve Maryland, Virginia, and the Washington DC area. Contact us to confirm we cover your location.' },
+  { id: '3', question: 'Do I need a water/electricity source?', answer: 'We bring our own water and power.' },
+  { id: '4', question: 'How long will it take?', answer: 'It depends on the service—from a quick wash to a full correction and coating. We’ll give you an estimate when you book.' },
 ];
 
 function FAQ({ id }) {
@@ -23,12 +22,13 @@ function FAQ({ id }) {
       .finally(() => setLoading(false));
   }, []);
 
-  // Remove payment-related FAQ if present (we accept payment in person)
+  // Remove payment-related and "What should I prepare?" FAQs
   const filterFaqs = (items) =>
     (items || []).filter(
       (faq) =>
         !faq.question?.toLowerCase().includes('payment') &&
-        !faq.question?.toLowerCase().includes('pay ')
+        !faq.question?.toLowerCase().includes('pay ') &&
+        !faq.question?.toLowerCase().includes('what should i prepare')
     );
   const list = filterFaqs(faqs.length > 0 ? faqs : DEFAULT_FAQS);
 

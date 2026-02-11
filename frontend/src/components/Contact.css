@@ -35,11 +35,12 @@
 }
 
 .contact-info a {
-  color: #2563eb;
+  color: #dc2626;
   text-decoration: none;
 }
 
 .contact-info a:hover {
+  color: #ef4444;
   text-decoration: underline;
 }
 

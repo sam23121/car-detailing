@@ -112,7 +112,6 @@ function PackageDetailPage() {
               <div className="package-detail-tier-cards">
                 {VEHICLE_SIZES.map((size) => {
                   const price = pkg[size.priceKey] ?? pkg.price;
-                  const original = pkg[size.originalKey];
                   if (price == null) return null;
                   return (
                     <button
@@ -121,13 +120,8 @@ function PackageDetailPage() {
                       className={`package-detail-tier-card ${selectedSize === size.key ? 'selected' : ''}`}
                       onClick={() => setSelectedSize(size.key)}
                     >
-                      <div className="package-detail-tier-label">{size.label}</div>
-                      <div className="package-detail-tier-price-row">
-                        <span className="package-detail-tier-start">STARTING AT:</span>
-                        {original != null && (
-                          <span className="package-detail-tier-original">${Number(original).toFixed(0)}</span>
-                        )}
-                        <span className="package-detail-tier-price">${Number(price).toFixed(0)}</span>
+                      <div className="package-detail-tier-label">
+                        {size.label} – ${Number(price).toFixed(0)}
                       </div>
                     </button>
                   );
@@ -136,10 +130,6 @@ function PackageDetailPage() {
             ) : (
               priceInfo?.price != null && (
                 <div className="package-detail-single-price">
-                  <span className="package-detail-tier-start">STARTING AT:</span>
-                  {priceInfo.original != null && (
-                    <span className="package-detail-tier-original">${Number(priceInfo.original).toFixed(0)}</span>
-                  )}
                   <span className="package-detail-tier-price">${Number(priceInfo.price).toFixed(0)}</span>
                 </div>
               )
@@ -157,8 +147,8 @@ function PackageDetailPage() {
             )}
 
             <div className="package-detail-actions">
-              <a href={`tel:${BUSINESS.phone}`} className="btn package-detail-btn-call">
-                CALL NOW
+              <a href={`sms:${BUSINESS.phone.replace(/\D/g, '').replace(/^(\d{10})$/, '+1$1')}`} className="btn package-detail-btn-call">
+                TEXT NOW
               </a>
               <button
                 type="button"

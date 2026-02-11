@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Hero from '../components/Hero';
 import FeaturedImage from '../components/FeaturedImage';
 import WelcomeSection from '../components/WelcomeSection';
@@ -11,6 +12,19 @@ import FAQ from '../components/FAQ';
 import Contact from '../components/Contact';
 
 function Home() {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) return;
+    const id = hash.replace(/^#/, '');
+    const el = document.getElementById(id);
+    if (el) {
+      const scroll = () => el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const t = setTimeout(scroll, 100);
+      return () => clearTimeout(t);
+    }
+  }, [hash]);
+
   return (
     <main>
       <Hero />

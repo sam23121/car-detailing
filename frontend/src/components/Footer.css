@@ -29,11 +29,12 @@
 }
 
 .footer-section a {
-  color: #2563eb;
+  color: #dc2626;
   text-decoration: none;
 }
 
 .footer-section a:hover {
+  color: #ef4444;
   text-decoration: underline;
 }
 
@@ -46,11 +47,11 @@
 }
 
 .footer-section li a {
-  color: #9ca3af;
+  color: #dc2626;
 }
 
 .footer-section li a:hover {
-  color: #fff;
+  color: #ef4444;
 }
 
 .footer-bottom {

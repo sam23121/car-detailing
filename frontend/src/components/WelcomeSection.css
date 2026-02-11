@@ -13,7 +13,7 @@
 .welcome-title {
   font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
   margin: 0 0 0.5rem;
   letter-spacing: 0.02em;
 }
@@ -21,7 +21,7 @@
 .welcome-subtitle {
   font-size: clamp(1.1rem, 2.5vw, 1.35rem);
   font-weight: 600;
-  color: #94a3b8;
+  color: #ffffff;
   margin: 0 0 1.25rem;
   letter-spacing: 0.03em;
 }
@@ -29,6 +29,6 @@
 .welcome-text {
   font-size: clamp(0.95rem, 2vw, 1.05rem);
   line-height: 1.7;
-  color: #cbd5e1;
+  color: #ffffff;
   margin: 0;
 }

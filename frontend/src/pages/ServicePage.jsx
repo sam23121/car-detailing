@@ -30,13 +30,15 @@ function ServicePage() {
         const serviceRes = await axios.get(`${API_BASE}/api/services/slug/${slug}`);
         setService(serviceRes.data);
         const pkgRes = await axios.get(`${API_BASE}/api/services/${serviceRes.data.id}/packages`);
-        // Do not show "Complete" or other legacy packages; for level-based services only show Level 1/2/3
+        // Do not show "Complete" or other legacy packages; for level-based services only show allowed names
         const levelSlugs = ['full-detailing', 'interior-detailing', 'exterior-detailing'];
         const levelNames = ['Level 1', 'Level 2', 'Level 3'];
+        const exteriorNames = ['Level 1', 'Level 2', 'Level 3', 'Engine bay cleaning'];
         const list = (pkgRes.data || []).filter((p) => {
           if (!p?.name) return false;
           if (p.name.toLowerCase().includes('complete')) return false;
-          if (levelSlugs.includes(slug) && !levelNames.includes(p.name.trim())) return false;
+          if (slug === 'exterior-detailing' && !exteriorNames.includes(p.name.trim())) return false;
+          if (slug !== 'exterior-detailing' && levelSlugs.includes(slug) && !levelNames.includes(p.name.trim())) return false;
           return true;
         });
         setPackages(list);
@@ -159,7 +161,6 @@ function ServicePage() {
                         <div className="service-level-price-boxes">
                           {VEHICLE_SIZES.map((size) => {
                             const p = getPriceForPkg(pkg, size.key);
-                            const orig = pkg[size.originalKey];
                             if (p == null) return null;
                             return (
                               <button
@@ -168,13 +169,8 @@ function ServicePage() {
                                 className={`service-level-price-box ${sizeKey === size.key ? 'selected' : ''}`}
                                 onClick={() => setSizeForPkg(pkg.id, size.key)}
                               >
-                                <span className="service-level-price-label">{size.label}</span>
-                                <span className="service-level-price-row">
-                                  <span className="service-level-price-start">STARTING AT:</span>
-                                  {orig != null && (
-                                    <span className="service-level-price-original">${Number(orig).toFixed(0)}</span>
-                                  )}
-                                  <span className="service-level-price-current">${Number(p).toFixed(0)}</span>
+                                <span className="service-level-price-label">
+                                  {size.label} – ${Number(p).toFixed(0)}
                                 </span>
                               </button>
                             );
@@ -194,8 +190,8 @@ function ServicePage() {
                         )}
 
                         <div className="service-level-actions">
-                          <a href={`tel:${BUSINESS.phone}`} className="btn service-level-btn-call">
-                            CALL NOW
+                          <a href={`sms:${BUSINESS.phone.replace(/\D/g, '').replace(/^(\d{10})$/, '+1$1')}`} className="btn service-level-btn-call">
+                            TEXT NOW
                           </a>
                           <button
                             type="button"
