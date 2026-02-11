@@ -51,6 +51,11 @@ function AdminLoginPage() {
       .catch((err) => {
         if (err.response?.status === 401) {
           setError('Incorrect password.');
+        } else if (err.code === 'ERR_NETWORK' || !err.response) {
+          setError(
+            'Cannot reach the server. Check that the backend is running. ' +
+            'On Vercel, set VITE_API_URL to your backend URL and redeploy.'
+          );
         } else {
           setError(err.message || 'Something went wrong.');
         }

@@ -1,10 +1,10 @@
 /**
  * Backend API base URL for all frontend requests.
- * Set VITE_API_URL in frontend/.env to override (e.g. for production).
- * No trailing slash.
+ * Set VITE_API_URL in frontend/.env (or Vercel env vars) to override.
+ * No trailing slash. Default http for local dev (backend usually has no SSL).
  */
 export const API_BASE =
-   import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'https://localhost:8000';
+   import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:8000';
 
 /**
  * Business contact info – change here to update everywhere (Contact, Footer, etc.).
