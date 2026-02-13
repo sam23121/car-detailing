@@ -26,7 +26,7 @@ function Home() {
   }, [hash]);
 
   return (
-    <main>
+    <main className="main-home">
       <Hero />
       <FeaturedImage />
       <div className="featured-image-slide-over">

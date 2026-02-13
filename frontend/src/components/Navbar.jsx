@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { PATHS } from '../lib/images';
 import './Navbar.css';
@@ -8,17 +8,24 @@ const SCROLL_THRESHOLD = 24;
 
 function Navbar() {
   const { count } = useCart();
+  const { pathname } = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const isHome = pathname === '/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
-    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const t = setTimeout(onScroll, 200);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
+  const showSolidNav = scrolled || !isHome;
+
   return (
-    <nav className={`navbar navbar-dark${scrolled ? ' navbar-scrolled' : ''}`}>
+    <nav className={`navbar navbar-dark${showSolidNav ? ' navbar-scrolled' : ''}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
           <span className="navbar-logo-img-wrap">
