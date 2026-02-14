@@ -5,20 +5,20 @@
 }
 
 .service-categories-inner {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
 
 .service-category-card {
-  background: #111;
+  background: #222;
   border: 1px solid #374151;
   color: #fff;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.05rem;
   text-align: center;
   border-radius: 8px;
   overflow: hidden;
@@ -38,6 +38,7 @@
   aspect-ratio: 4/3;
   background: #1f2937;
   overflow: hidden;
+  min-height: 200px;
 }
 
 .service-category-card-image img {
@@ -47,13 +48,19 @@
 }
 
 .service-category-card-name {
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   display: block;
 }
 
 .service-category-card-skeleton {
   grid-column: 1 / -1;
   padding: 2rem;
+}
+
+@media (max-width: 900px) {
+  .service-categories-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 600px) {

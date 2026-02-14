@@ -275,6 +275,13 @@
   margin-bottom: 1rem;
 }
 
+.service-level-price-per-foot {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 0 0 1rem;
+}
+
 .service-level-price-box {
   display: block;
   width: 100%;
@@ -362,6 +369,22 @@
 
 .service-level-list li {
   margin-bottom: 0.35rem;
+}
+
+.service-level-list-heading {
+  list-style: none;
+  margin-left: -1.25rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.service-level-list-heading:first-child {
+  margin-top: 0;
 }
 
 .service-level-actions {

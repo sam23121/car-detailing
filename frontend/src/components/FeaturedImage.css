@@ -1,13 +1,58 @@
+/* Extended hero: same background image from hero down until Welcome section */
+.hero-extended {
+  position: relative;
+}
+
+.hero-extended::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('/images/home-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(1.15);
+  pointer-events: none;
+}
+
+.hero-extended::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+}
+
+/* Use wrapper background; hide Hero’s own bg to avoid double image */
+.hero-extended .hero-bg,
+.hero-extended .hero-bg::before {
+  background: none !important;
+  background-image: none !important;
+}
+
+.hero-extended > * {
+  position: relative;
+  z-index: 2;
+}
+
 .featured-image-section {
   width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 0;
+  /* Pull section up so it overlaps hero and blends (no gap) */
+  margin-top: -8vh;
 }
 
 .featured-image-wrap {
   position: relative;
   width: 100%;
+  /* Smooth fade-in from top: no hard line between hero and lambergini */
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 8%, rgba(0, 0, 0, 0.7) 25%, black 50%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25) 8%, rgba(0, 0, 0, 0.7) 25%, black 50%);
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-position: center;
+  -webkit-mask-position: center;
 }
 
 .featured-image-img {
@@ -21,7 +66,7 @@
 .featured-image-dim {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.35);
   pointer-events: none;
 }
 

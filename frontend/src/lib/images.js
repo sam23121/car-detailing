@@ -1,9 +1,10 @@
 /**
  * Central image paths. All assets live in public/images/.
- * Use paths relative to public: /images/filename.jpg
+ * New images in public/images/new_images/ used for service/package cards.
  */
 
 const IMAGES_DIR = '/images';
+const NEW_IMAGES_DIR = `${IMAGES_DIR}/new_images`;
 
 export const PATHS = {
   // Branding
@@ -33,13 +34,25 @@ export const PATHS = {
   painting2: `${IMAGES_DIR}/painting_2.jpg`,
   beforeAfter: `${IMAGES_DIR}/before_and_after.jpg`,
   engineBay: `${IMAGES_DIR}/engine_bay_cleaning.jpg`,
-  // New additions
+  // Legacy
   fullDetailing: `${IMAGES_DIR}/full_detailing.webp`,
   fullDetailing2: `${IMAGES_DIR}/full_detaling_2.webp`,
   fleetDetailing: `${IMAGES_DIR}/fleet_detailing.webp`,
   maintenance: `${IMAGES_DIR}/maintainence.webp`,
   maintenance2: `${IMAGES_DIR}/maintainence_2.webp`,
   steps2: `${IMAGES_DIR}/steps_2.png`,
+
+  // New images (public/images/new_images/)
+  newFullDetailingLevel1: `${NEW_IMAGES_DIR}/Full_detailing_level_1.jpg`,
+  newFullDetailingLevel2: `${NEW_IMAGES_DIR}/Full_detailing_level_2.jpg`,
+  newFullDetailingLevel3: `${NEW_IMAGES_DIR}/Full_detailing_on_the_outside.jpg`,
+  newInteriorLevel2: `${NEW_IMAGES_DIR}/Interior_detaling_level_2.jpg`,
+  newMonthlyMaintenance: `${NEW_IMAGES_DIR}/Monthly_maintenance.jpg`,
+  newBiweeklyMaintenance: `${NEW_IMAGES_DIR}/Biweekly%20package_pic_(monthly_maintenance).jpg`,
+  newCeramic1Year: `${NEW_IMAGES_DIR}/1_year_ceramic_coating.jpg`,
+  newCeramic2: `${NEW_IMAGES_DIR}/Ceramic_coating_2.jpg`,
+  newPaintCorrection1: `${NEW_IMAGES_DIR}/Paint_correction_1.jpg`,
+  newPaintCorrection2: `${NEW_IMAGES_DIR}/Paint_correction_2.jpg`,
 };
 
 /** Default when no image is set (e.g. service/package has no image_url). */
@@ -50,12 +63,12 @@ export const PLACEHOLDER_IMAGE = PATHS.homeBg;
  */
 export function getServiceImagePath(serviceSlug) {
   const map = {
-    'full-detailing': PATHS.fullDetailing,
+    'full-detailing': PATHS.newFullDetailingLevel1,
     'exterior-detailing': PATHS.exterior1,
     'interior-detailing': PATHS.interior1,
-    'monthly-maintenance': PATHS.maintenance,
-    'paint-correction': PATHS.painting,
-    'ceramic-coating': PATHS.ceramicCoating,
+    'monthly-maintenance': PATHS.newMonthlyMaintenance,
+    'paint-correction': PATHS.newPaintCorrection1,
+    'ceramic-coating': PATHS.newCeramic1Year,
     'fleet-detailing': PATHS.fleetDetailing,
   };
   return map[serviceSlug] || PLACEHOLDER_IMAGE;
@@ -63,16 +76,16 @@ export function getServiceImagePath(serviceSlug) {
 
 /**
  * Default image for a package (by service slug and optional display_order).
- * When package.image_url and service.image_url are null, pick from category images.
+ * Uses new_images/ where available.
  */
 export function getPackageImagePath(serviceSlug, displayOrder = 0) {
   const byService = {
-    'full-detailing': [PATHS.fullDetailing, PATHS.fullDetailing2, PATHS.beforeAfter],
+    'full-detailing': [PATHS.newFullDetailingLevel1, PATHS.newFullDetailingLevel2, PATHS.newFullDetailingLevel3],
     'exterior-detailing': [PATHS.exterior1, PATHS.exterior2, PATHS.exterior3],
-    'interior-detailing': [PATHS.interior1, PATHS.interior3, PATHS.interior4],
-    'monthly-maintenance': [PATHS.maintenance, PATHS.maintenance2],
-    'paint-correction': [PATHS.painting, PATHS.painting2],
-    'ceramic-coating': [PATHS.ceramicCoating, PATHS.ceramicCoating2, PATHS.ceramicCoating],
+    'interior-detailing': [PATHS.interior1, PATHS.newInteriorLevel2, PATHS.interior4],
+    'monthly-maintenance': [PATHS.newBiweeklyMaintenance, PATHS.newMonthlyMaintenance],
+    'paint-correction': [PATHS.newPaintCorrection1, PATHS.newPaintCorrection2],
+    'ceramic-coating': [PATHS.newCeramic1Year, PATHS.newCeramic2, PATHS.newCeramic2],
     'fleet-detailing': [PATHS.fleetDetailing],
   };
   const list = byService[serviceSlug];

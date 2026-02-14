@@ -27,11 +27,15 @@ function Home() {
 
   return (
     <main className="main-home">
-      <Hero />
-      <FeaturedImage />
+      <section className="hero-extended">
+        <Hero />
+        <FeaturedImage />
+      </section>
       <div className="featured-image-slide-over">
-        <WelcomeSection />
-        <ServiceCategories />
+        <section className="welcome-and-services-section">
+          <WelcomeSection />
+          <ServiceCategories />
+        </section>
         <ServicesOverview />
         <Process />
         <DetailedServices />

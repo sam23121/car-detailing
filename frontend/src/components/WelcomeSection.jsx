@@ -5,7 +5,10 @@ function WelcomeSection() {
   return (
     <section className="welcome-section">
       <div className="welcome-section-inner">
-        <h2 className="welcome-title">Welcome to YMB Habesha AutoDetail</h2>
+        <h2 className="welcome-title">
+          <span className="welcome-title-line">Welcome to</span>
+          <span className="welcome-title-line">YMB Habesha AutoDetail</span>
+        </h2>
         <p className="welcome-subtitle">Premium Car Detailing</p>
         <p className="welcome-text">
           From deep interior cleaning to long-lasting ceramic coating, we restore and protect

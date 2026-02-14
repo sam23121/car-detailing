@@ -1,7 +1,7 @@
 .welcome-section {
   padding: 3rem 1.5rem;
-  background: #0d0d0d;
-  border-top: 1px solid #1f2937;
+  background: transparent;
+  border-top: none;
 }
 
 .welcome-section-inner {
@@ -11,24 +11,60 @@
 }
 
 .welcome-title {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 0.5rem;
-  letter-spacing: 0.02em;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+
+.welcome-title-line {
+  display: block;
+  position: relative;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.welcome-title-line:last-child {
+  margin-bottom: 0;
+}
+
+/* One slim line near center-left (middle), one near center-right (bottom) */
+.welcome-title-line:first-child::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 5rem);
+  bottom: 0;
+  width: 4rem;
+  height: 1px;
+  background: #dc2626;
+}
+
+.welcome-title-line:last-child::after {
+  content: '';
+  position: absolute;
+  right: calc(50% - 5rem);
+  bottom: 0;
+  left: auto;
+  width: 4rem;
+  height: 1px;
+  background: #dc2626;
 }
 
 .welcome-subtitle {
-  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-  font-weight: 600;
-  color: #ffffff;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: #fff;
   margin: 0 0 1.25rem;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 .welcome-text {
   font-size: clamp(0.95rem, 2vw, 1.05rem);
   line-height: 1.7;
-  color: #ffffff;
+  color: #b3b3b3;
   margin: 0;
 }

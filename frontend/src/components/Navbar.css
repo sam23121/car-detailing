@@ -102,6 +102,7 @@
   padding: 10px 20px;
   border-radius: 4px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .schedule-btn:hover {
@@ -122,7 +123,28 @@
   .nav-menu {
     width: 100%;
     justify-content: center;
-    gap: 16px;
+    gap: 12px;
     margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .nav-menu a {
+    font-size: 0.875rem;
+  }
+
+  .schedule-btn {
+    padding: 8px 14px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav-menu {
+    gap: 8px;
+  }
+
+  .schedule-btn {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
   }
 }
