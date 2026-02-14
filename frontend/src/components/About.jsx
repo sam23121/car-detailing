@@ -11,7 +11,7 @@ function About() {
           <h2>About YMB Habesha – How It Started</h2>
           <p className="section-subtext">
             YMB Habesha was built on a simple idea: bring professional-grade auto detailing 
-            to our customers wherever they are. Serving Maryland and the DC area, we focus on interior and 
+            to our customers wherever they are. Serving Maryland, Virginia and the DC area, we focus on interior and 
             exterior care, paint correction, and ceramic coating so your vehicle looks and stays like new.
           </p>
           <div className="about-buttons">
