@@ -65,6 +65,12 @@
   margin-top: 1.5rem;
 }
 
+.process-image {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .process-image-img {
   width: 100%;
   aspect-ratio: 4/3;

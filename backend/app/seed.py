@@ -9,11 +9,12 @@ def run_seed():
     """Insert default services and packages (levels) if missing. Safe to call multiple times."""
     db = SessionLocal()
     try:
-        # Remove only legacy "Complete" packages (e.g. "Complete In & Out"). Do NOT remove Full Detailing levels (Level 1, 2, 3).
+        # Remove only legacy "Complete" packages and "Full Ceramic Package".
         db.query(models.Package).filter(models.Package.name.ilike("%complete%")).delete(synchronize_session="fetch")
+        db.query(models.Package).filter(models.Package.name.ilike("%full ceramic package%")).delete(synchronize_session="fetch")
         db.commit()
 
-        # Main services: Full detailing, Interior, Exterior, Ceramic, Paint correction, Monthly maintenance
+        # Main services: Full detailing, Interior, Exterior, Ceramic, Paint correction, Monthly maintenance, Fleet
         services_data = [
             {"name": "Full Detailing", "slug": "full-detailing", "description": "Interior and exterior detailing. Choose your level."},
             {"name": "Interior Detailing", "slug": "interior-detailing", "description": "Deep clean and condition your vehicle interior. Choose your level."},
@@ -21,6 +22,7 @@ def run_seed():
             {"name": "Ceramic Coating", "slug": "ceramic-coating", "description": "Protective ceramic coating for your vehicle's paint."},
             {"name": "Paint Correction", "slug": "paint-correction", "description": "Professional paint correction to restore your vehicle's finish."},
             {"name": "Monthly Maintenance", "slug": "monthly-maintenance", "description": "Regular maintenance plans to keep your vehicle looking its best."},
+            {"name": "Fleet Detailing", "slug": "fleet-detailing", "description": "Wash and wax options for fleet vehicles. Pricing per foot."},
         ]
         for data in services_data:
             if not db.query(models.Service).filter(models.Service.slug == data["slug"]).first():
@@ -117,15 +119,23 @@ def run_seed():
         ensure_package("ceramic-coating", 2, "5 Year Ceramic Coating", "Five-year ceramic coating protection.", 480, 699, 799, 899, 769, 879, 989, turnaround_hours=8,
                       details="Full prep and correction\n5-year ceramic coating\nMultiple layers")
 
-        # ----- Paint correction: one level, Small / Medium / Large -----
-        ensure_package("paint-correction", 0, "Paint Correction", "Professional paint correction to remove swirls and restore gloss.", 300, 399, 459, 519, 439, 504, 569, turnaround_hours=5,
-                      details="Wash and decontamination\nMulti-step correction\nPolish and refine\nProtection application")
+        # ----- Paint correction: 1 Step, 2 Step (frontend shows custom copy) -----
+        ensure_package("paint-correction", 0, "1 Step paint correction", "1 step paint correction.", 300, 500, 600, 700, 500, 600, 700, turnaround_hours=5,
+                      details="Pre-wash and hand wash\nWheels and tires\nPaint correction")
+        ensure_package("paint-correction", 1, "2 Step paint correction", "2 step paint correction.", 480, 1000, 1200, 1300, 1000, 1200, 1300, turnaround_hours=8,
+                      details="Pre-wash and hand wash\nWheels and tires\n2 step correction")
 
         # ----- Monthly maintenance: Biweekly, Monthly -----
         ensure_package("monthly-maintenance", 0, "Biweekly", "Maintenance wash and interior tidy every two weeks.", 45, 79, 99, 119, 87, 109, 131, turnaround_hours=1,
                       details="Exterior wash\nInterior vacuum and wipe\nQuick detail")
         ensure_package("monthly-maintenance", 1, "Monthly", "Monthly maintenance detail to keep your vehicle in top shape.", 90, 129, 159, 189, 142, 175, 208, turnaround_hours=1,
                       details="Full maintenance wash\nInterior deep tidy\nTire and trim dressing")
+
+        # ----- Fleet detailing: Wash & Spray Wax, Wash & Hand Wax (price per foot, frontend shows custom copy) -----
+        ensure_package("fleet-detailing", 0, "Wash & Spray Wax", "Wash and spray wax. Pricing per foot.", 60, 15, 15, 15, 15, 15, 15, turnaround_hours=1,
+                      details="Wash and spray wax")
+        ensure_package("fleet-detailing", 1, "Wash & Hand Wax", "Wash and hand wax. Pricing per foot.", 120, 35, 35, 35, 35, 35, 35, turnaround_hours=2,
+                      details="Wash and hand wax")
 
         db.commit()
         return len(services_data)

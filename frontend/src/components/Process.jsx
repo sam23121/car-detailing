@@ -36,6 +36,7 @@ function Process() {
         </div>
         <div className="process-image">
           <img src={PATHS.steps2} alt="Our process" className="process-image-img" />
+          <img src={PATHS.fullDetailingWebp} alt="Detailing work" className="process-image-img" />
         </div>
       </div>
     </section>
