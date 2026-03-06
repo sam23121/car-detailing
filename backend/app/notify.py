@@ -1,14 +1,14 @@
-"""Send email and SMS when a booking is created. Uses Resend and Twilio (env-configured)."""
+"""Send email (SMTP) and optional SMS (Twilio) on booking. No paid email service."""
 import logging
 import os
 from datetime import datetime
+
+from app.email_smtp import send_email as smtp_send_email
 
 logger = logging.getLogger(__name__)
 
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "smlalene@gmail.com")
 OWNER_PHONE = os.environ.get("OWNER_PHONE", "7024707392")
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
-RESEND_FROM = os.environ.get("RESEND_FROM_EMAIL", "Quality Detailing <onboarding@resend.dev>")
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 TWILIO_FROM_NUMBER = os.environ.get("TWILIO_FROM_NUMBER")
@@ -43,20 +43,8 @@ def _booking_summary(booking):
 
 
 def _send_email(to: str, subject: str, body_text: str):
-    if not RESEND_API_KEY:
-        logger.warning("RESEND_API_KEY not set; skipping email to %s", to)
-        return
-    try:
-        import resend
-        resend.api_key = RESEND_API_KEY
-        resend.Emails.send({
-            "from": RESEND_FROM,
-            "to": [to],
-            "subject": subject,
-            "html": body_text.replace("\n", "<br>\n"),
-        })
-    except Exception as e:
-        logger.exception("Resend send failed to %s: %s", to, e)
+    html_body = body_text.replace("\n", "<br>\n")
+    smtp_send_email(to, subject, html_body, html=True)
 
 
 def _normalize_phone_e164(phone: str, default_country_code: str = "1") -> str:

@@ -9,9 +9,22 @@ def run_seed():
     """Insert default services and packages (levels) if missing. Safe to call multiple times."""
     db = SessionLocal()
     try:
-        # Remove only legacy "Complete" packages and "Full Ceramic Package".
-        db.query(models.Package).filter(models.Package.name.ilike("%complete%")).delete(synchronize_session="fetch")
-        db.query(models.Package).filter(models.Package.name.ilike("%full ceramic package%")).delete(synchronize_session="fetch")
+        # Package IDs still referenced by bookings (cannot delete).
+        referenced_ids = {
+            row[0] for row in
+            db.query(models.Booking.package_id)
+            .filter(models.Booking.package_id.isnot(None))
+            .distinct()
+            .all()
+        }
+
+        # Remove legacy "Complete" and "Full Ceramic Package" only if no booking references them.
+        for name_pattern in ("%complete%", "%full ceramic package%"):
+            q = db.query(models.Package).filter(models.Package.name.ilike(name_pattern))
+            if referenced_ids:
+                q = q.filter(~models.Package.id.in_(referenced_ids))
+            for pkg in q.all():
+                db.delete(pkg)
         db.commit()
 
         # Main services: Full detailing, Interior, Exterior, Ceramic, Paint correction, Monthly maintenance, Fleet
