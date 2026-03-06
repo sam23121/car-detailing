@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Services.css';
 
-// Order: full detailing, exterior, interior, monthly maintenance, paint correction, ceramic, fleet detailing
+// Order: full detailing, exterior, interior, monthly maintenance, paint correction, ceramic
 const SERVICE_CARDS = [
   { name: 'Full Detailing', slug: 'full-detailing', icon: '✨' },
   { name: 'Exterior Detailing', slug: 'exterior-detailing', icon: '🚗' },
@@ -10,7 +10,6 @@ const SERVICE_CARDS = [
   { name: 'Monthly Maintenance', slug: 'monthly-maintenance', icon: '🔧' },
   { name: 'Paint Correction', slug: 'paint-correction', icon: '🎨' },
   { name: 'Ceramic Coating', slug: 'ceramic-coating', icon: '🛡️' },
-  { name: 'Fleet Detailing', slug: 'fleet-detailing', icon: '🚐' },
 ];
 
 function Services({ services, id }) {

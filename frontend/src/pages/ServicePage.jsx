@@ -9,193 +9,240 @@ import { resolvePackageImage } from '../lib/images';
 import { getServiceDisplayName } from '../lib/services';
 import './ServicePage.css';
 
-/** Exterior Detailing: custom content per level, shown inside package cards */
+/** Exterior Detailing: custom content per level, shown inside package cards (from services.md) */
 const EXTERIOR_LEVELS = {
   'Level 1': {
-    subtitle: 'Wash, wax & interior wipe down',
-    prices: { small: 130, medium: 150, large: 150 },
+    subtitle: 'Wash, Wax & Interior wipe down',
+    prices: { small: 140, medium: 160, large: 180 },
     items: [
-      'Pre-wash with spot free water',
-      'Contact 100% hand wash with spot-free water',
-      'Hand wash wheels, wheel well and tires',
-      'Gas cap cleaning',
-      'Apply tire dressing',
+      'Gentle pre-rinse using spot-free water',
+      'Complete hand wash using spot-free water',
+      'Wheels, tires, and wheel wells cleaned by hand',
+      'Gas cap area cleaned',
+      'Tire dressing applied',
+      'Paint sealant applied for shine and protection',
       'Vacuum and wipe down vinyl or plastic floor mats',
       'Vacuum cloth seat',
       'Wipe down dashboard',
     ],
   },
   'Level 2': {
-    prices: { small: 140, medium: 150, large: 160 },
+    subtitle: 'Deep Detailing Upgrade',
+    prices: { small: 190, medium: 210, large: 230 },
     items: [
-      'Everything from our Level 1 Package plus these upgrades:',
-      'Iron removal treatment',
-      'Decontaminate paint to remove bugs/tar/grime',
-      'Apply paint sealant (wax)',
+      'Includes everything in our Level 1 Detail, plus the following advanced services:',
+      'Deep shampoo of carpets in cabin and trunk',
+      'Remove bug splatters from surfaces',
+      'Remove environmental fallout with detailers clay from paint',
+      'Chemically remove tar overspray and road grime',
+      'Pet hair and sand removal (if present)',
+      'UV protection applied to dashboard and panels',
     ],
   },
   'Level 3': {
-    prices: { small: 160, medium: 170, large: 190 },
+    subtitle: 'Extreme Restoration',
+    prices: { small: 280, medium: 310, large: 330 },
     items: [],
-    note: 'This package is for vehicles that are extremely dirty from the outside.',
+    note: 'For vehicles with heavy grime, brake dust, or long-term neglect. Add-On Service: Engine bay cleaning and dressing: $85',
   },
 };
 
-/** Interior Detailing: custom content per level, shown inside package cards */
+/** Interior Detailing: custom content per level, shown inside package cards (from services.md) */
 const INTERIOR_LEVELS = {
   'Level 1': {
-    prices: { small: 150, medium: 180, large: 190 },
+    subtitle: 'Interior Detailing',
+    prices: { small: 200, medium: 220, large: 250 },
     items: [
-      'Vacuum floors and trunk area',
-      'Wash vinyl or plastic floor mats',
+      'Interior items',
+      'Complete vacuum of floor and trunks area',
+      'Wash vinyl or rubber floor mats',
       'Vacuum cloth seats',
-      'Wipe leather seats down',
-      'Clean console, cup holders, crevices, and vents',
-      'Clean dash and UV protect',
-      'Clean all interior trim and plastics',
-      'Clean and condition door panels and pockets',
-      'Clean door jambs',
-      'Clean glass inside and out',
-      'Deep clean and condition leather seats',
-      'Apply protective treatment to leather and vinyl',
+      'Wipe down leather seats',
+      'Shampoo treatment of cloth floor mats',
+      'Deep clean and condition leather seat',
+      'Clean dashboard and apply UV protection',
+      'Full wipe-down of all plastics and interior trim',
+      'Cleaning of center console, vents, cup holders, and tight areas',
+      'Door panels and door storage pockets cleaned and conditioned',
+      'Door jambs cleaned',
+      'Interior windows and mirrors cleaned streak-free',
     ],
   },
   'Level 2': {
-    prices: { small: 220, medium: 230, large: 240 },
+    prices: { small: 250, medium: 270, large: 290 },
     items: [
-      'Everything from our Level 1 Package plus these upgrades:',
-      'Clean vehicle headliner',
-      'Shampoo cloth floor mats',
-      'Shampoo carpeting in cabin and trunk',
-      'Shampoo cloth seats',
-      'Decontaminate remaining impurities with clay-bar',
-      'Pet hair and sand removal if present',
+      'Includes everything in our Level 1 Detail, plus the following advanced services:',
+      'Deep shampoo extraction of cloth seats',
+      'Steam treatment of cloth seats to sanitize and break down stains',
+      'Deep shampoo and steam treatment of carpets in cabin and trunk',
+      'Pet hair and sand removal (if present)',
     ],
   },
   'Level 3': {
-    prices: { small: 300, medium: 350, large: 390 },
+    subtitle: 'Extreme Restoration',
+    prices: { small: 330, medium: 350, large: 390 },
     items: [],
-    note: 'This package is for vehicles that are extremely dirty from the inside. This includes excessive staining, dog hair, sand, throw up or if the vehicle hasn\'t been washed in years.',
+    note: 'This service is designed for vehicles in heavy soiled interior. This package includes extended labor time, extra extraction, and detailed restoration.',
   },
 };
 
-/** Full Detailing: custom content per level, shown inside package cards */
+/** Full Detailing: custom content per level, shown inside package cards (from services.md) */
 const FULL_DETAILING_LEVEL_1_ITEMS = [
-  'Interior items:',
-  'Vacuum floors and trunk area',
-  'Shampoo cloth floor mats',
+  'Interior items',
+  'Complete vacuum of floor and trunks area',
+  'Wash vinyl or rubber floor mats',
   'Vacuum cloth seats',
-  'Wipe leather seats down',
-  'Clean console, cup holders, crevices, and vents',
-  'Clean dash and UV protect',
-  'Clean all interior trim and plastics',
-  'Clean and condition door panels and pockets',
-  'Clean door jambs',
-  'Clean glass inside and out',
-  'Deep clean and condition leather seats',
-  'Apply protective treatment to leather and vinyl',
-  'Exterior items:',
-  'Pre-wash with spot free water',
-  'Contact 100% hand wash with spot-free water',
-  'Hand wash wheels, wheel well and tires',
-  'Gas cap cleaning',
-  'Decontaminate paint to remove minor bugs/tar/grime',
-  'Apply trim dressing',
-  'Apply no-sling tire dressing',
-  'Apply paint sealant (wax)',
+  'Wipe down leather seats',
+  'Shampoo of carpets floor mat',
+  'Deep clean and condition leather seat',
+  'Clean dashboard and apply UV protection',
+  'Full wipe-down of all plastics and interior trim',
+  'Cleaning of center console, vents, cup holders, and tight areas',
+  'Door panels and door storage pockets cleaned and conditioned',
+  'Door jambs cleaned',
+  'Interior windows and mirrors cleaned streak-free',
+  'Exterior Items',
+  'Your vehicle will receive a careful hand wash and protective finish for a clean, glossy look.',
+  'Gentle pre-rinse using spot-free water',
+  'Complete hand wash using spot-free water',
+  'Wheels, tires, and wheel wells cleaned by hand',
+  'Gas cap area cleaned',
+  'Tire dressing applied',
+  'Paint sealant applied for shine and protection',
 ];
 
 const FULL_DETAILING_LEVEL_2_ITEMS = [
-  'Everything from our Level 1 Package plus these upgrades:',
-  'Clean vehicle headliner',
-  'Shampoo carpeting in cabin and trunk',
-  'Shampoo cloth seats',
-  'Decontaminate remaining impurities with clay-bar',
-  'Pet hair and sand removal if present',
+  'What\'s Included',
+  'Includes everything in our Level 1 Detail, plus the following advanced services:',
+  'Full shampoo extraction of cloth seats',
+  'Steam treatment of cloth seats to sanitize and break down stains',
+  'Deep shampoo and steam treatment of carpets in cabin and trunk',
+  'Remove bug splatters from surfaces',
+  'Remove environmental fallout with detailers clay from paint',
+  'Chemically remove tar overspray and road grime',
+  'Pet hair and sand removal (if present)',
+];
+
+const FULL_DETAILING_LEVEL_3_ITEMS = [
+  'Who This Package Is For',
+  'This service is designed for vehicles in heavy or neglected condition that require extensive cleaning and extra labor.',
+  'What\'s Included',
+  'Includes everything in Level 1 and Level 2, plus:',
+  'Intensive stain treatment and extraction',
+  'Extended pet hair removal process',
+  'Deep interior cleaning',
+  'Heavy exterior decontamination',
+  'Extra labor time for severely soiled areas',
 ];
 
 const FULL_DETAILING_LEVELS = {
   'Level 1': {
-    prices: { small: 280, medium: 325, large: 370 },
+    subtitle: 'Full detailing',
+    prices: { small: 280, medium: 320, large: 370 },
     items: FULL_DETAILING_LEVEL_1_ITEMS,
   },
   'Level 2': {
+    subtitle: 'Deep Full Detailing Upgrade',
     prices: { small: 330, medium: 370, large: 390 },
     items: FULL_DETAILING_LEVEL_2_ITEMS,
   },
   'Level 3': {
-    items: [],
-    note: 'This package is for vehicles that are extremely dirty from the inside and outside. This includes excessive staining, dog hair, sand, throw up or if the vehicle hasn\'t been washed in years.',
+    subtitle: 'Extreme Restoration',
+    prices: { small: 470, medium: 520, large: 560 },
+    items: FULL_DETAILING_LEVEL_3_ITEMS,
+    note: 'Important Notice: Final pricing is determined after in-person inspection. Vehicles with biohazard material (excessive bodily fluids, mold, etc.) may require specialized treatment and additional charges.',
   },
 };
 
-/** Monthly Maintenance: custom content per package, shown inside package cards (API package names: "Monthly", "Biweekly") */
-const MAINTENANCE_SHARED_ITEMS = [
-  'Interior Items:',
-  'Vacuum floors and trunk area',
-  'Wipe down vinyl or plastic floor mats',
+/** Monthly Maintenance: custom content per package (from services.md). API package names: "Monthly", "Biweekly". */
+const MAINTENANCE_MONTHLY_ITEMS = [
+  'Interior Maintenance',
+  'Full vacuum of carpets and trunk',
+  'Light wipe-down of floor mats (vinyl/rubber)',
   'Vacuum cloth seats',
-  'Wipe leather seats down',
-  'Clean console, cup holders, crevices, and vents',
-  'Clean dash and UV protect',
-  'Clean all interior trim and plastics',
-  'Clean and condition door panels and pockets',
-  'Clean door jambs',
-  'Clean glass inside and out',
-  'Deep clean and condition leather seats',
-  'Apply protective treatment to leather and vinyl',
-  'Exterior Items:',
-  'Two bucket hand wash',
-  'Hand wash wheels and tires',
-  'Apply trim dressing',
-  'Apply no-sling tire dressing',
-  'Apply paint sealant (wax)',
+  'Wipe down leather seats',
+  'Leather seat conditioning treatment',
+  'Clean dashboard and apply UV protection',
+  'Detailed wipe-down of trim, panels, console, vents, and cup holders',
+  'Door jamb light wipe down',
+  'Interior and exterior glass cleaning',
+  'Protective treatment applied to leather and vinyl surfaces',
+  'Exterior Maintenance',
+  'Pre-rinse using spot-free water',
+  'Complete hand wash using spot-free water',
+  'Wheels and tires cleaned by hand',
+  'No-sling tire shine',
+  'Paint sealant applied to maintain protection and gloss',
+];
+
+const MAINTENANCE_BIWEEKLY_ITEMS = [
+  'Interior Maintenance',
+  'Complete vacuum of carpets and trunk area',
+  'Wipe-down of vinyl or rubber floor mats',
+  'Vacuum cloth seats',
+  'Leather seat wipe-down and conditioning',
+  'Dashboard cleaning with UV protection',
+  'Cleaning of console, cup holders, vents, and tight areas',
+  'Wipe-down of interior trim and plastics',
+  'Door jamb cleaning',
+  'Interior and exterior glass cleaned streak-free',
+  'Protective treatment applied to leather and vinyl surfaces',
+  'Exterior Maintenance',
+  'Pre-rinse using spot-free water',
+  'Complete hand wash using spot-free water',
+  'Wheels and tires cleaned by hand',
+  'Trim dressing applied',
+  'No-sling tire shine',
+  'Paint sealant application to maintain gloss and protection',
 ];
 
 const MAINTENANCE_PACKAGES = {
   'Monthly': {
     subtitle: '1 month maintenance',
     prices: { small: 150, medium: 175, large: 210 },
-    items: MAINTENANCE_SHARED_ITEMS,
+    items: MAINTENANCE_MONTHLY_ITEMS,
+    note: 'Important Notes: The vehicle must first get full detailing by our team and be maintained on a 4-week schedule to qualify for maintenance pricing. Excessive buildup, heavy pet hair, or severe staining may require upgrade to a higher-level detail.',
   },
   'Biweekly': {
+    subtitle: 'Biweekly',
     prices: { small: 350, medium: 370, large: 395 },
-    items: MAINTENANCE_SHARED_ITEMS,
+    items: MAINTENANCE_BIWEEKLY_ITEMS,
+    note: 'Important Notes: Biweekly pricing applies to vehicles maintained on a consistent two-week schedule. The vehicle must first get full detailing by our team to qualify for maintenance pricing. Vehicles with excessive buildup, staining, or heavy contamination may require a higher-level detail before starting maintenance.',
   },
 };
 
-/** Ceramic Coating: custom content per package (API names: "1 Year Ceramic Coating", "3 Year Ceramic Coating", "5 Year Ceramic Coating") */
+/** Ceramic Coating: custom content per package (from services.md). Benefits + per-package items. */
+const CERAMIC_BENEFITS = [
+  'Benefits of Ceramic Coating:',
+  'Protects your vehicle\'s paint from UV damage and oxidation',
+  'Maintains long-term paint condition and resale value',
+  'Creates a hydrophobic barrier that repels water & contaminants',
+  'Enhances gloss, depth, and color clarity for a rich, polished finish',
+  'Reduces maintenance time & makes cleaning effortless',
+];
+
 const CERAMIC_1YEAR_ITEMS = [
+  ...CERAMIC_BENEFITS,
   'Pre-wash and 100% hand wash using spot-free water',
-  'Cleaning of wheels, wheel well, tires and gas cap area',
-  '1 Step Paint Correction (remove 40-60% of light swirls)',
-  'High grade 1 year Ceramic Coating',
-  'Protect your vehicle\'s paint from UV rays and oxidation',
-  'Repel water, dirt, and road contaminants',
-  'Enhance gloss, depth, and color clarity',
-  'Make maintenance and washing easier',
+  'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+  '2-Step Paint Correction – removes 60–80% of light swirls',
+  'Application of high-grade 1-year ceramic coating',
 ];
 
 const CERAMIC_3YEAR_ITEMS = [
+  ...CERAMIC_BENEFITS,
   'Pre-wash and 100% hand wash using spot-free water',
-  'Cleaning of wheels, wheel well, tires and gas cap area',
-  '2 Step Paint Correction (remove 80-90% of light swirls)',
-  'High grade 3 year Ceramic Coating',
-  'Protect your vehicle\'s paint from UV rays and oxidation',
-  'Repel water, dirt, and road contaminants',
-  'Enhance gloss, depth, and color clarity',
-  'Make maintenance and washing easier',
+  'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+  '2-Step Paint Correction – removes 60–80% of light swirls',
+  'Application of high-grade 3-year ceramic coating',
 ];
 
 const CERAMIC_5YEAR_ITEMS = [
+  ...CERAMIC_BENEFITS,
   'Pre-wash and 100% hand wash using spot-free water',
-  'Cleaning of wheels, wheel well, tires and gas cap area',
-  '2 Step Paint Correction (remove 80-90% of light swirls)',
-  'High grade 5 year Ceramic Coating',
-  'Protect your vehicle\'s paint from UV rays and oxidation',
-  'Repel water, dirt, and road contaminants',
-  'Enhance gloss, depth, and color clarity',
-  'Make maintenance and washing easier',
+  'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+  '2-Step Paint Correction – removes 60–80% of light swirls',
+  'Application of high-grade 5-year ceramic coating',
 ];
 
 const CERAMIC_PACKAGES = {
@@ -216,17 +263,18 @@ const CERAMIC_PACKAGES = {
   },
 };
 
-/** Paint Correction: custom content per package (API names: "1 Step paint correction", "2 Step paint correction") */
+/** Paint Correction: custom content per package (from services.md). API names: "1 Step paint correction", "2 Step paint correction". */
 const PAINT_CORRECTION_1STEP_ITEMS = [
   'Pre-wash and 100% hand wash using spot-free water',
-  'Cleaning of wheels, wheel well, tires and gas cap area',
-  '2 Step Paint Correction (remove 40-60% of light swirls)',
-  'With our 2 step paint correction service, you can get up to 80% of scratches and defects removed based on original condition.',
+  'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+  '2-Step Paint Correction – removes 60–80% of light swirls',
+  'Upgrade Option:',
+  'Our professional 2-Step Paint Correction removes up to 80% of visible scratches and defects, dramatically improving gloss, clarity and overall paint appearance.',
 ];
 
 const PAINT_CORRECTION_2STEP_ITEMS = [
   'Pre-wash and 100% hand wash using spot-free water',
-  'Cleaning of wheels, wheel well, tires and gas cap area',
+  'Cleaning of wheels, wheel wells, tires and gas cap area',
   '2 Step Paint Correction (remove 80-90% of light swirls)',
   'With our 2 step paint correction service, you can get up to 80% of scratches and defects removed based on original condition. The process requires more time and energy than the 1 step enhancement polish, but benefits from a much higher level of scratch, defect and swirl removal.',
   'AVERAGE CAR, USED CAR, DAILY DRIVEN USE, NEGLECTED PAINT',
@@ -245,22 +293,10 @@ const PAINT_CORRECTION_PACKAGES = {
   },
 };
 
-/** Fleet Detailing: per-foot pricing, 2 cards (API names: "Wash & Spray Wax", "Wash & Hand Wax") */
-const FLEET_PACKAGES = {
-  'Wash & Spray Wax': {
-    pricePerFoot: 15,
-    items: [],
-  },
-  'Wash & Hand Wax': {
-    pricePerFoot: 35,
-    items: [],
-  },
-};
-
 const VEHICLE_SIZES = [
   { key: 'small', label: 'Small Coupe/Sedans', priceKey: 'price_small', originalKey: 'price_original_small' },
-  { key: 'medium', label: 'Medium SUV/Truck (4-5 Seater)', priceKey: 'price_medium', originalKey: 'price_original_medium' },
-  { key: 'large', label: 'Large Minivan/Van (6-8 Seater)', priceKey: 'price_large', originalKey: 'price_original_large' },
+  { key: 'medium', label: 'Medium SUV/Truck (4-5 seats)', priceKey: 'price_medium', originalKey: 'price_original_medium' },
+  { key: 'large', label: 'Minivan/Van (6-8 seats)', priceKey: 'price_large', originalKey: 'price_original_large' },
 ];
 
 function ServicePage() {
@@ -316,15 +352,7 @@ function ServicePage() {
     if (slug === 'monthly-maintenance') return MAINTENANCE_PACKAGES;
     if (slug === 'ceramic-coating') return CERAMIC_PACKAGES;
     if (slug === 'paint-correction') return PAINT_CORRECTION_PACKAGES;
-    if (slug === 'fleet-detailing') return FLEET_PACKAGES;
     return null;
-  };
-
-  const isFleetDetailing = slug === 'fleet-detailing';
-  const getPricePerFoot = (pkg) => {
-    if (!isFleetDetailing || !pkg?.name) return null;
-    const data = FLEET_PACKAGES[pkg.name.trim()];
-    return data?.pricePerFoot ?? null;
   };
 
   const getPriceForPkg = (pkg, sizeKey) => {
@@ -450,10 +478,7 @@ function ServicePage() {
                       <div className="service-level-content">
                         <h3 className="service-level-title">{getLevelCardTitle(pkg)} PACKAGE</h3>
 
-                        {isFleetDetailing && getPricePerFoot(pkg) != null ? (
-                          <p className="service-level-price-per-foot">${getPricePerFoot(pkg)} per foot</p>
-                        ) : (
-                          <div className="service-level-price-boxes">
+                        <div className="service-level-price-boxes">
                             {VEHICLE_SIZES.map((size) => {
                               const p = getPriceForPkg(pkg, size.key);
                               if (p == null) return null;
@@ -471,7 +496,6 @@ function ServicePage() {
                               );
                             })}
                           </div>
-                        )}
 
                         {turnaround(pkg) && (
                           <p className="service-level-turnaround">TURNAROUND: {turnaround(pkg)}</p>
@@ -480,7 +504,7 @@ function ServicePage() {
                         {items.length > 0 && (
                           <ul className="service-level-list">
                             {items.map((line, i) => {
-                              const isSectionHeading = /^(Interior|Exterior)\s+Items?:$/i.test(String(line).trim());
+                              const isSectionHeading = /^(Interior|Exterior)\s+(Items?|Maintenance)(\s|$)/i.test(String(line).trim()) || /^What's Included$|^Who This Package Is For$|^Upgrade Option:?$|^Benefits of Ceramic Coating:?$/i.test(String(line).trim());
                               return (
                                 <li key={i} className={isSectionHeading ? 'service-level-list-heading' : ''}>
                                   {line}

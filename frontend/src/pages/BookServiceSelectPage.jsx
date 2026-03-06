@@ -19,6 +19,10 @@ function BookServiceSelectPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    if (!loading) window.scrollTo(0, 0);
+  }, [loading]);
+
   if (loading) return <div className="book-select loading">Loading services...</div>;
   if (error) return <div className="book-select error">{error}</div>;
 

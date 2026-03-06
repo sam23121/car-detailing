@@ -6,7 +6,7 @@ import { resolveServiceImage } from '../lib/images';
 import { getServiceDisplayName, filterVisibleServices } from '../lib/services';
 import './ServiceCategories.css';
 
-// Display order on home: full → exterior → interior → monthly maintenance → paint correction → ceramic → fleet
+// Display order on home: full → exterior → interior → monthly maintenance → paint correction → ceramic
 const SERVICE_SLUG_ORDER = [
   'full-detailing',
   'exterior-detailing',
@@ -14,7 +14,6 @@ const SERVICE_SLUG_ORDER = [
   'monthly-maintenance',
   'paint-correction',
   'ceramic-coating',
-  'fleet-detailing',
 ];
 
 function filterAndSortServices(services) {

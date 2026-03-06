@@ -8,7 +8,7 @@ const NEW_IMAGES_DIR = `${IMAGES_DIR}/new_images`;
 
 export const PATHS = {
   // Branding
-  logo: `${IMAGES_DIR}/logo.png`,
+  logo: `${IMAGES_DIR}/Logo-01.png`,
   logoJpg: `${IMAGES_DIR}/logo.jpg`,
   logoSvg: `${IMAGES_DIR}/logo.svg`,
 

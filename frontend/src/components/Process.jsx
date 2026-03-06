@@ -5,7 +5,7 @@ import './Process.css';
 
 function Process() {
   const steps = [
-    { num: '1', title: 'Book online or call', text: 'Choose your service and pick a time that works for you. We come to you.' },
+    { num: '1', title: 'Book online, call or text', text: 'Choose your service and pick a time that works for you. We come to you.' },
     { num: '2', title: 'We arrive at your location', text: 'Our team brings everything needed for a full detail at your home or office.' },
     { num: '3', title: 'Enjoy a like-new vehicle', text: 'Relax while we clean, correct, and protect your car inside and out.' },
   ];

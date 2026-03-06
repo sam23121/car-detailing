@@ -1,8 +1,8 @@
 /**
- * Do not show "Maintenance Detailing" (slug maintenance-detailing) in any service list.
- * Keep "Monthly Maintenance" (monthly-maintenance).
+ * Do not show these services in any service list.
+ * maintenance-detailing: legacy slug. fleet-detailing: section removed.
  */
-export const HIDDEN_SERVICE_SLUGS = ['maintenance-detailing'];
+export const HIDDEN_SERVICE_SLUGS = ['maintenance-detailing', 'fleet-detailing'];
 
 export function filterVisibleServices(services) {
   if (!Array.isArray(services)) return [];
