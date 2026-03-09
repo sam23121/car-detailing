@@ -1,8 +1,9 @@
-version: '3.8'
+# One-server stack: PostgreSQL + backend. Run from repo root: docker compose up -d
+# Uses backend/.env for SMTP, Twilio, etc.; DATABASE_URL is overridden to use local Postgres.
 
 services:
   postgres:
-    image: postgres:13-alpine
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -11,22 +12,25 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/quality_detailing_db
     ports:
       - "8000:8000"
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
 
 volumes:
   postgres_data:

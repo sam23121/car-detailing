@@ -1,4 +1,5 @@
 """Send email via SMTP (no third-party services). Uses Python stdlib smtplib + email."""
+import errno
 import logging
 import os
 import smtplib
@@ -62,6 +63,17 @@ def send_email(to: str, subject: str, body_text: str, html: bool = False) -> boo
             server.sendmail(from_addr, [to], msg.as_string())
         logger.info("Email sent to %s: %s", to, subject[:50])
         return True
+    except OSError as e:
+        if getattr(e, "errno", None) == errno.ENETUNREACH:
+            logger.warning(
+                "SMTP connection failed (network unreachable). "
+                "Outbound port %s is often blocked in Docker/cloud. "
+                "Allow outbound TCP to %s:%s or run the app where SMTP is allowed.",
+                SMTP_PORT, SMTP_HOST, SMTP_PORT,
+            )
+        else:
+            logger.exception("SMTP send failed to %s: %s", to, e)
+        return False
     except Exception as e:
         logger.exception("SMTP send failed to %s: %s", to, e)
         return False
