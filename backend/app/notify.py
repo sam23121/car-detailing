@@ -1,9 +1,9 @@
-"""Send email (SMTP) and optional SMS (Twilio) on booking. No paid email service."""
+"""Send email (Resend, then Brevo/MailerSend fallback) and optional SMS (Twilio) on booking."""
 import logging
 import os
 from datetime import datetime
 
-from app.email_smtp import send_email as smtp_send_email
+from app.email_send import send_email
 
 logger = logging.getLogger(__name__)
 
@@ -43,8 +43,7 @@ def _booking_summary(booking):
 
 
 def _send_email(to: str, subject: str, body_text: str):
-    html_body = body_text.replace("\n", "<br>\n")
-    smtp_send_email(to, subject, html_body, html=True)
+    send_email(to, subject, body_text.replace("\n", "<br>\n"), html=True)
 
 
 def _normalize_phone_e164(phone: str, default_country_code: str = "1") -> str:

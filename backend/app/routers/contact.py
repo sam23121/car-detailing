@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app import models, schemas
-from app.email_smtp import send_email, OWNER_EMAIL, is_configured
+from app.email_send import send_email, OWNER_EMAIL, is_configured
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -12,7 +12,7 @@ router = APIRouter()
 def _send_contact_emails(msg: models.ContactMessage):
     """Email owner with contact form content and send confirmation to customer."""
     if not is_configured():
-        logger.warning("SMTP not configured; contact saved but no email sent")
+        logger.warning("No email provider configured; contact saved but no email sent")
         return
     owner_to = (OWNER_EMAIL or "").strip()
     if not owner_to:
