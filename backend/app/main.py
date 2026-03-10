@@ -115,6 +115,7 @@ origins = [
     "https://car-detailing-tau.vercel.app",
     "https://car-detailing.pages.dev/",
     "https://volqtxhodt65quinnqcfcmcogy0txfcp.lambda-url.us-east-1.on.aws",
+    "https://ymbdetailing.com",
     "https://ymbdetailing.com/",
 ]
 
