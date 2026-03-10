@@ -1,54 +1,59 @@
 import os
-from fastapi import FastAPI
+import logging
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.database import engine, get_db, Base
+
+logger = logging.getLogger(__name__)
 from app import models
 from app.routers import services, bookings, reviews, contact, blog, business, customers, availability, packages
 
-# Create tables
-Base.metadata.create_all(bind=engine)
+# Skip DB init when running on Lambda (run migrations/seed separately; keeps cold start fast)
+if not os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+    # Create tables
+    Base.metadata.create_all(bind=engine)
 
-# One-off migration: add booking.location if missing (create_all does not add new columns)
-try:
-    from sqlalchemy import text
-    with engine.begin() as conn:
-        conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS location VARCHAR(500)"))
-except Exception:
-    pass
-
-# One-off migration: add package tiered pricing and display fields
-try:
-    from sqlalchemy import text
-    with engine.begin() as conn:
-        for stmt in [
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_small FLOAT",
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_medium FLOAT",
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_large FLOAT",
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_small FLOAT",
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_medium FLOAT",
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_large FLOAT",
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS turnaround_hours INTEGER",
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS image_url VARCHAR(500)",
-            "ALTER TABLE packages ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0",
-        ]:
-            try:
-                conn.execute(text(stmt))
-            except Exception:
-                pass
-except Exception:
-    pass
-
-# Seed default services/packages on startup (e.g. for Render free tier with no Shell).
-# Set RUN_SEED_ON_STARTUP=false in env to disable.
-if os.getenv("RUN_SEED_ON_STARTUP", "true").lower() != "false":
+    # One-off migration: add booking.location if missing (create_all does not add new columns)
     try:
-        from app.seed import run_seed
-        run_seed()
-    except Exception as e:
-        # Log but don't crash the app if DB isn't ready or seed fails
-        import logging
-        logging.getLogger("app.main").warning("Startup seed skipped or failed: %s", e)
+        from sqlalchemy import text
+        with engine.begin() as conn:
+            conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS location VARCHAR(500)"))
+    except Exception:
+        pass
+
+    # One-off migration: add package tiered pricing and display fields
+    try:
+        from sqlalchemy import text
+        with engine.begin() as conn:
+            for stmt in [
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_small FLOAT",
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_medium FLOAT",
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_large FLOAT",
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_small FLOAT",
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_medium FLOAT",
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_original_large FLOAT",
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS turnaround_hours INTEGER",
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS image_url VARCHAR(500)",
+                "ALTER TABLE packages ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0",
+            ]:
+                try:
+                    conn.execute(text(stmt))
+                except Exception:
+                    pass
+    except Exception:
+        pass
+
+    # Seed default services/packages on startup (e.g. for Render free tier with no Shell).
+    # Set RUN_SEED_ON_STARTUP=false in env to disable.
+    if os.getenv("RUN_SEED_ON_STARTUP", "true").lower() != "false":
+        try:
+            from app.seed import run_seed
+            run_seed()
+        except Exception as e:
+            import logging
+            logging.getLogger("app.main").warning("Startup seed skipped or failed: %s", e)
 
 app = FastAPI(
     title="Quality Mobile Detailing API",
@@ -82,6 +87,17 @@ app.include_router(contact.router, prefix="/api/contact", tags=["Contact"])
 app.include_router(blog.router, prefix="/api/blog", tags=["Blog"])
 app.include_router(business.router, prefix="/api/business", tags=["Business"])
 app.include_router(availability.router, prefix="/api/availability", tags=["Availability"])
+
+
+@app.exception_handler(Exception)
+def unhandled_exception_handler(request: Request, exc: Exception):
+    """Log full traceback and return error detail so Lambda 500s are debuggable."""
+    logger.exception("Unhandled exception: %s", exc)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc), "type": type(exc).__name__},
+    )
+
 
 @app.get("/")
 def read_root():
