@@ -23,6 +23,7 @@ function Footer() {
         <div className="footer-section">
           <h4>Contact</h4>
           <p>Phone: <a href={`tel:${BUSINESS.phone.replace(/\D/g, '')}`}>{BUSINESS.phone}</a></p>
+          <p>Phone 2: <a href={`tel:${BUSINESS.phone2.replace(/\D/g, '')}`}>{BUSINESS.phone2}</a></p>
           <p>Email: <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a></p>
         </div>
         <div className="footer-section">

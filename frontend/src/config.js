@@ -12,6 +12,7 @@ export const API_BASE =
  */
 export const BUSINESS = {
   phone: '(202) 250-4842',
+  phone2: '(202) 876-6037',
   email: 'miki@ymbdetailing.com',
   address: 'Serving DMV area',
   hours: 'Monday - Sunday: 6:00 AM - 8:00 PM',

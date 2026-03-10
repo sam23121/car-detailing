@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { PATHS } from '../lib/images';
 import './ServicesOverview.css';
 
-const OVERVIEW_IMAGES = [PATHS.newFullDetailing, PATHS.interior3, PATHS.newCeramic1Year2, PATHS.engineBay];
+const OVERVIEW_IMAGES = [PATHS.newFullDetailing, PATHS.interior3, PATHS.engineBay, PATHS.newPaintCorrection1];
 
 function ServicesOverview() {
   return (

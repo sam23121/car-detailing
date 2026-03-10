@@ -50,14 +50,15 @@ export const PATHS = {
   newInteriorLevel3: `${NEW_IMAGES_DIR}/interior_level_3.jpg`,
   newMonthlyMaintenance: `${NEW_IMAGES_DIR}/Monthly_maintenance.jpg`,
   newBiweeklyMaintenance: `${NEW_IMAGES_DIR}/Biweekly%20package_pic_(monthly_maintenance).jpg`,
-  newCeramic1Year: `${NEW_IMAGES_DIR}/1_year_ceramic_coating.jpg`,
-  newCeramic1Year2: `${NEW_IMAGES_DIR}/1_year_ceramic_coating_2.jpg`,
+  newCeramic1Year: `${NEW_IMAGES_DIR}/1_year_ceramic_coating_2.jpg`,
+  newCeramic1Year2: `${NEW_IMAGES_DIR}/1_year_ceramic_coating_1.jpg`,
   newCeramic3Year: `${NEW_IMAGES_DIR}/Ceramic_coating_2.jpg`,
   newCeramic5Year: `${NEW_IMAGES_DIR}/5_year_ceramic_coating_2.jpg`,
   newCeramicHero: `${NEW_IMAGES_DIR}/ceramic_coating_hero.jpg`,
   newPaintCorrection1: `${NEW_IMAGES_DIR}/Paint_correction_1.jpg`,
   newPaintCorrection2: `${NEW_IMAGES_DIR}/Paint_correction_2.jpg`,
   newFleetDetailing: `${NEW_IMAGES_DIR}/fleet_detailing.jpg`,
+  engineBay: `${NEW_IMAGES_DIR}/engine_bay_engine.jpg`,
 };
 
 /** Default when no image is set (e.g. service/package has no image_url). */
@@ -71,8 +72,8 @@ export function getServiceImagePath(serviceSlug) {
     'full-detailing': PATHS.newFullDetailing,
     'exterior-detailing': PATHS.exterior1,
     'interior-detailing': PATHS.interior4,
-    'monthly-maintenance': PATHS.maintenanceWebp,
-    'paint-correction': PATHS.painting,
+    'monthly-maintenance': PATHS.cars2,
+    'paint-correction': PATHS.newPaintCorrection2,
     'ceramic-coating': PATHS.newCeramicHero,
     'fleet-detailing': PATHS.newFleetDetailing,
   };

@@ -10,14 +10,11 @@ function DetailedServices() {
         <div className="detailed-services-image">
           <div className="detailed-services-image-grid">
             <img src={PATHS.cars1} alt="Our detailing services" className="detailed-services-img" />
-            <img src={PATHS.cars2} alt="Detailing services" className="detailed-services-img" />
             <img src={PATHS.interior5} alt="Interior detailing" className="detailed-services-img" />
             <img src={PATHS.interior6} alt="Interior care" className="detailed-services-img" />
             <img src={PATHS.ceramicCoating} alt="Ceramic coating" className="detailed-services-img" />
-            <img src={PATHS.ceramicCoating2} alt="Ceramic protection" className="detailed-services-img" />
-            <img src={PATHS.painting2} alt="Paint correction" className="detailed-services-img" />
             <img src={PATHS.fullDetailing2Webp} alt="Full detailing" className="detailed-services-img" />
-            <img src={PATHS.maintenance2Webp} alt="Maintenance" className="detailed-services-img" />
+            <img src={PATHS.engineBay} alt="Engine bay cleaning" className="detailed-services-img" />
           </div>
         </div>
         <div className="detailed-services-panel">
