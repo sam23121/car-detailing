@@ -11,8 +11,8 @@ export const API_BASE =
  * For phone use digits only or format like (410) 575-4616; tel: links work with both.
  */
 export const BUSINESS = {
-  phone: '(410) ###-####',
-  email: 'smlalene@gmail.com',
-  address: '911 Autumn Valley Ln, Gambrills, MD 21054',
+  phone: '(202) 250-4842',
+  email: 'miki@ymbdetailing.com',
+  address: 'Serving DMV area',
   hours: 'Monday - Sunday: 6:00 AM - 8:00 PM',
 };

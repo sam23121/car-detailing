@@ -1,9 +1,15 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.database import get_db
+
 from app import schemas
 from app.auth import require_admin
 from app.crud import bookings as crud_bookings
+from app.database import get_db
+
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -13,8 +19,12 @@ def create_booking(booking: schemas.BookingCreate, db: Session = Depends(get_db)
     try:
         from app.notify import send_booking_notifications
         send_booking_notifications(db, db_booking.id)
-    except Exception:
-        pass  # Don't fail the request if notify fails
+    except Exception as e:
+        logger.exception(
+            "send_booking_notifications failed for booking_id=%s: %s",
+            getattr(db_booking, "id", None),
+            e,
+        )
     return db_booking
 
 
@@ -28,8 +38,12 @@ def create_booking_multi(payload: schemas.BookingCreateMulti, db: Session = Depe
         try:
             from app.notify import send_booking_notifications
             send_booking_notifications(db, db_booking.id)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.exception(
+                "send_booking_notifications failed for multi booking_id=%s: %s",
+                getattr(db_booking, "id", None),
+                e,
+            )
     return db_booking
 
 
