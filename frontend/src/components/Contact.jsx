@@ -42,6 +42,7 @@ function Contact({ id }) {
           <div className="contact-info">
             <h3>Contact Information</h3>
             <p><strong>Phone:</strong> <a href={`tel:${BUSINESS.phone.replace(/\D/g, '')}`}>{BUSINESS.phone}</a></p>
+            <p><strong>Phone 2:</strong> <a href={`tel:${BUSINESS.phone2.replace(/\D/g, '')}`}>{BUSINESS.phone2}</a></p>
             <p><strong>Email:</strong> <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a></p>
             <p><strong>Address:</strong> {BUSINESS.address}</p>
             <p><strong>Hours:</strong> {BUSINESS.hours}</p>
