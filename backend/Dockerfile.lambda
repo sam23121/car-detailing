@@ -1,0 +1,14 @@
+# Lambda container image: runs Mangum handler, not Uvicorn.
+# Build from backend/:  docker build -f Dockerfile.lambda -t backend-lambda .
+# In Lambda config set handler to: app.lambda_handler.handler
+
+FROM public.ecr.aws/lambda/python:3.11
+
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["app.lambda_handler.handler"]

@@ -18,7 +18,7 @@ def _get_mangum():
         from mangum import Mangum
         from app.main import app
         _app = app
-        _mangum = Mangum(app, lifespan="off")
+        _mangum = Mangum(app, lifespan="off", api_gateway_base_path=None)
     return _mangum
 
 

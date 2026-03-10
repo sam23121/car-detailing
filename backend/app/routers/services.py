@@ -6,11 +6,11 @@ from app.crud import services as crud_services
 
 router = APIRouter()
 
-@router.post("/", response_model=schemas.Service)
+@router.post("", response_model=schemas.Service)
 def create_service(service: schemas.ServiceCreate, db: Session = Depends(get_db)):
     return crud_services.create_service(db=db, service=service)
 
-@router.get("/", response_model=list[schemas.Service])
+@router.get("", response_model=list[schemas.Service])
 def list_services(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud_services.get_services(db, skip=skip, limit=limit)
 

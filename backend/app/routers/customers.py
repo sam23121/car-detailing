@@ -6,14 +6,14 @@ from app.crud import customers as crud_customers
 
 router = APIRouter()
 
-@router.post("/", response_model=schemas.Customer)
+@router.post("", response_model=schemas.Customer)
 def create_customer(customer: schemas.CustomerCreate, db: Session = Depends(get_db)):
     existing = crud_customers.get_customer_by_email(db, email=customer.email)
     if existing:
         return existing
     return crud_customers.create_customer(db=db, customer=customer)
 
-@router.get("/", response_model=list[schemas.Customer])
+@router.get("", response_model=list[schemas.Customer])
 def list_customers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud_customers.get_customers(db, skip=skip, limit=limit)
 

@@ -7,7 +7,7 @@ from app.crud import bookings as crud_bookings
 
 router = APIRouter()
 
-@router.post("/", response_model=schemas.Booking)
+@router.post("", response_model=schemas.Booking)
 def create_booking(booking: schemas.BookingCreate, db: Session = Depends(get_db)):
     db_booking = crud_bookings.create_booking(db=db, booking=booking)
     try:
@@ -33,7 +33,7 @@ def create_booking_multi(payload: schemas.BookingCreateMulti, db: Session = Depe
     return db_booking
 
 
-@router.get("/", response_model=list[schemas.Booking])
+@router.get("", response_model=list[schemas.Booking])
 def list_bookings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud_bookings.get_bookings(db, skip=skip, limit=limit)
 

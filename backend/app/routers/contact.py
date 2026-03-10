@@ -34,7 +34,7 @@ def _send_contact_emails(msg: models.ContactMessage):
     send_email(msg.email, customer_subject, customer_body)
 
 
-@router.post("/", response_model=schemas.ContactMessage)
+@router.post("", response_model=schemas.ContactMessage)
 def create_contact_message(
     message: schemas.ContactMessageCreate, db: Session = Depends(get_db)
 ):
@@ -48,7 +48,7 @@ def create_contact_message(
         logger.exception("Contact form email failed: %s", e)
     return db_message
 
-@router.get("/", response_model=list[schemas.ContactMessage])
+@router.get("", response_model=list[schemas.ContactMessage])
 def list_contact_messages(
     skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):

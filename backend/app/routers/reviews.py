@@ -6,11 +6,11 @@ from app.crud import reviews as crud_reviews
 
 router = APIRouter()
 
-@router.post("/", response_model=schemas.Review)
+@router.post("", response_model=schemas.Review)
 def create_review(review: schemas.ReviewCreate, db: Session = Depends(get_db)):
     return crud_reviews.create_review(db=db, review=review)
 
-@router.get("/", response_model=list[schemas.Review])
+@router.get("", response_model=list[schemas.Review])
 def list_reviews(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud_reviews.get_reviews(db, skip=skip, limit=limit)
 

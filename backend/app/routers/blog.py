@@ -5,7 +5,7 @@ from app import models, schemas
 
 router = APIRouter()
 
-@router.post("/", response_model=schemas.BlogPost)
+@router.post("", response_model=schemas.BlogPost)
 def create_blog_post(post: schemas.BlogPostCreate, db: Session = Depends(get_db)):
     db_post = models.BlogPost(**post.model_dump())
     db.add(db_post)
@@ -13,7 +13,7 @@ def create_blog_post(post: schemas.BlogPostCreate, db: Session = Depends(get_db)
     db.refresh(db_post)
     return db_post
 
-@router.get("/", response_model=list[schemas.BlogPost])
+@router.get("", response_model=list[schemas.BlogPost])
 def list_blog_posts(skip: int = 0, limit: int = 100, published_only: bool = True, db: Session = Depends(get_db)):
     query = db.query(models.BlogPost)
     if published_only:
