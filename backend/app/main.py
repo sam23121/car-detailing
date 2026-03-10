@@ -62,6 +62,7 @@ origins = [
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8000",
     "https://car-detailing-tau.vercel.app",
+    "https://car-detailing.pages.dev/",
 ]
 
 app.add_middleware(

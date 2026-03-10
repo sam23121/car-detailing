@@ -21,7 +21,7 @@ def _format_datetime(dt):
         dt = datetime.fromisoformat(dt.replace("Z", "+00:00"))
     return dt.strftime("%B %d, %Y at %I:%M %p")
 
-
+lMdGkVdNq78aJj6NK9pLn5RG6O-8OLkWQnTy8wVy
 def _booking_summary(booking):
     """Build a short text summary of the booking."""
     c = booking.customer
