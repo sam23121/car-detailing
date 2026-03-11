@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './BookingPage.css';
 
 function BookingPage() {
@@ -22,6 +24,7 @@ function BookingPage() {
   const [bookableSlots, setBookableSlots] = useState([]);
   const [slotsLoading, setSlotsLoading] = useState(true);
   const [selectedSlotKey, setSelectedSlotKey] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -83,6 +86,31 @@ function BookingPage() {
       });
     return () => { cancelled = true; };
   }, [cartItems]);
+
+  const slotsByDay = useMemo(() => {
+    const map = {};
+    bookableSlots.forEach((s) => {
+      const d = new Date(s.start);
+      const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
+      if (!map[key]) map[key] = [];
+      map[key].push(s);
+    });
+    return map;
+  }, [bookableSlots]);
+
+  useEffect(() => {
+    if (!selectedDate && bookableSlots.length > 0) {
+      setSelectedDate(new Date(bookableSlots[0].start));
+    }
+  }, [bookableSlots, selectedDate]);
+
+  const selectedDayKey = selectedDate ? selectedDate.toISOString().slice(0, 10) : null;
+  const slotsForSelectedDay = selectedDayKey ? slotsByDay[selectedDayKey] || [] : [];
+
+  const hasSlotsForDay = (date) => {
+    const key = date.toISOString().slice(0, 10);
+    return !!slotsByDay[key];
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -214,23 +242,44 @@ function BookingPage() {
                 ) : bookableSlots.length === 0 ? (
                   <p className="booking-no-slots">No availability in this window, or add packages to see times (slots are based on your selection’s turnaround + 2 hours).</p>
                 ) : (
-                  <select
-                    value={selectedSlotKey}
-                    onChange={(e) => setSelectedSlotKey(e.target.value)}
-                    className="booking-slots-select"
-                    required
-                  >
-                    <option value="">Choose a date & time</option>
-                    {bookableSlots.map((s) => {
-                      const start = new Date(s.start);
-                      const key = `${s.start}_${s.available_slot_id}`;
-                      return (
-                        <option key={key} value={key}>
-                          {start.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
-                        </option>
-                      );
-                    })}
-                  </select>
+                  <div className="booking-slots-picker">
+                    <div className="booking-slots-date">
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => {
+                          setSelectedDate(date);
+                          setSelectedSlotKey('');
+                        }}
+                        filterDate={hasSlotsForDay}
+                        minDate={new Date()}
+                        dateFormat="MMMM d, yyyy"
+                        placeholderText="Choose a date"
+                        className="booking-slots-datepicker"
+                      />
+                    </div>
+                    {selectedDate && slotsForSelectedDay.length > 0 && (
+                      <select
+                        value={selectedSlotKey}
+                        onChange={(e) => setSelectedSlotKey(e.target.value)}
+                        className="booking-slots-select"
+                        required
+                      >
+                        <option value="">Choose a time</option>
+                        {slotsForSelectedDay.map((s) => {
+                          const start = new Date(s.start);
+                          const key = `${s.start}_${s.available_slot_id}`;
+                          return (
+                            <option key={key} value={key}>
+                              {start.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    )}
+                    {selectedDate && slotsForSelectedDay.length === 0 && (
+                      <p className="booking-no-slots">No times available for this day.</p>
+                    )}
+                  </div>
                 )}
                 <label>Notes</label>
                 <textarea name="notes" value={formData.notes} onChange={handleChange} rows="3" />
