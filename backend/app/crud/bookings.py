@@ -48,6 +48,7 @@ def _booking_overlaps_existing(
     return False
 
 
+
 def create_booking(db: Session, booking: schemas.BookingCreate):
     duration_minutes = _duration_minutes_for_package_ids(db, [booking.package_id])
     if _booking_overlaps_existing(db, booking.scheduled_date, duration_minutes):
