@@ -99,6 +99,23 @@
   margin-left: auto;
 }
 
+.hero-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 320px;
+  margin-left: auto;
+}
+
+.hero-cta-group .hero-cta {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+}
+
 .hero-cta {
   display: inline-block;
   padding: 12px 28px;
@@ -133,6 +150,10 @@
   .hero-description {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .hero-cta-group {
+    justify-content: center;
   }
 
   .hero-cta {

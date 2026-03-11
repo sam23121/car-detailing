@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { API_BASE } from '../config';
+import { API_BASE, formatInDC, formatDateInDC } from '../config';
 import { getAdminHeaders } from './AdminLoginPage';
 import './AdminBookingsPage.css';
 
@@ -49,11 +49,7 @@ function AdminBookingsPage() {
 
   const formatDate = (s) => {
     if (!s) return '—';
-    const d = new Date(s);
-    return d.toLocaleString(undefined, {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    });
+    return formatInDC(s, { dateStyle: 'medium', timeStyle: 'short' });
   };
 
   if (loading) return <div className="admin-bookings loading">Loading bookings...</div>;
@@ -162,7 +158,7 @@ function AdminBookingsPage() {
                           Completed
                           {b.completed_at && (
                             <span className="admin-completed-at">
-                              {' '}({new Date(b.completed_at).toLocaleDateString()})
+                              {' '}({formatDateInDC(b.completed_at)})
                             </span>
                           )}
                         </span>

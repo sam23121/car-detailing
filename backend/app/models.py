@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Text, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from datetime import datetime
 from app.database import Base
+from app.timezone import now_eastern
 
 class Customer(Base):
     __tablename__ = "customers"
@@ -10,8 +10,8 @@ class Customer(Base):
     name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False, index=True)
     phone = Column(String(20))
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)
+    updated_at = Column(DateTime, default=now_eastern, onupdate=now_eastern)
 
     bookings = relationship("Booking", back_populates="customer")
     reviews = relationship("Review", back_populates="customer")
@@ -24,7 +24,7 @@ class Service(Base):
     slug = Column(String(255), unique=True, nullable=False)
     description = Column(Text)
     image_url = Column(String(500))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)
 
     packages = relationship("Package", back_populates="service")
     reviews = relationship("Review", back_populates="service")
@@ -48,7 +48,7 @@ class Package(Base):
     details = Column(Text)
     image_url = Column(String(500))
     display_order = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)
 
     service = relationship("Service", back_populates="packages")
     bookings = relationship("Booking", back_populates="package")
@@ -78,8 +78,8 @@ class Booking(Base):
     completed_at = Column(DateTime, nullable=True)  # set when status -> completed
     location = Column(String(500))  # service address / where to perform the job
     notes = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)
+    updated_at = Column(DateTime, default=now_eastern, onupdate=now_eastern)
 
     customer = relationship("Customer", back_populates="bookings")
     package = relationship("Package", back_populates="bookings")
@@ -94,7 +94,7 @@ class Review(Base):
     comment = Column(Text, nullable=False)
     service_id = Column(Integer, ForeignKey("services.id"))
     verified = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)
 
     customer = relationship("Customer", back_populates="reviews")
     service = relationship("Service", back_populates="reviews")
@@ -107,7 +107,7 @@ class ContactMessage(Base):
     email = Column(String(255), nullable=False)
     phone = Column(String(20))
     message = Column(Text, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)
 
 class BlogPost(Base):
     __tablename__ = "blog_posts"
@@ -118,8 +118,8 @@ class BlogPost(Base):
     content = Column(Text, nullable=False)
     image_url = Column(String(500))
     published = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)
+    updated_at = Column(DateTime, default=now_eastern, onupdate=now_eastern)
 
 class BusinessInfo(Base):
     __tablename__ = "business_info"
@@ -143,7 +143,7 @@ class AvailableSlot(Base):
     id = Column(Integer, primary_key=True, index=True)
     slot_start = Column(DateTime, nullable=False)
     slot_end = Column(DateTime, nullable=True)  # optional; if null, treat as single time
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)
 
 class FAQ(Base):
     __tablename__ = "faqs"
@@ -152,4 +152,4 @@ class FAQ(Base):
     question = Column(String(500), nullable=False)
     answer = Column(Text, nullable=False)
     order_index = Column(Integer)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=now_eastern)

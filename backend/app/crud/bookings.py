@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from app import models, schemas
 from app.crud import services as crud_services
-from datetime import datetime, timedelta
+from datetime import timedelta
+from app.timezone import now_eastern
 
 # Default duration for legacy bookings with no duration_minutes
 DEFAULT_BOOKING_DURATION_MINUTES = 120
@@ -23,7 +24,7 @@ def _duration_minutes_for_package_ids(db: Session, package_ids: list[int]) -> in
 
 def _booking_overlaps_existing(
     db: Session,
-    scheduled_date: datetime,
+    scheduled_date,
     duration_minutes: int,
     exclude_booking_id: int | None = None,
 ) -> bool:
@@ -114,7 +115,7 @@ def get_bookings_with_details(
     )
     if not include_archived:
         # Hide completed bookings older than 7 days; all states still in DB
-        week_ago = datetime.utcnow() - timedelta(days=7)
+        week_ago = now_eastern() - timedelta(days=7)
         q = q.filter(
             or_(
                 models.Booking.status != "completed",
@@ -149,7 +150,7 @@ def get_customer_bookings(db: Session, customer_id: int):
 def update_booking(db: Session, booking_id: int, booking: schemas.BookingCreate):
     db_booking = get_booking(db, booking_id)
     if db_booking:
-        now = datetime.utcnow()
+        now = now_eastern()
         for key, value in booking.model_dump(exclude_unset=True).items():
             setattr(db_booking, key, value)
         if db_booking.status == "completed" and db_booking.completed_at is None:

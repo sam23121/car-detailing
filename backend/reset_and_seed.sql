@@ -1,6 +1,9 @@
 -- WARNING: This will DELETE all existing data in these tables.
 -- Run with: psql "$DATABASE_URL" -f reset_and_seed.sql
 
+-- Use DMV (DC/MD/VA) timezone so NOW() and defaults are Eastern
+SET timezone = 'America/New_York';
+
 BEGIN;
 
 -- =========================

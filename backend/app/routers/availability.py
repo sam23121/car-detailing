@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, time
+from app.timezone import now_eastern
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
@@ -42,7 +43,7 @@ def list_bookable_slots(
     db: Session = Depends(get_db),
 ):
     """Bookable start times: 30-min steps; duration = package turnarounds + 2h."""
-    now = datetime.utcnow()
+    now = now_eastern()
     start = from_date or now
     end = to_date or (now + timedelta(days=30))
     required_minutes = _required_minutes_for_packages(db, package_ids or [])
@@ -119,7 +120,7 @@ def list_available_slots(
     admin: bool = Depends(is_admin),
 ):
     """List slots. Excludes taken slots unless admin (X-Admin-Secret)."""
-    now = datetime.utcnow()
+    now = now_eastern()
     start = from_date or now
     end = to_date or (now + timedelta(days=30))
     q = (

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { API_BASE } from '../config';
+import { API_BASE, formatInDC, formatTimeInDC, formatDateInDC, todayKeyInDC } from '../config';
 import { getAdminHeaders, clearAdminSecret } from './AdminLoginPage';
 import './AdminAvailabilityPage.css';
 
@@ -82,13 +82,11 @@ function AdminAvailabilityPage() {
   }, []);
 
   const formatSlot = (slot) => {
-    const start = new Date(slot.slot_start);
     const opts = { dateStyle: 'medium', timeStyle: 'short' };
     if (slot.slot_end) {
-      const end = new Date(slot.slot_end);
-      return `${start.toLocaleString(undefined, opts)} – ${end.toLocaleTimeString(undefined, { timeStyle: 'short' })}`;
+      return `${formatInDC(slot.slot_start, opts)} – ${formatTimeInDC(slot.slot_end, { timeStyle: 'short' })}`;
     }
-    return start.toLocaleString(undefined, opts);
+    return formatInDC(slot.slot_start, opts);
   };
 
   const handleDelete = (id) => {
@@ -316,7 +314,7 @@ function AdminAvailabilityPage() {
                 ←
               </button>
               <span className="admin-calendar-title">
-                {new Date(calendarMonth.year, calendarMonth.month).toLocaleString(undefined, {
+                {formatInDC(new Date(calendarMonth.year, calendarMonth.month), {
                   month: 'long',
                   year: 'numeric'
                 })}
@@ -343,7 +341,7 @@ function AdminAvailabilityPage() {
                 const key = d ? dateKey(d) : `empty-${i}`;
                 const daySlots = d ? slotsByDate[key] || [] : [];
                 const count = daySlots.length;
-                const isToday = d && dateKey(d) === dateKey(new Date());
+                const isToday = d && dateKey(d) === todayKeyInDC();
                 return (
                   <div
                     key={key}
@@ -373,7 +371,7 @@ function AdminAvailabilityPage() {
                 .map((key) => (
                   <div key={key} className="admin-availability-date-group">
                     <h3 className="admin-availability-date-heading">
-                      {new Date(key + 'T12:00:00').toLocaleDateString(undefined, {
+                      {formatDateInDC(key + 'T12:00:00', {
                         weekday: 'short',
                         month: 'short',
                         day: 'numeric',

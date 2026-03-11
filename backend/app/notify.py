@@ -4,6 +4,8 @@ import os
 from datetime import datetime
 
 from app.email_send import send_email
+from app.timezone import EASTERN
+from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
 
@@ -15,11 +17,16 @@ TWILIO_FROM_NUMBER = os.environ.get("TWILIO_FROM_NUMBER")
 
 
 def _format_datetime(dt):
+    """Format datetime in DMV (Eastern) for email/SMS."""
     if dt is None:
         return ""
     if isinstance(dt, str):
         dt = datetime.fromisoformat(dt.replace("Z", "+00:00"))
-    return dt.strftime("%B %d, %Y at %I:%M %p")
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=ZoneInfo("UTC")).astimezone(EASTERN)
+    else:
+        dt = dt.astimezone(EASTERN)
+    return dt.strftime("%B %d, %Y at %I:%M %p %Z")
 
 def _booking_summary(booking):
     """Build a short text summary of the booking."""

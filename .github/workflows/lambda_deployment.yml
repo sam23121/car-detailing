@@ -5,9 +5,9 @@ on:
     branches:
       - main
       - master
-    # paths:
-    #   - 
-    #   - .github/**
+    paths:
+      - 'backend/**'
+      - '.github/workflows/lambda_deployment.yml'
 
 env:
   #ECR repo name

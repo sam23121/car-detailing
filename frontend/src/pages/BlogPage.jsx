@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_BASE } from '../config';
+import { API_BASE, formatDateInDC } from '../config';
 import './BlogPage.css';
 
 function BlogPage() {
@@ -27,7 +27,7 @@ function BlogPage() {
               <article key={post.id} className="blog-post-item" id={post.slug}>
                 <h2>{post.title}</h2>
                 <p className="meta">
-                  {new Date(post.created_at).toLocaleDateString()}
+                  {formatDateInDC(post.created_at)}
                 </p>
                 <div className="content">{post.content}</div>
               </article>

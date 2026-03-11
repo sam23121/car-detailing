@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import { API_BASE } from '../config';
+import { API_BASE, formatTimeInDC } from '../config';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import DatePicker from 'react-datepicker';
@@ -270,7 +270,7 @@ function BookingPage() {
                           const key = `${s.start}_${s.available_slot_id}`;
                           return (
                             <option key={key} value={key}>
-                              {start.toLocaleTimeString(undefined, { timeStyle: 'short' })}
+                              {formatTimeInDC(start, { timeStyle: 'short' })}
                             </option>
                           );
                         })}
