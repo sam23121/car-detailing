@@ -30,6 +30,7 @@ def _ensure_lambda_tables():
             with engine.begin() as conn:
                 conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS location VARCHAR(500)"))
                 conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS duration_minutes INTEGER"))
+                conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP"))
                 for stmt in [
                     "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_small FLOAT",
                     "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_medium FLOAT",
@@ -62,6 +63,7 @@ if not os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
         with engine.begin() as conn:
             conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS location VARCHAR(500)"))
             conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS duration_minutes INTEGER"))
+            conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP"))
     except Exception:
         pass
 

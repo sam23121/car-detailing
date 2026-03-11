@@ -28,17 +28,18 @@ function AdminBookingsPage() {
     const b = bookings.find((x) => x.id === bookingId);
     if (!b) return;
     setUpdatingId(bookingId);
+    const payload = {
+      customer_id: b.customer_id,
+      package_id: b.package_id ?? null,
+      scheduled_date: b.scheduled_date,
+      status: newStatus,
+      location: b.location || null,
+      notes: b.notes || null,
+    };
     axios
       .put(
         `${API_BASE}/api/bookings/${bookingId}`,
-        {
-          customer_id: b.customer_id,
-          package_id: b.package_id,
-          scheduled_date: b.scheduled_date,
-          status: newStatus,
-          location: b.location || null,
-          notes: b.notes || null,
-        },
+        payload,
         { headers: getAdminHeaders() }
       )
       .then(() => fetchBookings())
@@ -144,7 +145,27 @@ function AdminBookingsPage() {
                         </>
                       )}
                       {b.status === 'confirmed' && (
-                        <span className="admin-confirmed">Confirmed</span>
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-primary btn-sm"
+                            onClick={() => updateStatus(b.id, 'completed')}
+                            disabled={updatingId === b.id}
+                          >
+                            {updatingId === b.id ? '…' : 'Mark completed'}
+                          </button>
+                          <span className="admin-confirmed">Confirmed</span>
+                        </>
+                      )}
+                      {b.status === 'completed' && (
+                        <span className="admin-status admin-status-completed">
+                          Completed
+                          {b.completed_at && (
+                            <span className="admin-completed-at">
+                              {' '}({new Date(b.completed_at).toLocaleDateString()})
+                            </span>
+                          )}
+                        </span>
                       )}
                     </td>
                   </tr>

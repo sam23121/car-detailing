@@ -64,11 +64,14 @@ def list_bookings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 def list_bookings_with_details(
     skip: int = 0,
     limit: int = 100,
+    include_archived: bool = False,
     db: Session = Depends(get_db),
     _: None = Depends(require_admin),
 ):
-    """For owner view: bookings with customer and package info. Admin only."""
-    return crud_bookings.get_bookings_with_details(db, skip=skip, limit=limit)
+    """For owner view. Hides completed >7 days by default; all states kept in DB. Admin only."""
+    return crud_bookings.get_bookings_with_details(
+        db, skip=skip, limit=limit, include_archived=include_archived
+    )
 
 
 @router.get("/{booking_id}", response_model=schemas.Booking)

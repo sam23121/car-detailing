@@ -30,8 +30,25 @@ CREATE TABLE IF NOT EXISTS packages (
     name VARCHAR(255) NOT NULL,
     description TEXT,
     price DECIMAL(10, 2),
+    price_small DOUBLE PRECISION,
+    price_medium DOUBLE PRECISION,
+    price_large DOUBLE PRECISION,
+    price_original_small DOUBLE PRECISION,
+    price_original_medium DOUBLE PRECISION,
+    price_original_large DOUBLE PRECISION,
     duration_minutes INTEGER,
+    turnaround_hours INTEGER,
     details TEXT,
+    image_url VARCHAR(500),
+    display_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Available Slots (admin-defined windows for booking)
+CREATE TABLE IF NOT EXISTS available_slots (
+    id SERIAL PRIMARY KEY,
+    slot_start TIMESTAMP NOT NULL,
+    slot_end TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -39,12 +56,24 @@ CREATE TABLE IF NOT EXISTS packages (
 CREATE TABLE IF NOT EXISTS bookings (
     id SERIAL PRIMARY KEY,
     customer_id INTEGER NOT NULL REFERENCES customers(id),
-    package_id INTEGER NOT NULL REFERENCES packages(id),
+    package_id INTEGER REFERENCES packages(id),
+    available_slot_id INTEGER REFERENCES available_slots(id) ON DELETE SET NULL,
     scheduled_date TIMESTAMP NOT NULL,
+    duration_minutes INTEGER,
     status VARCHAR(50) DEFAULT 'pending',
+    completed_at TIMESTAMP,
+    location VARCHAR(500),
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Booking Items (multi-package bookings from cart)
+CREATE TABLE IF NOT EXISTS booking_items (
+    id SERIAL PRIMARY KEY,
+    booking_id INTEGER NOT NULL REFERENCES bookings(id) ON DELETE CASCADE,
+    package_id INTEGER NOT NULL REFERENCES packages(id) ON DELETE CASCADE,
+    quantity INTEGER DEFAULT 1
 );
 
 -- Reviews Table

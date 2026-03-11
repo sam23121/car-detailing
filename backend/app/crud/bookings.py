@@ -95,10 +95,14 @@ def get_bookings(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Booking).offset(skip).limit(limit).all()
 
 
-def get_bookings_with_details(db: Session, skip: int = 0, limit: int = 100):
-    """Return bookings with customer, package, and booking_items for owner display."""
+def get_bookings_with_details(
+    db: Session, skip: int = 0, limit: int = 100, include_archived: bool = False
+):
+    """Bookings for owner. Hides completed >7d by default; all states in DB."""
     from sqlalchemy.orm import joinedload
-    return (
+    from sqlalchemy import or_
+
+    q = (
         db.query(models.Booking)
         .options(
             joinedload(models.Booking.customer),
@@ -106,10 +110,18 @@ def get_bookings_with_details(db: Session, skip: int = 0, limit: int = 100):
             joinedload(models.Booking.booking_items).joinedload(models.BookingItem.package),
         )
         .order_by(models.Booking.scheduled_date.desc())
-        .offset(skip)
-        .limit(limit)
-        .all()
     )
+    if not include_archived:
+        # Hide completed bookings older than 7 days; all states still in DB
+        week_ago = datetime.utcnow() - timedelta(days=7)
+        q = q.filter(
+            or_(
+                models.Booking.status != "completed",
+                models.Booking.completed_at.is_(None),
+                models.Booking.completed_at >= week_ago,
+            )
+        )
+    return q.offset(skip).limit(limit).all()
 
 
 def get_booking_with_details(db: Session, booking_id: int):
@@ -136,9 +148,12 @@ def get_customer_bookings(db: Session, customer_id: int):
 def update_booking(db: Session, booking_id: int, booking: schemas.BookingCreate):
     db_booking = get_booking(db, booking_id)
     if db_booking:
+        now = datetime.utcnow()
         for key, value in booking.model_dump(exclude_unset=True).items():
             setattr(db_booking, key, value)
-        db_booking.updated_at = datetime.utcnow()
+        if db_booking.status == "completed" and db_booking.completed_at is None:
+            db_booking.completed_at = now
+        db_booking.updated_at = now
         db.commit()
         db.refresh(db_booking)
     return db_booking

@@ -74,7 +74,8 @@ class Booking(Base):
     available_slot_id = Column(Integer, ForeignKey("available_slots.id"), nullable=True)  # slot taken by this booking
     scheduled_date = Column(DateTime, nullable=False)
     duration_minutes = Column(Integer, nullable=True)  # sum of package turnarounds + 2h; used for overlap checks
-    status = Column(String(50), default="pending")
+    status = Column(String(50), default="pending")  # pending|confirmed|completed|cancelled
+    completed_at = Column(DateTime, nullable=True)  # set when status -> completed
     location = Column(String(500))  # service address / where to perform the job
     notes = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)

@@ -20,6 +20,9 @@ DROP TABLE IF EXISTS faqs CASCADE;
 
 -- =========================
 -- Create tables (Postgres)
+-- Schema: availability (available_slots), bookings with duration_minutes +
+-- completed_at + location, booking_items for multi-package, packages tiered
+-- pricing + turnaround_hours. Matches app models for full DB rerun.
 -- =========================
 
 CREATE TABLE customers (
@@ -82,7 +85,9 @@ CREATE TABLE bookings (
     package_id        INTEGER REFERENCES packages(id) ON DELETE SET NULL,
     available_slot_id INTEGER REFERENCES available_slots(id) ON DELETE SET NULL,
     scheduled_date    TIMESTAMPTZ NOT NULL,
+    duration_minutes  INTEGER,
     status            VARCHAR(50) DEFAULT 'pending',
+    completed_at      TIMESTAMPTZ,
     location          VARCHAR(500),
     notes             TEXT,
     created_at        TIMESTAMPTZ DEFAULT NOW(),

@@ -87,6 +87,7 @@ class BookingBase(BaseModel):
     scheduled_date: datetime
     duration_minutes: Optional[int] = None
     status: str = "pending"
+    completed_at: Optional[datetime] = None
     location: Optional[str] = None
     notes: Optional[str] = None
 
@@ -109,6 +110,7 @@ class Booking(BookingBase):
     package_id: Optional[int] = None
     available_slot_id: Optional[int] = None
     duration_minutes: Optional[int] = None
+    completed_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
@@ -144,6 +146,7 @@ class BookingWithDetails(BookingBase):
     package_id: Optional[int] = None
     available_slot_id: Optional[int] = None
     duration_minutes: Optional[int] = None
+    completed_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
     customer: Optional[BookingCustomerInfo] = None
