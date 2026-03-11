@@ -38,6 +38,7 @@ function AdminAvailabilityPage() {
   const [addAsTimeRange, setAddAsTimeRange] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [addError, setAddError] = useState(null);
+  const [addSuccess, setAddSuccess] = useState(null);
   const [calendarMonth, setCalendarMonth] = useState(() => {
     const n = new Date();
     return { year: n.getFullYear(), month: n.getMonth() };
@@ -122,6 +123,7 @@ function AdminAvailabilityPage() {
   const handleAdd = async (e) => {
     e.preventDefault();
     setAddError(null);
+    setAddSuccess(null);
     const start = addAsDayRange ? addDateStart : addDateStart;
     const end = addAsDayRange ? addDateEnd : addDateStart;
     if (!start) {
@@ -142,28 +144,38 @@ function AdminAvailabilityPage() {
       setAddError('Maximum 31 days in one range.');
       return;
     }
+    const slotsToAdd = [];
+    for (const day of days) {
+      const y = day.getFullYear(), m = day.getMonth(), d = day.getDate();
+      const slotStart = new Date(y, m, d, startH, startMin, 0, 0);
+      let slotEnd = null;
+      if (endH != null && endMin != null) {
+        slotEnd = new Date(y, m, d, endH, endMin, 0, 0);
+        if (slotEnd <= slotStart) {
+          setAddError('End time must be after start time.');
+          return;
+        }
+      }
+      slotsToAdd.push({
+        slot_start: slotStart.toISOString(),
+        slot_end: slotEnd ? slotEnd.toISOString() : null
+      });
+    }
     setSubmitting(true);
     try {
-      for (const day of days) {
-        const y = day.getFullYear(), m = day.getMonth(), d = day.getDate();
-        const slotStart = new Date(y, m, d, startH, startMin, 0, 0);
-        let slotEnd = null;
-        if (endH != null && endMin != null) {
-          slotEnd = new Date(y, m, d, endH, endMin, 0, 0);
-          if (slotEnd <= slotStart) {
-            setAddError('End time must be after start time.');
-            setSubmitting(false);
-            return;
-          }
-        }
-        await axios.post(
-          `${API_BASE}/api/availability`,
-          {
-            slot_start: slotStart.toISOString(),
-            slot_end: slotEnd ? slotEnd.toISOString() : null
-          },
-          { headers: getAdminHeaders() }
+      const res = await axios.post(
+        `${API_BASE}/api/availability/batch`,
+        { slots: slotsToAdd },
+        { headers: getAdminHeaders() }
+      );
+      const added = res.data.created?.length ?? 0;
+      const dupes = res.data.duplicates_skipped ?? 0;
+      if (dupes > 0) {
+        setAddSuccess(
+          `Added ${added} slot(s). ${dupes} duplicate(s) were skipped (already in range).`
         );
+      } else {
+        setAddSuccess(added > 0 ? `Added ${added} slot(s).` : null);
       }
       fetchSlots();
       setAddDateStart(null);
@@ -279,6 +291,7 @@ function AdminAvailabilityPage() {
               </label>
             </div>
             {addError && <p className="admin-availability-add-error">{addError}</p>}
+            {addSuccess && <p className="admin-availability-add-success">{addSuccess}</p>}
             <button type="submit" className="btn btn-primary" disabled={submitting}>
               {submitting ? 'Adding…' : addAsDayRange && addDateStart && addDateEnd
                 ? `Add ${getDaysInRange(addDateStart, addDateEnd).length} slots`

@@ -280,6 +280,12 @@
   margin-bottom: 0.75rem;
 }
 
+.admin-availability-add-success {
+  color: #34d399;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
 .admin-availability-empty {
   color: #9ca3af;
   padding: 1rem 0;

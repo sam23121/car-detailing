@@ -207,6 +207,17 @@ class AvailableSlot(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class AvailableSlotBatchCreate(BaseModel):
+    """Request body for adding multiple slots; duplicates/overlaps are skipped."""
+    slots: list[AvailableSlotCreate]
+
+
+class AvailableSlotBatchResult(BaseModel):
+    """Result of batch create: created slots and count of duplicates skipped."""
+    created: list[AvailableSlot]
+    duplicates_skipped: int
+
+
 class BookableSlotOption(BaseModel):
     """A single bookable start time within an availability window (client-side breakdown)."""
     start: datetime

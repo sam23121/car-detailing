@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Session
 from app import models, schemas
 from app.crud import services as crud_services
-from datetime import datetime
+from datetime import datetime, timedelta
+
+# Default duration for legacy bookings with no duration_minutes
+DEFAULT_BOOKING_DURATION_MINUTES = 120
 
 
 def _duration_minutes_for_package_ids(db: Session, package_ids: list[int]) -> int:
@@ -18,8 +21,37 @@ def _duration_minutes_for_package_ids(db: Session, package_ids: list[int]) -> in
     return int(total_hours * 60)
 
 
+def _booking_overlaps_existing(
+    db: Session,
+    scheduled_date: datetime,
+    duration_minutes: int,
+    exclude_booking_id: int | None = None,
+) -> bool:
+    """True if this time range overlaps any non-cancelled booking."""
+    new_end = scheduled_date + timedelta(minutes=duration_minutes)
+    q = (
+        db.query(models.Booking)
+        .filter(models.Booking.status != "cancelled")
+        .filter(models.Booking.scheduled_date < new_end)
+    )
+    if exclude_booking_id is not None:
+        q = q.filter(models.Booking.id != exclude_booking_id)
+    for b in q.all():
+        b_dur = (
+            b.duration_minutes
+            if b.duration_minutes is not None
+            else DEFAULT_BOOKING_DURATION_MINUTES
+        )
+        b_end = b.scheduled_date + timedelta(minutes=b_dur)
+        if b_end > scheduled_date:
+            return True
+    return False
+
+
 def create_booking(db: Session, booking: schemas.BookingCreate):
     duration_minutes = _duration_minutes_for_package_ids(db, [booking.package_id])
+    if _booking_overlaps_existing(db, booking.scheduled_date, duration_minutes):
+        raise ValueError("This time slot is no longer available.")
     data = booking.model_dump()
     data["duration_minutes"] = duration_minutes
     db_booking = models.Booking(**data)
@@ -35,6 +67,8 @@ def create_booking_multi(db: Session, payload: schemas.BookingCreateMulti):
         return None
     first_id = payload.package_ids[0]
     duration_minutes = _duration_minutes_for_package_ids(db, payload.package_ids)
+    if _booking_overlaps_existing(db, payload.scheduled_date, duration_minutes):
+        raise ValueError("This time slot is no longer available.")
     db_booking = models.Booking(
         customer_id=payload.customer_id,
         package_id=first_id,

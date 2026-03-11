@@ -6,6 +6,7 @@ from app.database import get_db
 from app.auth import require_admin, is_admin
 from app import models, schemas
 from app.crud import services as crud_services
+from app.crud.bookings import DEFAULT_BOOKING_DURATION_MINUTES
 
 router = APIRouter()
 
@@ -83,7 +84,11 @@ def list_bookable_slots(
             overlaps = False
             for b in bookings:
                 b_start = b.scheduled_date
-                b_minutes = b.duration_minutes or 0
+                b_minutes = (
+                    b.duration_minutes
+                    if b.duration_minutes is not None
+                    else DEFAULT_BOOKING_DURATION_MINUTES
+                )
                 b_end = b_start + timedelta(minutes=b_minutes)
                 if b_start < candidate_end and b_end > current:
                     overlaps = True
@@ -136,6 +141,52 @@ def list_available_slots(
             q = q.filter(~models.AvailableSlot.id.in_(taken_ids))
     return q.all()
 
+def _slot_overlaps_existing(
+    db: Session, slot_start: datetime, slot_end: datetime | None
+) -> bool:
+    """True if this slot overlaps any existing slot (same day, overlapping time)."""
+    day_start = slot_start.replace(hour=0, minute=0, second=0, microsecond=0)
+    day_end = day_start + timedelta(days=1) - timedelta(microseconds=1)
+    end = slot_end if slot_end is not None else day_end
+    existing = (
+        db.query(models.AvailableSlot)
+        .filter(models.AvailableSlot.slot_start >= day_start)
+        .filter(models.AvailableSlot.slot_start < day_start + timedelta(days=1))
+        .all()
+    )
+    for ex in existing:
+        ex_end = ex.slot_end if ex.slot_end is not None else day_end
+        if slot_start < ex_end and end > ex.slot_start:
+            return True
+    return False
+
+
+@router.post("/batch", response_model=schemas.AvailableSlotBatchResult)
+def create_available_slots_batch(
+    body: schemas.AvailableSlotBatchCreate,
+    db: Session = Depends(get_db),
+    _: None = Depends(require_admin),
+):
+    """Admin: add multiple slots; duplicates (overlapping same day) are skipped."""
+    created = []
+    duplicates_skipped = 0
+    for s in body.slots:
+        if _slot_overlaps_existing(db, s.slot_start, s.slot_end):
+            duplicates_skipped += 1
+            continue
+        db_slot = models.AvailableSlot(slot_start=s.slot_start, slot_end=s.slot_end)
+        db.add(db_slot)
+        db.flush()
+        db.refresh(db_slot)
+        created.append(db_slot)
+    db.commit()
+    for c in created:
+        db.refresh(c)
+    return schemas.AvailableSlotBatchResult(
+        created=created, duplicates_skipped=duplicates_skipped
+    )
+
+
 @router.post("", response_model=schemas.AvailableSlot)
 def create_available_slot(
     slot: schemas.AvailableSlotCreate,
@@ -143,6 +194,11 @@ def create_available_slot(
     _: None = Depends(require_admin),
 ):
     """Admin: add an available slot."""
+    if _slot_overlaps_existing(db, slot.slot_start, slot.slot_end):
+        raise HTTPException(
+            status_code=409,
+            detail="A slot overlapping this date and time already exists.",
+        )
     db_slot = models.AvailableSlot(**slot.model_dump())
     db.add(db_slot)
     db.commit()

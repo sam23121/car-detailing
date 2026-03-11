@@ -15,7 +15,10 @@ router = APIRouter()
 
 @router.post("", response_model=schemas.Booking)
 def create_booking(booking: schemas.BookingCreate, db: Session = Depends(get_db)):
-    db_booking = crud_bookings.create_booking(db=db, booking=booking)
+    try:
+        db_booking = crud_bookings.create_booking(db=db, booking=booking)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     try:
         from app.notify import send_booking_notifications
         send_booking_notifications(db, db_booking.id)
@@ -29,11 +32,16 @@ def create_booking(booking: schemas.BookingCreate, db: Session = Depends(get_db)
 
 
 @router.post("/multi", response_model=schemas.Booking)
-def create_booking_multi(payload: schemas.BookingCreateMulti, db: Session = Depends(get_db)):
-    """Create one booking with multiple packages (cart checkout)."""
+def create_booking_multi(
+    payload: schemas.BookingCreateMulti, db: Session = Depends(get_db)
+):
+    """Create one booking with multiple packages from cart."""
     if not payload.package_ids:
         raise HTTPException(status_code=400, detail="At least one package is required")
-    db_booking = crud_bookings.create_booking_multi(db=db, payload=payload)
+    try:
+        db_booking = crud_bookings.create_booking_multi(db=db, payload=payload)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     if db_booking:
         try:
             from app.notify import send_booking_notifications
@@ -75,8 +83,12 @@ def get_customer_bookings(customer_id: int, db: Session = Depends(get_db)):
     return crud_bookings.get_customer_bookings(db, customer_id=customer_id)
 
 @router.put("/{booking_id}", response_model=schemas.Booking)
-def update_booking(booking_id: int, booking: schemas.BookingCreate, db: Session = Depends(get_db)):
-    db_booking = crud_bookings.update_booking(db=db, booking_id=booking_id, booking=booking)
+def update_booking(
+    booking_id: int, booking: schemas.BookingCreate, db: Session = Depends(get_db)
+):
+    db_booking = crud_bookings.update_booking(
+        db=db, booking_id=booking_id, booking=booking
+    )
     if not db_booking:
         raise HTTPException(status_code=404, detail="Booking not found")
     return db_booking
