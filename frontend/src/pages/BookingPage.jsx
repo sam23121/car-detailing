@@ -19,9 +19,9 @@ function BookingPage() {
     location: '',
     notes: ''
   });
-  const [availableSlots, setAvailableSlots] = useState([]);
+  const [bookableSlots, setBookableSlots] = useState([]);
   const [slotsLoading, setSlotsLoading] = useState(true);
-  const [selectedSlotId, setSelectedSlotId] = useState('');
+  const [selectedSlotKey, setSelectedSlotKey] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -53,26 +53,36 @@ function BookingPage() {
     return () => { cancelled = true; };
   }, [preselectedPackageId, cartItems.length, addItem]);
 
+  // Fetch bookable start times (admin slots broken into 30-min options; duration = package turnaround sum + 2h)
   useEffect(() => {
+    if (cartItems.length === 0) {
+      setBookableSlots([]);
+      setSlotsLoading(false);
+      return;
+    }
     let cancelled = false;
+    setSlotsLoading(true);
     const from = new Date();
     const to = new Date();
     to.setDate(to.getDate() + 30);
+    const params = {
+      from_date: from.toISOString(),
+      to_date: to.toISOString(),
+      ...(cartItems.length > 0 ? { package_ids: cartItems.map((i) => i.id) } : {})
+    };
     axios
-      .get(`${API_BASE}/api/availability`, {
-        params: { from_date: from.toISOString(), to_date: to.toISOString() }
-      })
+      .get(`${API_BASE}/api/availability/bookable-slots`, { params })
       .then((res) => {
-        if (!cancelled) setAvailableSlots(res.data);
+        if (!cancelled) setBookableSlots(res.data);
       })
       .catch(() => {
-        if (!cancelled) setAvailableSlots([]);
+        if (!cancelled) setBookableSlots([]);
       })
       .finally(() => {
         if (!cancelled) setSlotsLoading(false);
       });
     return () => { cancelled = true; };
-  }, []);
+  }, [cartItems]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,12 +97,12 @@ function BookingPage() {
       setError('Add at least one package from a service page.');
       return;
     }
-    const slot = availableSlots.find((s) => String(s.id) === selectedSlotId);
-    if (!slot || !formData.name || !formData.email) {
+    const selected = bookableSlots.find((s) => `${s.start}_${s.available_slot_id}` === selectedSlotKey);
+    if (!selected || !formData.name || !formData.email) {
       setError('Please fill in name, email, and choose an available date & time.');
       return;
     }
-    const scheduledDate = new Date(slot.slot_start);
+    const scheduledDate = new Date(selected.start);
     setSubmitting(true);
     try {
       const customerRes = await axios.post(`${API_BASE}/api/customers/`, {
@@ -101,7 +111,7 @@ function BookingPage() {
         phone: formData.phone || null
       });
       const customerId = customerRes.data.id;
-      const slotIdNum = parseInt(selectedSlotId, 10);
+      const slotIdNum = selected.available_slot_id;
       const payload = {
         customer_id: customerId,
         scheduled_date: scheduledDate.toISOString(),
@@ -123,7 +133,7 @@ function BookingPage() {
       clearCart();
       setSubmitted(true);
       setFormData({ name: '', email: '', phone: '', location: '', notes: '' });
-      setSelectedSlotId('');
+      setSelectedSlotKey('');
       showToast("Booking submitted! We'll confirm soon.");
     } catch (err) {
       console.error(err);
@@ -201,24 +211,22 @@ function BookingPage() {
                 <label>Preferred Date & Time *</label>
                 {slotsLoading ? (
                   <p className="booking-slots-loading">Loading available times…</p>
-                ) : availableSlots.length === 0 ? (
-                  <p className="booking-no-slots">No availability set right now. Please contact us to arrange a time.</p>
+                ) : bookableSlots.length === 0 ? (
+                  <p className="booking-no-slots">No availability in this window, or add packages to see times (slots are based on your selection’s turnaround + 2 hours).</p>
                 ) : (
                   <select
-                    value={selectedSlotId}
-                    onChange={(e) => setSelectedSlotId(e.target.value)}
+                    value={selectedSlotKey}
+                    onChange={(e) => setSelectedSlotKey(e.target.value)}
                     className="booking-slots-select"
                     required
                   >
                     <option value="">Choose a date & time</option>
-                    {availableSlots.map((s) => {
-                      const start = new Date(s.slot_start);
-                      const label = s.slot_end
-                        ? `${start.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })} – ${new Date(s.slot_end).toLocaleTimeString(undefined, { timeStyle: 'short' })}`
-                        : start.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+                    {bookableSlots.map((s) => {
+                      const start = new Date(s.start);
+                      const key = `${s.start}_${s.available_slot_id}`;
                       return (
-                        <option key={s.id} value={s.id}>
-                          {label}
+                        <option key={key} value={key}>
+                          {start.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
                         </option>
                       );
                     })}

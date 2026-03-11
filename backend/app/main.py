@@ -29,6 +29,7 @@ def _ensure_lambda_tables():
             Base.metadata.create_all(bind=engine)
             with engine.begin() as conn:
                 conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS location VARCHAR(500)"))
+                conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS duration_minutes INTEGER"))
                 for stmt in [
                     "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_small FLOAT",
                     "ALTER TABLE packages ADD COLUMN IF NOT EXISTS price_medium FLOAT",
@@ -60,6 +61,7 @@ if not os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
         from sqlalchemy import text
         with engine.begin() as conn:
             conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS location VARCHAR(500)"))
+            conn.execute(text("ALTER TABLE bookings ADD COLUMN IF NOT EXISTS duration_minutes INTEGER"))
     except Exception:
         pass
 

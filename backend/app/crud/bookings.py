@@ -1,9 +1,28 @@
 from sqlalchemy.orm import Session
 from app import models, schemas
+from app.crud import services as crud_services
 from datetime import datetime
 
+
+def _duration_minutes_for_package_ids(db: Session, package_ids: list[int]) -> int:
+    """Sum of package turnaround (hours) + 2 hours, in minutes."""
+    total_hours = 2.0
+    for pid in package_ids or []:
+        pkg = crud_services.get_package(db, pid)
+        if not pkg:
+            continue
+        if pkg.turnaround_hours is not None:
+            total_hours += pkg.turnaround_hours
+        elif pkg.duration_minutes is not None:
+            total_hours += pkg.duration_minutes / 60.0
+    return int(total_hours * 60)
+
+
 def create_booking(db: Session, booking: schemas.BookingCreate):
-    db_booking = models.Booking(**booking.model_dump())
+    duration_minutes = _duration_minutes_for_package_ids(db, [booking.package_id])
+    data = booking.model_dump()
+    data["duration_minutes"] = duration_minutes
+    db_booking = models.Booking(**data)
     db.add(db_booking)
     db.commit()
     db.refresh(db_booking)
@@ -15,11 +34,13 @@ def create_booking_multi(db: Session, payload: schemas.BookingCreateMulti):
     if not payload.package_ids:
         return None
     first_id = payload.package_ids[0]
+    duration_minutes = _duration_minutes_for_package_ids(db, payload.package_ids)
     db_booking = models.Booking(
         customer_id=payload.customer_id,
         package_id=first_id,
         available_slot_id=payload.available_slot_id,
         scheduled_date=payload.scheduled_date,
+        duration_minutes=duration_minutes,
         status=payload.status,
         location=payload.location,
         notes=payload.notes,
@@ -72,7 +93,11 @@ def get_booking_with_details(db: Session, booking_id: int):
     )
 
 def get_customer_bookings(db: Session, customer_id: int):
-    return db.query(models.Booking).filter(models.Booking.customer_id == customer_id).all()
+    return (
+        db.query(models.Booking)
+        .filter(models.Booking.customer_id == customer_id)
+        .all()
+    )
 
 def update_booking(db: Session, booking_id: int, booking: schemas.BookingCreate):
     db_booking = get_booking(db, booking_id)

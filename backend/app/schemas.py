@@ -85,6 +85,7 @@ class PackageWithService(BaseModel):
 # Booking Schemas
 class BookingBase(BaseModel):
     scheduled_date: datetime
+    duration_minutes: Optional[int] = None
     status: str = "pending"
     location: Optional[str] = None
     notes: Optional[str] = None
@@ -107,6 +108,7 @@ class Booking(BookingBase):
     customer_id: int
     package_id: Optional[int] = None
     available_slot_id: Optional[int] = None
+    duration_minutes: Optional[int] = None
     created_at: datetime
     updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
@@ -141,6 +143,7 @@ class BookingWithDetails(BookingBase):
     customer_id: int
     package_id: Optional[int] = None
     available_slot_id: Optional[int] = None
+    duration_minutes: Optional[int] = None
     created_at: datetime
     updated_at: datetime
     customer: Optional[BookingCustomerInfo] = None
@@ -202,6 +205,12 @@ class AvailableSlot(BaseModel):
     slot_end: Optional[datetime] = None
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
+
+
+class BookableSlotOption(BaseModel):
+    """A single bookable start time within an availability window (client-side breakdown)."""
+    start: datetime
+    available_slot_id: int
 
 
 # FAQ Schemas
