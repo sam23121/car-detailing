@@ -17,6 +17,7 @@ dependencies = [
     "python-jose==3.3.0",
     "resend>=0.8.0",
     "twilio>=8.0.0",
+    "mangum>=0.17.0",
 ]
 
 [project.optional-dependencies]
