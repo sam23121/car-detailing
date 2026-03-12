@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { PATHS } from '../lib/images';
+import SectionCTAs from './SectionCTAs';
 import './Process.css';
 
 function Process() {
@@ -30,8 +30,7 @@ function Process() {
             ))}
           </ul>
           <div className="process-buttons">
-            <Link to="/book" className="btn btn-primary">Book Now</Link>
-            <a href="/#services" className="btn btn-secondary">View Services</a>
+            <SectionCTAs third={{ label: 'View Services', href: '/#services' }} />
           </div>
         </div>
         <div className="process-image">

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { PATHS } from '../lib/images';
+import SectionCTAs from './SectionCTAs';
 import './About.css';
 
 function About() {
@@ -15,8 +15,7 @@ function About() {
             exterior care, paint correction, and ceramic coating so your vehicle looks and stays like new.
           </p>
           <div className="about-buttons">
-            <Link to="/book" className="btn btn-primary">Book Now</Link>
-            <a href="/#contact" className="btn btn-secondary">Contact Us</a>
+            <SectionCTAs />
           </div>
         </div>
         <div className="about-image">

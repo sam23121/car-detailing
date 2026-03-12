@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Hero.css';
-import { BUSINESS } from '../config';
+import SectionCTAs from './SectionCTAs';
 
 const HERO_DESCRIPTION =
   'We deliver reliable, efficient detailing for personal cars and fleets by our certified professionals—restoring showroom shine, extending vehicle life, and protecting your investment.';
@@ -22,10 +21,7 @@ function Hero() {
           </div>
           <div className="hero-right">
             <p className="hero-description">{HERO_DESCRIPTION}</p>
-            <div className="hero-cta-group">
-              <Link to="/book" className="btn btn-primary hero-cta">Book Now</Link>
-              <a href={`sms:${BUSINESS.phone.replace(/\D/g, '').replace(/^(\d{10})$/, '+1$1')}`} className="btn btn-primary hero-cta">Text Us</a>
-            </div>
+            <SectionCTAs wrapperClassName="hero-cta-group" />
           </div>
         </div>
       </div>

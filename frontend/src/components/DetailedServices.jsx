@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { PATHS } from '../lib/images';
+import SectionCTAs from './SectionCTAs';
 import './DetailedServices.css';
 
 function DetailedServices() {
@@ -23,7 +23,7 @@ function DetailedServices() {
             From interior deep cleans to paint correction and ceramic coating, we offer a full range of mobile detailing 
             services to suit your vehicle and budget. All work is done at your location with professional equipment and products.
           </p>
-          <Link to="/book" className="btn btn-primary">Book a Service</Link>
+          <SectionCTAs />
         </div>
       </div>
     </section>

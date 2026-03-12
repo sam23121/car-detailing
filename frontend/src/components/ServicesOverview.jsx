@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { PATHS } from '../lib/images';
+import SectionCTAs from './SectionCTAs';
 import './ServicesOverview.css';
 
 const OVERVIEW_IMAGES = [PATHS.newFullDetailing, PATHS.interior3, PATHS.engineBay, PATHS.newPaintCorrection1];
@@ -25,8 +25,7 @@ function ServicesOverview() {
             From full corrections to quick maintenance washes, our mobile service keeps your vehicle looking its best.
           </p>
           <div className="services-overview-buttons">
-            <Link to="/book" className="btn btn-primary">Book Now</Link>
-            <a href="/#process" className="btn btn-secondary">Our Process</a>
+            <SectionCTAs third={{ label: 'Our Process', href: '/#process' }} />
           </div>
         </div>
       </div>
