@@ -9,10 +9,11 @@ import { resolvePackageImage } from '../lib/images';
 import { getServiceDisplayName } from '../lib/services';
 import './ServicePage.css';
 
-/** Exterior Detailing: custom content per level, shown inside package cards (from services.md) */
+/** Exterior Detailing: custom content per level. No booking after 4PM. */
 const EXTERIOR_LEVELS = {
   'Level 1': {
     subtitle: 'Wash, Wax & Interior wipe down',
+    turnaround: '1-2 Hours',
     prices: { small: 140, medium: 160, large: 180 },
     items: [
       'Gentle pre-rinse using spot-free water',
@@ -28,6 +29,7 @@ const EXTERIOR_LEVELS = {
   },
   'Level 2': {
     subtitle: 'Deep Detailing Upgrade',
+    turnaround: '2-2.5 Hours',
     prices: { small: 190, medium: 210, large: 230 },
     items: [
       'Includes everything in our Level 1 Detail, plus the following advanced services:',
@@ -41,16 +43,18 @@ const EXTERIOR_LEVELS = {
   },
   'Level 3': {
     subtitle: 'Extreme Restoration',
+    turnaround: '2-3 Hours',
     prices: { small: 280, medium: 310, large: 330 },
     items: [],
     note: 'For vehicles with heavy grime, brake dust, or long-term neglect. Add-On Service: Engine bay cleaning and dressing: $85',
   },
 };
 
-/** Interior Detailing: custom content per level, shown inside package cards (from services.md) */
+/** Interior Detailing: custom content per level. No booking after 4PM. */
 const INTERIOR_LEVELS = {
   'Level 1': {
     subtitle: 'Interior Detailing',
+    turnaround: '2-2.5 Hours',
     prices: { small: 200, medium: 220, large: 250 },
     items: [
       'Interior items',
@@ -69,6 +73,7 @@ const INTERIOR_LEVELS = {
     ],
   },
   'Level 2': {
+    turnaround: '2.5-3 Hours',
     prices: { small: 250, medium: 270, large: 290 },
     items: [
       'Includes everything in our Level 1 Detail, plus the following advanced services:',
@@ -80,6 +85,7 @@ const INTERIOR_LEVELS = {
   },
   'Level 3': {
     subtitle: 'Extreme Restoration',
+    turnaround: '3-4 Hours',
     prices: { small: 330, medium: 350, large: 390 },
     items: [],
     note: 'This service is designed for vehicles in heavy soiled interior. This package includes extended labor time, extra extraction, and detailed restoration.',
@@ -135,19 +141,23 @@ const FULL_DETAILING_LEVEL_3_ITEMS = [
   'Extra labor time for severely soiled areas',
 ];
 
+/** Full Detailing. No booking after 1PM. */
 const FULL_DETAILING_LEVELS = {
   'Level 1': {
     subtitle: 'Full detailing',
+    turnaround: '4-5 Hours',
     prices: { small: 280, medium: 320, large: 370 },
     items: FULL_DETAILING_LEVEL_1_ITEMS,
   },
   'Level 2': {
     subtitle: 'Deep Full Detailing Upgrade',
+    turnaround: '4-6 Hours',
     prices: { small: 330, medium: 370, large: 390 },
     items: FULL_DETAILING_LEVEL_2_ITEMS,
   },
   'Level 3': {
     subtitle: 'Extreme Restoration',
+    turnaround: '5-7 Hours',
     prices: { small: 470, medium: 520, large: 560 },
     items: FULL_DETAILING_LEVEL_3_ITEMS,
     note: 'Important Notice: Final pricing is determined after in-person inspection. Vehicles with biohazard material (excessive bodily fluids, mold, etc.) may require specialized treatment and additional charges.',
@@ -196,9 +206,11 @@ const MAINTENANCE_BIWEEKLY_ITEMS = [
   'Paint sealant application to maintain gloss and protection',
 ];
 
+/** Monthly Maintenance. No booking after 4PM. Biweekly hidden for now. */
 const MAINTENANCE_PACKAGES = {
   'Monthly': {
     subtitle: '1 month maintenance',
+    turnaround: '2-3 Hours',
     prices: { small: 150, medium: 175, large: 210 },
     items: MAINTENANCE_MONTHLY_ITEMS,
     note: 'Important Notes: The vehicle must first get full detailing by our team and be maintained on a 4-week schedule to qualify for maintenance pricing. Excessive buildup, heavy pet hair, or severe staining may require upgrade to a higher-level detail.',
@@ -245,19 +257,23 @@ const CERAMIC_5YEAR_ITEMS = [
   'Application of high-grade 5-year ceramic coating',
 ];
 
+/** Ceramic Coating. No booking after 10AM. */
 const CERAMIC_PACKAGES = {
   '1 Year Ceramic Coating': {
     subtitle: '1 Year ceramic coating',
+    turnaround: '3-4 Hours',
     prices: { small: 300, medium: 350, large: 390 },
     items: CERAMIC_1YEAR_ITEMS,
   },
   '3 Year Ceramic Coating': {
     subtitle: '3 Year ceramic coating',
+    turnaround: '5-7 Hours',
     prices: { small: 1000, medium: 1100, large: 1200 },
     items: CERAMIC_3YEAR_ITEMS,
   },
   '5 Year Ceramic Coating': {
     subtitle: '5 Year ceramic coating',
+    turnaround: '8-10 Hours',
     prices: { small: 1100, medium: 1200, large: 1300 },
     items: CERAMIC_5YEAR_ITEMS,
   },
@@ -280,14 +296,19 @@ const PAINT_CORRECTION_2STEP_ITEMS = [
   'AVERAGE CAR, USED CAR, DAILY DRIVEN USE, NEGLECTED PAINT',
 ];
 
+/** Paint Correction. No booking after 10AM. */
 const PAINT_CORRECTION_PACKAGES = {
   '1 Step paint correction': {
     subtitle: '1 Step paint correction',
+    turnaround: '5-7 Hours',
+    priceLabel: 'Start from $600',
     prices: { small: 500, medium: 600, large: 700 },
     items: PAINT_CORRECTION_1STEP_ITEMS,
   },
   '2 Step paint correction': {
     subtitle: '2 Step paint correction',
+    turnaround: '9-10 Hours',
+    priceLabel: 'Start from $800',
     prices: { small: 1000, medium: 1200, large: 1300 },
     items: PAINT_CORRECTION_2STEP_ITEMS,
   },
@@ -323,6 +344,7 @@ function ServicePage() {
         const list = (pkgRes.data || []).filter((p) => {
           if (!p?.name) return false;
           if (p.name.toLowerCase().includes('complete')) return false;
+          if (slug === 'monthly-maintenance' && p.name.trim() === 'Biweekly') return false;
           if (slug === 'exterior-detailing' && !exteriorNames.includes(p.name.trim())) return false;
           if (slug === 'ceramic-coating' && !ceramicNames.includes(p.name.trim())) return false;
           if (slug !== 'exterior-detailing' && slug !== 'ceramic-coating' && levelSlugs.includes(slug) && !levelNames.includes(p.name.trim())) return false;
@@ -370,6 +392,11 @@ function ServicePage() {
 
   const turnaround = (pkg) => {
     if (!pkg) return null;
+    const levels = getCustomLevels();
+    if (levels && pkg.name) {
+      const data = levels[pkg.name.trim()];
+      if (data?.turnaround) return data.turnaround;
+    }
     if (pkg.turnaround_hours != null) return `${pkg.turnaround_hours} HOUR${pkg.turnaround_hours !== 1 ? 'S' : ''}`;
     if (pkg.duration_minutes) {
       const h = Math.round(pkg.duration_minutes / 60);
@@ -479,22 +506,31 @@ function ServicePage() {
                         <h3 className="service-level-title">{getLevelCardTitle(pkg)} PACKAGE</h3>
 
                         <div className="service-level-price-boxes">
-                            {VEHICLE_SIZES.map((size) => {
-                              const p = getPriceForPkg(pkg, size.key);
-                              if (p == null) return null;
-                              return (
-                                <button
-                                  type="button"
-                                  key={size.key}
-                                  className={`service-level-price-box ${sizeKey === size.key ? 'selected' : ''}`}
-                                  onClick={() => setSizeForPkg(pkg.id, size.key)}
-                                >
-                                  <span className="service-level-price-label">
-                                    {size.label} – ${Number(p).toFixed(0)}
-                                  </span>
-                                </button>
-                              );
-                            })}
+                            {(() => {
+                              const levels = getCustomLevels();
+                              const data = levels && pkg.name ? levels[pkg.name.trim()] : null;
+                              if (data?.priceLabel) {
+                                return (
+                                  <p className="service-level-price-single">{data.priceLabel}</p>
+                                );
+                              }
+                              return VEHICLE_SIZES.map((size) => {
+                                const p = getPriceForPkg(pkg, size.key);
+                                if (p == null) return null;
+                                return (
+                                  <button
+                                    type="button"
+                                    key={size.key}
+                                    className={`service-level-price-box ${sizeKey === size.key ? 'selected' : ''}`}
+                                    onClick={() => setSizeForPkg(pkg.id, size.key)}
+                                  >
+                                    <span className="service-level-price-label">
+                                      {size.label} – ${Number(p).toFixed(0)}
+                                    </span>
+                                  </button>
+                                );
+                              });
+                            })()}
                           </div>
 
                         {turnaround(pkg) && (

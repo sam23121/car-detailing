@@ -275,6 +275,13 @@
   margin-bottom: 1rem;
 }
 
+.service-level-price-single {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 0 0 1rem;
+}
+
 .service-level-price-per-foot {
   font-size: 1.15rem;
   font-weight: 600;

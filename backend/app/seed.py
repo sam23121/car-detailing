@@ -104,22 +104,22 @@ def run_seed():
             "Everything from Level 1 and Level 2.\nFor vehicles extremely dirty inside and out:\n"
             "Excessive staining\nPet hair and sand\nThrow-up or long-term neglect"
         )
-        ensure_package("full-detailing", 0, "Level 1", "Essential interior and exterior detail.", 150, 248, 293, 338, 275, 325, 375, turnaround_hours=2, details=level1_details)
-        ensure_package("full-detailing", 1, "Level 2", "Everything in Level 1 plus deeper cleaning and protection.", 180, 293, 338, 383, 325, 375, 425, turnaround_hours=3, details=level2_details)
-        ensure_package("full-detailing", 2, "Level 3", "Everything from Level 1 and Level 2. For vehicles that are extremely dirty inside and out.", 240, 473, 518, 563, 525, 575, 625, turnaround_hours=4, details=level3_details)
+        ensure_package("full-detailing", 0, "Level 1", "Essential interior and exterior detail.", 300, 248, 293, 338, 275, 325, 375, turnaround_hours=5, details=level1_details)
+        ensure_package("full-detailing", 1, "Level 2", "Everything in Level 1 plus deeper cleaning and protection.", 360, 293, 338, 383, 325, 375, 425, turnaround_hours=6, details=level2_details)
+        ensure_package("full-detailing", 2, "Level 3", "Everything from Level 1 and Level 2. For vehicles that are extremely dirty inside and out.", 420, 473, 518, 563, 525, 575, 625, turnaround_hours=7, details=level3_details)
 
         # ----- Interior detailing: Level 1, Level 2, Level 3 -----
-        ensure_package("interior-detailing", 0, "Level 1", "Essential interior clean and protect.", 90, 149, 179, 209, 165, 199, 229, turnaround_hours=1,
+        ensure_package("interior-detailing", 0, "Level 1", "Essential interior clean and protect.", 150, 149, 179, 209, 165, 199, 229, turnaround_hours=2,
                       details="Vacuum and wipe all surfaces\nClean console and dash\nClean door panels and jambs\nGlass cleaning")
-        ensure_package("interior-detailing", 1, "Level 2", "Deeper interior detail with conditioning.", 120, 219, 259, 299, 245, 289, 329, turnaround_hours=2,
+        ensure_package("interior-detailing", 1, "Level 2", "Deeper interior detail with conditioning.", 180, 219, 259, 299, 245, 289, 329, turnaround_hours=3,
                       details="Everything in Level 1 plus:\nShampoo carpets and mats\nLeather conditioning\nHeadliner cleaning")
-        ensure_package("interior-detailing", 2, "Level 3", "Full interior detail for heavily soiled vehicles.", 180, 349, 399, 449, 385, 439, 495, turnaround_hours=3,
+        ensure_package("interior-detailing", 2, "Level 3", "Full interior detail for heavily soiled vehicles.", 240, 349, 399, 449, 385, 439, 495, turnaround_hours=4,
                       details="Everything in Level 1 and 2 plus:\nDeep stain removal\nPet hair removal\nFull interior sanitization")
 
         # ----- Exterior detailing: Level 1, Level 2, Level 3 -----
-        ensure_package("exterior-detailing", 0, "Level 1", "Wash, wax, and basic exterior care.", 60, 99, 129, 159, 109, 144, 179, turnaround_hours=1,
+        ensure_package("exterior-detailing", 0, "Level 1", "Wash, wax, and basic exterior care.", 120, 99, 129, 159, 109, 144, 179, turnaround_hours=2,
                       details="Two-bucket hand wash\nWheels and tires\nBasic wax application")
-        ensure_package("exterior-detailing", 1, "Level 2", "Clay, polish, and sealant.", 120, 179, 219, 259, 199, 243, 289, turnaround_hours=2,
+        ensure_package("exterior-detailing", 1, "Level 2", "Clay, polish, and sealant.", 150, 179, 219, 259, 199, 243, 289, turnaround_hours=3,
                       details="Everything in Level 1 plus:\nPaint decontamination (clay)\nPolish\nSealant")
         ensure_package("exterior-detailing", 2, "Level 3", "Full exterior correction and protection.", 180, 279, 329, 379, 309, 365, 419, turnaround_hours=3,
                       details="Everything in Level 1 and 2 plus:\nPaint correction\nPremium sealant or coating prep")
@@ -127,21 +127,21 @@ def run_seed():
         # ----- Ceramic coating: 1 year, 3 year, 5 year -----
         ensure_package("ceramic-coating", 0, "1 Year Ceramic Coating", "One-year ceramic coating protection.", 240, 299, 349, 399, 329, 384, 439, turnaround_hours=4,
                       details="Paint preparation\nCeramic coating application\nCuring time")
-        ensure_package("ceramic-coating", 1, "3 Year Ceramic Coating", "Three-year ceramic coating protection.", 360, 499, 574, 649, 549, 629, 714, turnaround_hours=6,
+        ensure_package("ceramic-coating", 1, "3 Year Ceramic Coating", "Three-year ceramic coating protection.", 420, 499, 574, 649, 549, 629, 714, turnaround_hours=7,
                       details="Full decontamination\nPaint correction (as needed)\n3-year ceramic coating")
-        ensure_package("ceramic-coating", 2, "5 Year Ceramic Coating", "Five-year ceramic coating protection.", 480, 699, 799, 899, 769, 879, 989, turnaround_hours=8,
+        ensure_package("ceramic-coating", 2, "5 Year Ceramic Coating", "Five-year ceramic coating protection.", 600, 699, 799, 899, 769, 879, 989, turnaround_hours=10,
                       details="Full prep and correction\n5-year ceramic coating\nMultiple layers")
 
         # ----- Paint correction: 1 Step, 2 Step (frontend shows custom copy) -----
-        ensure_package("paint-correction", 0, "1 Step paint correction", "1 step paint correction.", 300, 500, 600, 700, 500, 600, 700, turnaround_hours=5,
+        ensure_package("paint-correction", 0, "1 Step paint correction", "1 step paint correction.", 420, 500, 600, 700, 500, 600, 700, turnaround_hours=7,
                       details="Pre-wash and hand wash\nWheels and tires\nPaint correction")
-        ensure_package("paint-correction", 1, "2 Step paint correction", "2 step paint correction.", 480, 1000, 1200, 1300, 1000, 1200, 1300, turnaround_hours=8,
+        ensure_package("paint-correction", 1, "2 Step paint correction", "2 step paint correction.", 600, 1000, 1200, 1300, 1000, 1200, 1300, turnaround_hours=10,
                       details="Pre-wash and hand wash\nWheels and tires\n2 step correction")
 
         # ----- Monthly maintenance: Biweekly, Monthly -----
         ensure_package("monthly-maintenance", 0, "Biweekly", "Maintenance wash and interior tidy every two weeks.", 45, 79, 99, 119, 87, 109, 131, turnaround_hours=1,
                       details="Exterior wash\nInterior vacuum and wipe\nQuick detail")
-        ensure_package("monthly-maintenance", 1, "Monthly", "Monthly maintenance detail to keep your vehicle in top shape.", 90, 129, 159, 189, 142, 175, 208, turnaround_hours=1,
+        ensure_package("monthly-maintenance", 1, "Monthly", "Monthly maintenance detail to keep your vehicle in top shape.", 180, 129, 159, 189, 142, 175, 208, turnaround_hours=3,
                       details="Full maintenance wash\nInterior deep tidy\nTire and trim dressing")
 
         # ----- Fleet detailing: Wash & Spray Wax, Wash & Hand Wax (price per foot, frontend shows custom copy) -----

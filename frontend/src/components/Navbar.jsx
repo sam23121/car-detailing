@@ -39,7 +39,6 @@ function Navbar() {
           {/* <li><Link to="/#reviews">Reviews</Link></li> */}
           {/* <li><Link to="/#blog">Blog</Link></li> */}
           <li><Link to="/#faq">FAQ</Link></li>
-          <li><Link to="/#contact">Contact</Link></li>
           {count > 0 && (
             <li>
               <Link to="/booking" className="navbar-cart">

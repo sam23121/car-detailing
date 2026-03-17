@@ -9,7 +9,6 @@ import ServiceCategories from '../components/ServiceCategories';
 import DetailedServices from '../components/DetailedServices';
 import About from '../components/About';
 import FAQ from '../components/FAQ';
-import Contact from '../components/Contact';
 
 function Home() {
   const { hash } = useLocation();
@@ -41,7 +40,6 @@ function Home() {
         <DetailedServices />
         <About />
         <FAQ id="faq" />
-        <Contact id="contact" />
       </div>
       {/* Footer is rendered by App.jsx layout */}
     </main>

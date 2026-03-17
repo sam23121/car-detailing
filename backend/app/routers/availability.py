@@ -33,6 +33,22 @@ def _end_of_day(d: datetime) -> datetime:
     return datetime.combine(d.date(), time(23, 59, 59), tzinfo=d.tzinfo)
 
 
+def _parse_cutoff_time(value: Optional[str]):
+    """Parse 'HH:MM' or 'H:MM' into time. Returns None if invalid or missing."""
+    if not value or not value.strip():
+        return None
+    parts = value.strip().split(":")
+    if len(parts) != 2:
+        return None
+    try:
+        h, m = int(parts[0]), int(parts[1])
+        if 0 <= h <= 23 and 0 <= m <= 59:
+            return time(h, m)
+    except ValueError:
+        pass
+    return None
+
+
 @router.get("/bookable-slots", response_model=list[schemas.BookableSlotOption])
 def list_bookable_slots(
     from_date: Optional[datetime] = Query(None, description="Start (ISO)"),
@@ -40,10 +56,16 @@ def list_bookable_slots(
     package_ids: Optional[list[int]] = Query(
         None, description="Package IDs in cart (turnaround sum + 2h = slot length)"
     ),
+    latest_booking_time: Optional[str] = Query(
+        None, description="No start times after this (Eastern), e.g. 13:00 for 1PM"
+    ),
     db: Session = Depends(get_db),
 ):
     """Bookable start times: 30-min steps; duration = package turnarounds + 2h."""
+    from app.timezone import as_eastern
+
     now = now_eastern()
+    cutoff_time = _parse_cutoff_time(latest_booking_time)
     start = from_date or now
     end = to_date or (now + timedelta(days=30))
     required_minutes = _required_minutes_for_packages(db, package_ids or [])
@@ -95,6 +117,11 @@ def list_bookable_slots(
                     overlaps = True
                     break
             if not overlaps:
+                if cutoff_time is not None:
+                    local_time = as_eastern(current).time()
+                    if local_time > cutoff_time:
+                        current += interval
+                        continue
                 result.append(
                     schemas.BookableSlotOption(start=current, available_slot_id=slot.id)
                 )

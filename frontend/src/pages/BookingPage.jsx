@@ -56,6 +56,16 @@ function BookingPage() {
     return () => { cancelled = true; };
   }, [preselectedPackageId, cartItems.length, addItem]);
 
+  // No booking after this time (Eastern) per service; use strictest (earliest) when cart has multiple
+  const BOOKING_CUTOFF_BY_SERVICE = {
+    'Full Detailing': '13:00',
+    'Exterior Detailing': '16:00',
+    'Interior Detailing': '16:00',
+    'Monthly Maintenance': '16:00',
+    'Paint Correction': '10:00',
+    'Ceramic Coating': '10:00',
+  };
+
   // Fetch bookable start times (admin slots broken into 30-min options; duration = package turnaround sum + 2h)
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -68,10 +78,14 @@ function BookingPage() {
     const from = new Date();
     const to = new Date();
     to.setDate(to.getDate() + 30);
+    const serviceNames = [...new Set(cartItems.map((i) => i.service_name).filter(Boolean))];
+    const cutoffs = serviceNames.map((n) => BOOKING_CUTOFF_BY_SERVICE[n]).filter(Boolean);
+    const latestBookingTime = cutoffs.length > 0 ? cutoffs.sort()[0] : undefined;
     const params = {
       from_date: from.toISOString(),
       to_date: to.toISOString(),
-      ...(cartItems.length > 0 ? { package_ids: cartItems.map((i) => i.id) } : {})
+      ...(cartItems.length > 0 ? { package_ids: cartItems.map((i) => i.id) } : {}),
+      ...(latestBookingTime ? { latest_booking_time: latestBookingTime } : {}),
     };
     axios
       .get(`${API_BASE}/api/availability/bookable-slots`, { params })

@@ -199,14 +199,14 @@ INSERT INTO packages (
     price_original_small, price_original_medium, price_original_large,
     turnaround_hours, details
 )
--- Full Detailing
+-- Full Detailing (no booking after 1PM)
 SELECT s.id, 0,
        'Level 1',
        'Essential interior and exterior detail.',
-       150,
+       300,
        248, 248, 293, 338,
        275, 325, 375,
-       2,
+       5,
        'Vacuum floors and trunk
 Wipe down vinyl/plastic and mats
 Vacuum cloth seats
@@ -228,10 +228,10 @@ UNION ALL
 SELECT s.id, 1,
        'Level 2',
        'Everything in Level 1 plus deeper cleaning and protection.',
-       180,
+       360,
        293, 293, 338, 383,
        325, 375, 425,
-       3,
+       6,
        'Everything from our Level 1 Package plus:
 Clean vehicle headliner
 Shampoo cloth floor mats
@@ -245,10 +245,10 @@ UNION ALL
 SELECT s.id, 2,
        'Level 3',
        'Everything from Level 1 and Level 2. For vehicles that are extremely dirty inside and out.',
-       240,
+       420,
        473, 473, 518, 563,
        525, 575, 625,
-       4,
+       7,
        'Everything from Level 1 and Level 2.
 For vehicles extremely dirty inside and out:
 Excessive staining
@@ -257,14 +257,14 @@ Throw-up or long-term neglect'
 FROM svc s WHERE s.slug = 'full-detailing'
 
 UNION ALL
--- Interior Detailing
+-- Interior Detailing (no booking after 4PM)
 SELECT s.id, 0,
        'Level 1',
        'Essential interior clean and protect.',
-       90,
+       150,
        149, 149, 179, 209,
        165, 199, 229,
-       1,
+       2,
        'Vacuum and wipe all surfaces
 Clean console and dash
 Clean door panels and jambs
@@ -274,10 +274,10 @@ UNION ALL
 SELECT s.id, 1,
        'Level 2',
        'Deeper interior detail with conditioning.',
-       120,
+       180,
        219, 219, 259, 299,
        245, 289, 329,
-       2,
+       3,
        'Everything in Level 1 plus:
 Shampoo carpets and mats
 Leather conditioning
@@ -287,10 +287,10 @@ UNION ALL
 SELECT s.id, 2,
        'Level 3',
        'Full interior detail for heavily soiled vehicles.',
-       180,
+       240,
        349, 349, 399, 449,
        385, 439, 495,
-       3,
+       4,
        'Everything in Level 1 and 2 plus:
 Deep stain removal
 Pet hair removal
@@ -298,14 +298,14 @@ Full interior sanitization'
 FROM svc s WHERE s.slug = 'interior-detailing'
 
 UNION ALL
--- Exterior Detailing
+-- Exterior Detailing (no booking after 4PM)
 SELECT s.id, 0,
        'Level 1',
        'Wash, wax, and basic exterior care.',
-       60,
+       120,
        99, 99, 129, 159,
        109, 144, 179,
-       1,
+       2,
        'Two-bucket hand wash
 Wheels and tires
 Basic wax application'
@@ -314,10 +314,10 @@ UNION ALL
 SELECT s.id, 1,
        'Level 2',
        'Clay, polish, and sealant.',
-       120,
+       150,
        179, 179, 219, 259,
        199, 243, 289,
-       2,
+       3,
        'Everything in Level 1 plus:
 Paint decontamination (clay)
 Polish
@@ -337,7 +337,7 @@ Premium sealant or coating prep'
 FROM svc s WHERE s.slug = 'exterior-detailing'
 
 UNION ALL
--- Ceramic Coating
+-- Ceramic Coating (no booking after 10AM)
 SELECT s.id, 0,
        '1 Year Ceramic Coating',
        'One-year ceramic coating protection.',
@@ -353,10 +353,10 @@ UNION ALL
 SELECT s.id, 1,
        '3 Year Ceramic Coating',
        'Three-year ceramic coating protection.',
-       360,
+       420,
        499, 499, 574, 649,
        549, 629, 714,
-       6,
+       7,
        'Full decontamination
 Paint correction (as needed)
 3-year ceramic coating'
@@ -365,24 +365,24 @@ UNION ALL
 SELECT s.id, 2,
        '5 Year Ceramic Coating',
        'Five-year ceramic coating protection.',
-       480,
+       600,
        699, 699, 799, 899,
        769, 879, 989,
-       8,
+       10,
        'Full prep and correction
 5-year ceramic coating
 Multiple layers'
 FROM svc s WHERE s.slug = 'ceramic-coating'
 
 UNION ALL
--- Paint Correction
+-- Paint Correction (no booking after 10AM)
 SELECT s.id, 0,
        '1 Step paint correction',
        '1 step paint correction.',
-       300,
+       420,
        500, 500, 600, 700,
        500, 600, 700,
-       5,
+       7,
        'Pre-wash and hand wash
 Wheels and tires
 Paint correction'
@@ -391,17 +391,17 @@ UNION ALL
 SELECT s.id, 1,
        '2 Step paint correction',
        '2 step paint correction.',
-       480,
+       600,
        1000, 1000, 1200, 1300,
        1000, 1200, 1300,
-       8,
+       10,
        'Pre-wash and hand wash
 Wheels and tires
 2 step correction'
 FROM svc s WHERE s.slug = 'paint-correction'
 
 UNION ALL
--- Monthly Maintenance
+-- Monthly Maintenance (no booking after 4PM; Biweekly hidden in UI for now)
 SELECT s.id, 0,
        'Biweekly',
        'Maintenance wash and interior tidy every two weeks.',
@@ -417,10 +417,10 @@ UNION ALL
 SELECT s.id, 1,
        'Monthly',
        'Monthly maintenance detail to keep your vehicle in top shape.',
-       90,
+       180,
        129, 129, 159, 189,
        142, 175, 208,
-       1,
+       3,
        'Full maintenance wash
 Interior deep tidy
 Tire and trim dressing'
