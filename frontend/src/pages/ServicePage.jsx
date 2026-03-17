@@ -99,14 +99,14 @@ const FULL_DETAILING_LEVEL_1_ITEMS = [
   'Wash vinyl or rubber floor mats',
   'Vacuum cloth seats',
   'Wipe down leather seats',
-  'Shampoo of carpets floor mat',
+  'Shampoo floor mats and carpets',
   'Deep clean and condition leather seat',
   'Clean dashboard and apply UV protection',
   'Full wipe-down of all plastics and interior trim',
   'Cleaning of center console, vents, cup holders, and tight areas',
   'Door panels and door storage pockets cleaned and conditioned',
   'Door jambs cleaned',
-  'Interior windows and mirrors cleaned streak-free',
+  'Windows and mirrors cleaned streak-free',
   'Exterior Items',
   'Your vehicle will receive a careful hand wash and protective finish for a clean, glossy look.',
   'Gentle pre-rinse using spot-free water',
@@ -211,16 +211,16 @@ const MAINTENANCE_PACKAGES = {
   'Monthly': {
     subtitle: '1 month maintenance',
     turnaround: '2-3 Hours',
-    prices: { small: 150, medium: 175, large: 210 },
+    prices: { small: 150, medium: 175, large: 190 },
     items: MAINTENANCE_MONTHLY_ITEMS,
     note: 'Important Notes: The vehicle must first get full detailing by our team and be maintained on a 4-week schedule to qualify for maintenance pricing. Excessive buildup, heavy pet hair, or severe staining may require upgrade to a higher-level detail.',
   },
-  'Biweekly': {
-    subtitle: 'Biweekly',
-    prices: { small: 350, medium: 370, large: 395 },
-    items: MAINTENANCE_BIWEEKLY_ITEMS,
-    note: 'Important Notes: Biweekly pricing applies to vehicles maintained on a consistent two-week schedule. The vehicle must first get full detailing by our team to qualify for maintenance pricing. Vehicles with excessive buildup, staining, or heavy contamination may require a higher-level detail before starting maintenance.',
-  },
+  // 'Biweekly': {
+  //   subtitle: 'Biweekly',
+  //   prices: { small: 350, medium: 370, large: 395 },
+  //   items: MAINTENANCE_BIWEEKLY_ITEMS,
+  //   note: 'Important Notes: Biweekly pricing applies to vehicles maintained on a consistent two-week schedule. The vehicle must first get full detailing by our team to qualify for maintenance pricing. Vehicles with excessive buildup, staining, or heavy contamination may require a higher-level detail before starting maintenance.',
+  // },
 };
 
 /** Ceramic Coating: custom content per package (from services.md). Benefits + per-package items. */
@@ -283,7 +283,7 @@ const CERAMIC_PACKAGES = {
 const PAINT_CORRECTION_1STEP_ITEMS = [
   'Pre-wash and 100% hand wash using spot-free water',
   'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
-  '2-Step Paint Correction – removes 60–80% of light swirls',
+  '2-Step Paint Correction – removes 50–60% of light swirls',
   'Upgrade Option:',
   'Our professional 2-Step Paint Correction removes up to 80% of visible scratches and defects, dramatically improving gloss, clarity and overall paint appearance.',
 ];
@@ -291,9 +291,8 @@ const PAINT_CORRECTION_1STEP_ITEMS = [
 const PAINT_CORRECTION_2STEP_ITEMS = [
   'Pre-wash and 100% hand wash using spot-free water',
   'Cleaning of wheels, wheel wells, tires and gas cap area',
-  '2 Step Paint Correction (remove 80-90% of light swirls)',
+  '2 Step Paint Correction (remove 60-80% of light swirls)',
   'With our 2 step paint correction service, you can get up to 80% of scratches and defects removed based on original condition. The process requires more time and energy than the 1 step enhancement polish, but benefits from a much higher level of scratch, defect and swirl removal.',
-  'AVERAGE CAR, USED CAR, DAILY DRIVEN USE, NEGLECTED PAINT',
 ];
 
 /** Paint Correction. No booking after 10AM. */
@@ -301,15 +300,15 @@ const PAINT_CORRECTION_PACKAGES = {
   '1 Step paint correction': {
     subtitle: '1 Step paint correction',
     turnaround: '5-7 Hours',
-    priceLabel: 'Start from $600',
-    prices: { small: 500, medium: 600, large: 700 },
+    priceLabel: 'Starting from $600',
+    // prices: { small: 500, medium: 600, large: 700 },
     items: PAINT_CORRECTION_1STEP_ITEMS,
   },
   '2 Step paint correction': {
     subtitle: '2 Step paint correction',
     turnaround: '9-10 Hours',
-    priceLabel: 'Start from $800',
-    prices: { small: 1000, medium: 1200, large: 1300 },
+    priceLabel: 'Starting from $800',
+    // prices: { small: 1000, medium: 1200, large: 1300 },
     items: PAINT_CORRECTION_2STEP_ITEMS,
   },
 };
