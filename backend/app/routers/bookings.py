@@ -89,11 +89,24 @@ def get_customer_bookings(customer_id: int, db: Session = Depends(get_db)):
 def update_booking(
     booking_id: int, booking: schemas.BookingCreate, db: Session = Depends(get_db)
 ):
+    existing = crud_bookings.get_booking(db, booking_id=booking_id)
+    if not existing:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    old_status = existing.status
     db_booking = crud_bookings.update_booking(
         db=db, booking_id=booking_id, booking=booking
     )
-    if not db_booking:
-        raise HTTPException(status_code=404, detail="Booking not found")
+    # When admin confirms a pending booking, email the customer
+    if old_status == "pending" and booking.status == "confirmed":
+        try:
+            from app.notify import send_booking_confirmed_notification
+            send_booking_confirmed_notification(db, booking_id)
+        except Exception as e:
+            logger.exception(
+                "send_booking_confirmed_notification failed for booking_id=%s: %s",
+                booking_id,
+                e,
+            )
     return db_booking
 
 @router.delete("/{booking_id}", response_model=schemas.Booking)

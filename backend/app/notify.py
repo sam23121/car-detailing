@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
 
+BUSINESS_NAME = "YMB Habesha Mobile Detailing"
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "smlalene@gmail.com")
 OWNER_PHONE = os.environ.get("OWNER_PHONE", "7024707392")
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
@@ -28,6 +29,23 @@ def _format_datetime(dt):
         dt = dt.astimezone(EASTERN)
     return dt.strftime("%B %d, %Y at %I:%M %p %Z")
 
+def _package_display(package_or_item):
+    """Format as 'Service name – Package name' when service is available."""
+    if hasattr(package_or_item, "package"):
+        item = package_or_item
+        pkg = item.package
+        if not pkg:
+            return f"Package #{item.package_id}"
+    else:
+        pkg = package_or_item
+        if not pkg:
+            return "Package"
+    service_name = getattr(pkg, "service_name", None) if pkg else None
+    if service_name and str(service_name).strip():
+        return f"{service_name} – {pkg.name}"
+    return pkg.name
+
+
 def _booking_summary(booking):
     """Build a short text summary of the booking."""
     c = booking.customer
@@ -37,10 +55,10 @@ def _booking_summary(booking):
     if c.phone:
         parts.append(f"Phone: {c.phone}")
     if booking.booking_items:
-        names = [item.package.name if item.package else f"Package #{item.package_id}" for item in booking.booking_items]
+        names = [_package_display(item) for item in booking.booking_items]
         parts.append("Packages: " + ", ".join(names))
     elif booking.package:
-        parts.append(f"Package: {booking.package.name}")
+        parts.append(f"Package: {_package_display(booking.package)}")
     if getattr(booking, "location", None):
         parts.append(f"Location: {booking.location}")
     if booking.notes:
@@ -101,21 +119,65 @@ def send_booking_notifications(db, booking_id: int):
     customer_name = booking.customer.name
     date_str = _format_datetime(booking.scheduled_date)
 
-    # Email to customer (confirmation)
-    customer_subject = "Booking request received – Quality Mobile Detailing"
+    # Email to customer (request received)
+    customer_subject = f"Booking request received – {BUSINESS_NAME}"
+    location_line = ""
+    if getattr(booking, "location", None) and booking.location.strip():
+        location_line = f"Service address: {booking.location.strip()}\n\n"
+    if booking.booking_items:
+        package_lines = [_package_display(item) for item in booking.booking_items]
+        order_line = "Your order: " + ", ".join(package_lines) + "\n\n"
+    elif booking.package:
+        order_line = f"Your order: {_package_display(booking.package)}\n\n"
+    else:
+        order_line = ""
     customer_body = (
         f"Hi {customer_name},\n\n"
         f"We received your booking request for {date_str}.\n\n"
-        "We'll confirm shortly. If you have questions, reply to this email or give us a call.\n\n"
-        "— Quality Mobile Detailing"
+        f"{order_line}"
+        f"{location_line}"
+        "If you have questions, reply to this email or give us a call.\n\n"
+        f"— {BUSINESS_NAME}"
     )
     _send_email(customer_email, customer_subject, customer_body)
 
     # Email to owner
-    owner_subject = "New booking request – Quality Mobile Detailing"
+    owner_subject = f"New booking request – {BUSINESS_NAME}"
     owner_body = "New booking request:\n\n" + summary
     _send_email(OWNER_EMAIL, owner_subject, owner_body)
 
     # SMS to owner (short)
     sms_body = f"New booking: {customer_name} – {date_str}. Check admin."
     _send_sms(OWNER_PHONE, sms_body)
+
+
+def send_booking_confirmed_notification(db, booking_id: int):
+    """When admin confirms a booking: email the customer that their booking is confirmed."""
+    from app.crud import bookings as crud_bookings
+    booking = crud_bookings.get_booking_with_details(db, booking_id)
+    if not booking or not booking.customer:
+        return
+    customer_email = booking.customer.email
+    customer_name = booking.customer.name
+    date_str = _format_datetime(booking.scheduled_date)
+
+    subject = f"Your booking is confirmed – {BUSINESS_NAME}"
+    location_line = ""
+    if getattr(booking, "location", None) and booking.location.strip():
+        location_line = f"Service address: {booking.location.strip()}\n\n"
+    if booking.booking_items:
+        package_lines = [_package_display(item) for item in booking.booking_items]
+        order_line = "Your order: " + ", ".join(package_lines) + "\n\n"
+    elif booking.package:
+        order_line = f"Your order: {_package_display(booking.package)}\n\n"
+    else:
+        order_line = ""
+    body = (
+        f"Hi {customer_name},\n\n"
+        f"Your booking with {BUSINESS_NAME} at {date_str} is confirmed.\n\n"
+        f"{order_line}"
+        f"{location_line}"
+        "We look forward to seeing you. If you have any questions, reply to this email or give us a call.\n\n"
+        f"— {BUSINESS_NAME}"
+    )
+    _send_email(customer_email, subject, body)

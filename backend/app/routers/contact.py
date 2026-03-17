@@ -25,11 +25,11 @@ def _send_contact_emails(msg: models.ContactMessage):
         f"Message:\n{msg.message}"
     )
     send_email(owner_to, subject, body)
-    customer_subject = "We received your message – Quality Mobile Detailing"
+    customer_subject = "We received your message – YMB Habesha Mobile Detailing"
     customer_body = (
         f"Hi {msg.name},\n\n"
         "Thanks for reaching out. We've received your message and will get back "
-        "to you soon.\n\n— Quality Mobile Detailing"
+        "to you soon.\n\n— YMB Habesha Mobile Detailing"
     )
     send_email(msg.email, customer_subject, customer_body)
 

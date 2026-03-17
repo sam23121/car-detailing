@@ -196,6 +196,21 @@
   color: #6b7280;
 }
 
+/* Full / unavailable days: strikethrough so it's clear they can't be selected */
+.booking-calendar .react-datepicker__day--disabled,
+.booking-calendar .booking-day-full {
+  text-decoration: line-through;
+  color: #6b7280 !important;
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+.booking-calendar .react-datepicker__day--disabled:hover,
+.booking-calendar .booking-day-full:hover {
+  background: transparent;
+  color: #6b7280 !important;
+}
+
 .react-datepicker__time-container .react-datepicker__time-box {
   background: #111;
 }

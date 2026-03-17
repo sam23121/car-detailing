@@ -53,7 +53,10 @@ def _booking_overlaps_existing(
 def create_booking(db: Session, booking: schemas.BookingCreate):
     duration_minutes = _duration_minutes_for_package_ids(db, [booking.package_id])
     if _booking_overlaps_existing(db, booking.scheduled_date, duration_minutes):
-        raise ValueError("This time slot is no longer available.")
+        raise ValueError(
+            "This service requires more time than is available for the selected "
+            "slot. Please choose another date or time."
+        )
     data = booking.model_dump()
     data["duration_minutes"] = duration_minutes
     db_booking = models.Booking(**data)
@@ -70,7 +73,10 @@ def create_booking_multi(db: Session, payload: schemas.BookingCreateMulti):
     first_id = payload.package_ids[0]
     duration_minutes = _duration_minutes_for_package_ids(db, payload.package_ids)
     if _booking_overlaps_existing(db, payload.scheduled_date, duration_minutes):
-        raise ValueError("This time slot is no longer available.")
+        raise ValueError(
+            "This service requires more time than is available for the selected "
+            "slot. Please choose another date or time."
+        )
     db_booking = models.Booking(
         customer_id=payload.customer_id,
         package_id=first_id,
@@ -108,8 +114,10 @@ def get_bookings_with_details(
         db.query(models.Booking)
         .options(
             joinedload(models.Booking.customer),
-            joinedload(models.Booking.package),
-            joinedload(models.Booking.booking_items).joinedload(models.BookingItem.package),
+            joinedload(models.Booking.package).joinedload(models.Package.service),
+            joinedload(models.Booking.booking_items)
+            .joinedload(models.BookingItem.package)
+            .joinedload(models.Package.service),
         )
         .order_by(models.Booking.scheduled_date.desc())
     )
@@ -133,8 +141,10 @@ def get_booking_with_details(db: Session, booking_id: int):
         db.query(models.Booking)
         .options(
             joinedload(models.Booking.customer),
-            joinedload(models.Booking.package),
-            joinedload(models.Booking.booking_items).joinedload(models.BookingItem.package),
+            joinedload(models.Booking.package).joinedload(models.Package.service),
+            joinedload(models.Booking.booking_items)
+            .joinedload(models.BookingItem.package)
+            .joinedload(models.Package.service),
         )
         .filter(models.Booking.id == booking_id)
         .first()

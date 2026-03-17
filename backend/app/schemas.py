@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, model_validator
 from datetime import datetime
 from typing import Optional
 
@@ -96,12 +96,24 @@ class BookingCreate(BookingBase):
     package_id: int
     available_slot_id: Optional[int] = None
 
+    @model_validator(mode="after")
+    def require_location(self):
+        if not self.location or not str(self.location).strip():
+            raise ValueError("Service location (address) is required.")
+        return self
+
 
 class BookingCreateMulti(BookingBase):
     """Create one booking with multiple packages (cart/checkout)."""
     customer_id: int
     package_ids: list[int]
     available_slot_id: Optional[int] = None
+
+    @model_validator(mode="after")
+    def require_location(self):
+        if not self.location or not str(self.location).strip():
+            raise ValueError("Service location (address) is required.")
+        return self
 
 
 class Booking(BookingBase):
@@ -121,6 +133,7 @@ class BookingPackageInfo(BaseModel):
     name: str
     price: Optional[float] = None
     duration_minutes: Optional[int] = None
+    service_name: Optional[str] = None
     model_config = ConfigDict(from_attributes=True)
 
 

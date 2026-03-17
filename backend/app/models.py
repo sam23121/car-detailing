@@ -54,6 +54,10 @@ class Package(Base):
     bookings = relationship("Booking", back_populates="package")
     booking_items = relationship("BookingItem", back_populates="package")
 
+    @property
+    def service_name(self):
+        return self.service.name if self.service else None
+
 class BookingItem(Base):
     __tablename__ = "booking_items"
 

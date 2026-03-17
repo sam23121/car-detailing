@@ -74,6 +74,7 @@ function AdminBookingsPage() {
                 <tr>
                   <th>Date / Time</th>
                   <th>Customer</th>
+                  <th>Address</th>
                   <th>Package</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -98,18 +99,25 @@ function AdminBookingsPage() {
                     <td>
                       {b.booking_items && b.booking_items.length > 0 ? (
                         <ul className="admin-packages-list">
-                          {b.booking_items.map((item) => (
-                            <li key={item.id}>
-                              {item.package?.name ?? `#${item.package_id}`}
-                              {item.package?.price != null && (
-                                <span className="admin-price"> ${Number(item.package.price).toFixed(2)}</span>
-                              )}
-                            </li>
-                          ))}
+                          {b.booking_items.map((item) => {
+                            const label = item.package?.service_name
+                              ? `${item.package.service_name} – ${item.package.name}`
+                              : (item.package?.name ?? `#${item.package_id}`);
+                            return (
+                              <li key={item.id}>
+                                {label}
+                                {item.package?.price != null && (
+                                  <span className="admin-price"> ${Number(item.package.price).toFixed(2)}</span>
+                                )}
+                              </li>
+                            );
+                          })}
                         </ul>
                       ) : (
                         <>
-                          {b.package?.name ?? (b.package_id ? `Package #${b.package_id}` : '—')}
+                          {b.package?.service_name
+                            ? `${b.package.service_name} – ${b.package.name}`
+                            : (b.package?.name ?? (b.package_id ? `Package #${b.package_id}` : '—'))}
                           {b.package?.price != null && (
                             <span className="admin-price"> ${Number(b.package.price).toFixed(2)}</span>
                           )}

@@ -144,6 +144,10 @@ function BookingPage() {
       setError('Please fill in name, email, and choose an available date & time.');
       return;
     }
+    if (!formData.location || !formData.location.trim()) {
+      setError('Please enter the service location (address where you want the service).');
+      return;
+    }
     const scheduledDate = new Date(selected.start);
     setSubmitting(true);
     try {
@@ -159,7 +163,8 @@ function BookingPage() {
         scheduled_date: scheduledDate.toISOString(),
         notes: formData.notes || null,
         package_ids: packageIds,
-        available_slot_id: slotIdNum
+        available_slot_id: slotIdNum,
+        location: formData.location || null
       };
       if (packageIds.length === 1) {
         await axios.post(`${API_BASE}/api/bookings/`, {
@@ -167,7 +172,8 @@ function BookingPage() {
           package_id: packageIds[0],
           scheduled_date: payload.scheduled_date,
           notes: payload.notes,
-          available_slot_id: slotIdNum
+          available_slot_id: slotIdNum,
+          location: formData.location || null
         });
       } else {
         await axios.post(`${API_BASE}/api/bookings/multi`, payload);
@@ -185,7 +191,19 @@ function BookingPage() {
         : typeof detail === 'string'
           ? detail
           : 'Failed to create booking. Please try again.';
-      setError(message);
+      const isSlotUnavailable =
+        err.response?.status === 409 ||
+        (typeof message === 'string' && message.toLowerCase().includes('slot') && message.toLowerCase().includes('available'));
+      if (isSlotUnavailable) {
+        showToast(
+          typeof message === 'string' && message.length > 0
+            ? message
+            : 'This service requires more time than is available for the selected slot. Please choose another date or time.'
+        );
+        setError(null);
+      } else {
+        setError(message);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -242,13 +260,14 @@ function BookingPage() {
                 <input type="email" name="email" value={formData.email} onChange={handleChange} required />
                 <label>Phone</label>
                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
-                <label>Service location (address where you want the service)</label>
+                <label>Service location (address where you want the service) *</label>
                 <input
                   type="text"
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
                   placeholder="e.g. 123 Main St, City"
+                  required
                 />
                 <label>Preferred Date & Time *</label>
                 {slotsLoading ? (
@@ -265,10 +284,12 @@ function BookingPage() {
                           setSelectedSlotKey('');
                         }}
                         filterDate={hasSlotsForDay}
+                        dayClassName={(date) => (hasSlotsForDay(date) ? '' : 'booking-day-full')}
                         minDate={new Date()}
                         dateFormat="MMMM d, yyyy"
                         placeholderText="Choose a date"
                         className="booking-slots-datepicker"
+                        calendarClassName="booking-calendar"
                       />
                     </div>
                     {selectedDate && slotsForSelectedDay.length > 0 && (
