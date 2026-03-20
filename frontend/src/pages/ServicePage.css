@@ -378,6 +378,16 @@
   margin-bottom: 0.35rem;
 }
 
+.service-level-list-nested {
+  margin: 0.35rem 0 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.service-level-list-nested li {
+  margin-bottom: 0.25rem;
+}
+
 .service-level-list-heading {
   list-style: none;
   margin-left: -1.25rem;

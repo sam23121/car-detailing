@@ -236,23 +236,43 @@ const CERAMIC_BENEFITS = [
 const CERAMIC_1YEAR_ITEMS = [
   ...CERAMIC_BENEFITS,
   'Pre-wash and 100% hand wash using spot-free water',
-  'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
-  '2-Step Paint Correction – removes 60–80% of light swirls',
+  [
+    'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+    [
+      'Remove bug splatters from exterior surfaces',
+      'Remove bonded environmental fallout using a clay bar',
+      'Chemically remove tar and road grime',
+    ],
+  ],
   'Application of high-grade 1-year ceramic coating',
 ];
 
 const CERAMIC_3YEAR_ITEMS = [
   ...CERAMIC_BENEFITS,
   'Pre-wash and 100% hand wash using spot-free water',
-  'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
-  '2-Step Paint Correction – removes 60–80% of light swirls',
+  [
+    'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+    [
+      'Remove bug splatters from exterior surfaces',
+      'Remove bonded environmental fallout using a clay bar',
+      'Chemically remove tar and road grime',
+    ],
+  ],
+  '1-Step Paint Correction – removes 50–60% of light swirls',
   'Application of high-grade 3-year ceramic coating',
 ];
 
 const CERAMIC_5YEAR_ITEMS = [
   ...CERAMIC_BENEFITS,
   'Pre-wash and 100% hand wash using spot-free water',
-  'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+  [
+    'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+    [
+      'Remove bug splatters from exterior surfaces',
+      'Remove bonded environmental fallout using a clay bar',
+      'Chemically remove tar and road grime',
+    ],
+  ],
   '2-Step Paint Correction – removes 60–80% of light swirls',
   'Application of high-grade 5-year ceramic coating',
 ];
@@ -262,19 +282,19 @@ const CERAMIC_PACKAGES = {
   '1 Year Ceramic Coating': {
     subtitle: '1 Year ceramic coating',
     turnaround: '3-4 Hours',
-    prices: { small: 300, medium: 350, large: 390 },
+    prices: { small: 440, medium: 490, large: 540 },
     items: CERAMIC_1YEAR_ITEMS,
   },
   '3 Year Ceramic Coating': {
     subtitle: '3 Year ceramic coating',
     turnaround: '5-7 Hours',
-    prices: { small: 1000, medium: 1100, large: 1200 },
+    prices: { small: 1100, medium: 1200, large: 1300 },
     items: CERAMIC_3YEAR_ITEMS,
   },
   '5 Year Ceramic Coating': {
     subtitle: '5 Year ceramic coating',
     turnaround: '8-10 Hours',
-    prices: { small: 1100, medium: 1200, large: 1300 },
+    prices: { small: 1200, medium: 1300, large: 1400 },
     items: CERAMIC_5YEAR_ITEMS,
   },
 };
@@ -282,15 +302,29 @@ const CERAMIC_PACKAGES = {
 /** Paint Correction: custom content per package (from services.md). API names: "1 Step paint correction", "2 Step paint correction". */
 const PAINT_CORRECTION_1STEP_ITEMS = [
   'Pre-wash and 100% hand wash using spot-free water',
-  'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
-  '2-Step Paint Correction – removes 50–60% of light swirls',
+  [
+    'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
+    [
+      'Remove bug splatters from exterior surfaces',
+      'Remove bonded environmental fallout using a clay bar',
+      'Chemically remove tar and road grime',
+    ],
+  ],
+  '1 step paint correction - remove 50 - 60% of light swirls',
   'Upgrade Option:',
-  'Our professional 2-Step Paint Correction removes up to 80% of visible scratches and defects, dramatically improving gloss, clarity and overall paint appearance.',
+  'Our professional 1-Step Paint Correction removes up to 80% of visible scratches and defects, dramatically improving gloss, clarity and overall paint appearance.',
 ];
 
 const PAINT_CORRECTION_2STEP_ITEMS = [
   'Pre-wash and 100% hand wash using spot-free water',
-  'Cleaning of wheels, wheel wells, tires and gas cap area',
+  [
+    'Cleaning of wheels, wheel wells, tires and gas cap area, including:',
+    [
+      'Remove bug splatters from exterior surfaces',
+      'Remove bonded environmental fallout using a clay bar',
+      'Chemically remove tar and road grime',
+    ],
+  ],
   '2 Step Paint Correction (remove 60-80% of light swirls)',
   'With our 2 step paint correction service, you can get up to 80% of scratches and defects removed based on original condition. The process requires more time and energy than the 1 step enhancement polish, but benefits from a much higher level of scratch, defect and swirl removal.',
 ];
@@ -318,6 +352,117 @@ const VEHICLE_SIZES = [
   { key: 'medium', label: 'Medium SUV/Truck (4-5 seats)', priceKey: 'price_medium', originalKey: 'price_original_medium' },
   { key: 'large', label: 'Minivan/Van (6-8 seats)', priceKey: 'price_large', originalKey: 'price_original_large' },
 ];
+
+const isServiceListSectionHeading = (s) => {
+  const t = String(s).trim();
+  return (
+    /^(Interior|Exterior)\s+(Items?|Maintenance)(\s|$)/i.test(t) ||
+    /^What's Included$|^Who This Package Is For$|^Upgrade Option:?$|^Benefits of Ceramic Coating:?$/i.test(t)
+  );
+};
+
+/** Nested groups: [label, [leaf, ...]] or [label, leaf, leaf, ...]. Plain strings are top-level bullets. */
+function renderServiceLevelListNode(item, key) {
+  if (typeof item === 'string') {
+    return (
+      <li key={key} className={isServiceListSectionHeading(item) ? 'service-level-list-heading' : ''}>
+        {item}
+      </li>
+    );
+  }
+  if (!Array.isArray(item) || item.length === 0) return null;
+
+  const [label, ...rest] = item;
+  if (typeof label !== 'string') {
+    return (
+      <React.Fragment key={key}>
+        {item.map((sub, j) => renderServiceLevelListNode(sub, `${key}-${j}`))}
+      </React.Fragment>
+    );
+  }
+
+  const headingClass = isServiceListSectionHeading(label) ? 'service-level-list-heading' : '';
+
+  if (rest.length === 1 && Array.isArray(rest[0])) {
+    const kids = rest[0];
+    return (
+      <li key={key} className={headingClass}>
+        {label}
+        <ul className="service-level-list-nested">
+          {kids.map((c, j) =>
+            typeof c === 'string' ? (
+              <li key={j}>{c}</li>
+            ) : (
+              <li key={j}>{renderServiceLevelNestedGroup(c)}</li>
+            )
+          )}
+        </ul>
+      </li>
+    );
+  }
+
+  if (rest.length >= 1 && rest.every((x) => typeof x === 'string')) {
+    return (
+      <li key={key} className={headingClass}>
+        {label}
+        <ul className="service-level-list-nested">
+          {rest.map((c, j) => (
+            <li key={j}>{c}</li>
+          ))}
+        </ul>
+      </li>
+    );
+  }
+
+  if (rest.length === 0) {
+    return (
+      <li key={key} className={headingClass}>
+        {label}
+      </li>
+    );
+  }
+
+  return (
+    <li key={key} className={headingClass}>
+      {label} {rest.map(String).join(' ')}
+    </li>
+  );
+}
+
+function renderServiceLevelNestedGroup(node) {
+  if (typeof node === 'string') return node;
+  if (!Array.isArray(node) || node.length === 0) return null;
+  const [subLabel, ...subRest] = node;
+  if (typeof subLabel !== 'string') return null;
+
+  if (subRest.length === 1 && Array.isArray(subRest[0])) {
+    return (
+      <>
+        {subLabel}
+        <ul className="service-level-list-nested">
+          {subRest[0].map((x, i) => (
+            <li key={i}>{typeof x === 'string' ? x : renderServiceLevelNestedGroup(x)}</li>
+          ))}
+        </ul>
+      </>
+    );
+  }
+
+  if (subRest.length >= 1 && subRest.every((x) => typeof x === 'string')) {
+    return (
+      <>
+        {subLabel}
+        <ul className="service-level-list-nested">
+          {subRest.map((x, i) => (
+            <li key={i}>{x}</li>
+          ))}
+        </ul>
+      </>
+    );
+  }
+
+  return subLabel;
+}
 
 function ServicePage() {
   const { slug } = useParams();
@@ -538,14 +683,7 @@ function ServicePage() {
 
                         {items.length > 0 && (
                           <ul className="service-level-list">
-                            {items.map((line, i) => {
-                              const isSectionHeading = /^(Interior|Exterior)\s+(Items?|Maintenance)(\s|$)/i.test(String(line).trim()) || /^What's Included$|^Who This Package Is For$|^Upgrade Option:?$|^Benefits of Ceramic Coating:?$/i.test(String(line).trim());
-                              return (
-                                <li key={i} className={isSectionHeading ? 'service-level-list-heading' : ''}>
-                                  {line}
-                                </li>
-                              );
-                            })}
+                            {items.map((line, i) => renderServiceLevelListNode(line, i))}
                           </ul>
                         )}
 
