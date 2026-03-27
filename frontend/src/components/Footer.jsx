@@ -25,10 +25,10 @@ function Footer() {
           <p>Phone 2: <a href={`tel:${BUSINESS.phone2.replace(/\D/g, '')}`}>{BUSINESS.phone2}</a></p>
           <p>Email: <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a></p>
         </div>
-        <div className="footer-section">
+        {/* <div className="footer-section">
           <h4>Owner</h4>
           <p><a href="/admin">Admin (bookings & availability)</a></p>
-        </div>
+        </div> */}
       </div>
       <div className="footer-bottom">
         <p>&copy; 2026 YMB Habesha. All rights reserved.</p>
