@@ -199,231 +199,324 @@ INSERT INTO packages (
     price_original_small, price_original_medium, price_original_large,
     turnaround_hours, details
 )
--- Full Detailing (no booking after 1PM)
+-- Full Detailing (no booking after 1PM) — prices/copy aligned with frontend ServicePage.jsx
 SELECT s.id, 0,
        'Level 1',
-       'Essential interior and exterior detail.',
-       300,
-       248, 248, 293, 338,
-       275, 325, 375,
+       'Full detailing',
+       270,
+       280, 280, 320, 370,
+       NULL, NULL, NULL,
        5,
-       'Vacuum floors and trunk
-Wipe down vinyl/plastic and mats
+       'Interior items
+Complete vacuum of floor and trunks area
+Wash vinyl or rubber floor mats
 Vacuum cloth seats
-Wipe leather seats
-Clean console and cup holders
-Clean dash with UV protect
-Clean interior trim and plastics
-Clean door panels and pockets
-Clean door jambs
-Clean all glass
-Two-bucket hand wash
-Hand wash wheels and tires
-Decontaminate paint
-Trim dressing
-No-sling tire dressing
-Paint sealant (wax)'
+Wipe down leather seats
+Shampoo floor mats and carpets
+Deep clean and condition leather seat
+Clean dashboard and apply UV protection
+Full wipe-down of all plastics and interior trim
+Cleaning of center console, vents, cup holders, and tight areas
+Door panels and door storage pockets cleaned and conditioned
+Door jambs cleaned
+Windows and mirrors cleaned streak-free
+Exterior Items
+Your vehicle will receive a careful hand wash and protective finish for a clean, glossy look.
+Gentle pre-rinse using spot-free water
+Complete hand wash using spot-free water
+Wheels, tires, and wheel wells cleaned by hand
+Gas cap area cleaned
+Tire dressing applied
+Paint sealant applied for shine and protection'
 FROM svc s WHERE s.slug = 'full-detailing'
 UNION ALL
 SELECT s.id, 1,
        'Level 2',
-       'Everything in Level 1 plus deeper cleaning and protection.',
-       360,
-       293, 293, 338, 383,
-       325, 375, 425,
+       'Deep Full Detailing Upgrade',
+       330,
+       330, 330, 370, 390,
+       NULL, NULL, NULL,
        6,
-       'Everything from our Level 1 Package plus:
-Clean vehicle headliner
-Shampoo cloth floor mats
-Shampoo carpeting in cabin and trunk
-Shampoo cloth seats
-Decontaminate with clay bar
-Pet hair and sand removal if present
-Paint sealant for 3-month protection'
+       'What''s Included
+Includes everything in our Level 1 Detail, plus the following advanced services:
+Full shampoo extraction of cloth seats
+Steam treatment of cloth seats to sanitize and break down stains
+Deep shampoo and steam treatment of carpets in cabin and trunk
+Remove bug splatters from surfaces
+Remove environmental fallout with detailers clay from paint
+Chemically remove tar overspray and road grime
+Pet hair and sand removal (if present)'
 FROM svc s WHERE s.slug = 'full-detailing'
 UNION ALL
 SELECT s.id, 2,
        'Level 3',
-       'Everything from Level 1 and Level 2. For vehicles that are extremely dirty inside and out.',
-       420,
-       473, 473, 518, 563,
-       525, 575, 625,
+       'Extreme Restoration',
+       390,
+       470, 470, 520, 560,
+       NULL, NULL, NULL,
        7,
-       'Everything from Level 1 and Level 2.
-For vehicles extremely dirty inside and out:
-Excessive staining
-Pet hair and sand
-Throw-up or long-term neglect'
+       'Who This Package Is For
+This service is designed for vehicles in heavy or neglected condition that require extensive cleaning and extra labor.
+What''s Included
+Includes everything in Level 1 and Level 2, plus:
+Intensive stain treatment and extraction
+Extended pet hair removal process
+Deep interior cleaning
+Heavy exterior decontamination
+Extra labor time for severely soiled areas
+Important Notice: Final pricing is determined after in-person inspection. Vehicles with biohazard material (excessive bodily fluids, mold, etc.) may require specialized treatment and additional charges.'
 FROM svc s WHERE s.slug = 'full-detailing'
 
 UNION ALL
 -- Interior Detailing (no booking after 4PM)
 SELECT s.id, 0,
        'Level 1',
-       'Essential interior clean and protect.',
+       'Interior Detailing',
        150,
-       149, 149, 179, 209,
-       165, 199, 229,
-       2,
-       'Vacuum and wipe all surfaces
-Clean console and dash
-Clean door panels and jambs
-Glass cleaning'
+       200, 200, 220, 250,
+       NULL, NULL, NULL,
+       3,
+       'Interior items
+Complete vacuum of floor and trunks area
+Wash vinyl or rubber floor mats
+Vacuum cloth seats
+Wipe down leather seats
+Shampoo treatment of cloth floor mats
+Deep clean and condition leather seat
+Clean dashboard and apply UV protection
+Full wipe-down of all plastics and interior trim
+Cleaning of center console, vents, cup holders, and tight areas
+Door panels and door storage pockets cleaned and conditioned
+Door jambs cleaned
+Interior windows and mirrors cleaned streak-free'
 FROM svc s WHERE s.slug = 'interior-detailing'
 UNION ALL
 SELECT s.id, 1,
        'Level 2',
-       'Deeper interior detail with conditioning.',
-       180,
-       219, 219, 259, 299,
-       245, 289, 329,
+       'Deep interior upgrade',
+       165,
+       250, 250, 270, 290,
+       NULL, NULL, NULL,
        3,
-       'Everything in Level 1 plus:
-Shampoo carpets and mats
-Leather conditioning
-Headliner cleaning'
+       'Includes everything in our Level 1 Detail, plus the following advanced services:
+Deep shampoo extraction of cloth seats
+Steam treatment of cloth seats to sanitize and break down stains
+Deep shampoo and steam treatment of carpets in cabin and trunk
+Pet hair and sand removal (if present)'
 FROM svc s WHERE s.slug = 'interior-detailing'
 UNION ALL
 SELECT s.id, 2,
        'Level 3',
-       'Full interior detail for heavily soiled vehicles.',
-       240,
-       349, 349, 399, 449,
-       385, 439, 495,
+       'Extreme Restoration',
+       225,
+       330, 330, 350, 390,
+       NULL, NULL, NULL,
        4,
-       'Everything in Level 1 and 2 plus:
-Deep stain removal
-Pet hair removal
-Full interior sanitization'
+       'This service is designed for vehicles in heavy soiled interior. This package includes extended labor time, extra extraction, and detailed restoration.'
 FROM svc s WHERE s.slug = 'interior-detailing'
 
 UNION ALL
 -- Exterior Detailing (no booking after 4PM)
 SELECT s.id, 0,
        'Level 1',
-       'Wash, wax, and basic exterior care.',
-       120,
-       99, 99, 129, 159,
-       109, 144, 179,
+       'Wash, Wax & Interior wipe down',
+       90,
+       140, 140, 160, 180,
+       NULL, NULL, NULL,
        2,
-       'Two-bucket hand wash
-Wheels and tires
-Basic wax application'
+       'Gentle pre-rinse using spot-free water
+Complete hand wash using spot-free water
+Wheels, tires, and wheel wells cleaned by hand
+Gas cap area cleaned
+Tire dressing applied
+Paint sealant applied for shine and protection
+Vacuum and wipe down vinyl or plastic floor mats
+Vacuum cloth seat
+Wipe down dashboard'
 FROM svc s WHERE s.slug = 'exterior-detailing'
 UNION ALL
 SELECT s.id, 1,
        'Level 2',
-       'Clay, polish, and sealant.',
+       'Deep Detailing Upgrade',
        150,
-       179, 179, 219, 259,
-       199, 243, 289,
+       190, 190, 210, 230,
+       NULL, NULL, NULL,
        3,
-       'Everything in Level 1 plus:
-Paint decontamination (clay)
-Polish
-Sealant'
+       'Includes everything in our Level 1 Detail, plus the following advanced services:
+Deep shampoo of carpets in cabin and trunk
+Remove bug splatters from surfaces
+Remove environmental fallout with detailers clay from paint
+Chemically remove tar overspray and road grime
+Pet hair and sand removal (if present)
+UV protection applied to dashboard and panels'
 FROM svc s WHERE s.slug = 'exterior-detailing'
 UNION ALL
 SELECT s.id, 2,
        'Level 3',
-       'Full exterior correction and protection.',
-       180,
-       279, 279, 329, 379,
-       309, 365, 419,
+       'Extreme Restoration',
+       165,
+       280, 280, 310, 330,
+       NULL, NULL, NULL,
        3,
-       'Everything in Level 1 and 2 plus:
-Paint correction
-Premium sealant or coating prep'
+       'For vehicles with heavy grime, brake dust, or long-term neglect. Add-On Service: Engine bay cleaning and dressing: $85'
 FROM svc s WHERE s.slug = 'exterior-detailing'
 
 UNION ALL
 -- Ceramic Coating (no booking after 10AM)
 SELECT s.id, 0,
        '1 Year Ceramic Coating',
-       'One-year ceramic coating protection.',
+       '1 Year ceramic coating',
        240,
-       299, 299, 349, 399,
-       329, 384, 439,
+       440, 440, 490, 540,
+       NULL, NULL, NULL,
        4,
-       'Paint preparation
-Ceramic coating application
-Curing time'
+       'Benefits of Ceramic Coating:
+Protects your vehicle''s paint from UV damage and oxidation
+Maintains long-term paint condition and resale value
+Creates a hydrophobic barrier that repels water & contaminants
+Enhances gloss, depth, and color clarity for a rich, polished finish
+Reduces maintenance time & makes cleaning effortless
+Pre-wash and 100% hand wash using spot-free water
+Thorough cleaning of wheels, wheel wells, tires, and gas cap area
+Remove bug splatters from exterior surfaces
+Remove bonded environmental fallout using a clay bar
+Chemically remove tar and road grime
+Application of high-grade 1-year ceramic coating'
 FROM svc s WHERE s.slug = 'ceramic-coating'
 UNION ALL
 SELECT s.id, 1,
        '3 Year Ceramic Coating',
-       'Three-year ceramic coating protection.',
-       420,
-       499, 499, 574, 649,
-       549, 629, 714,
+       '3 Year ceramic coating',
+       360,
+       1100, 1100, 1200, 1300,
+       NULL, NULL, NULL,
        7,
-       'Full decontamination
-Paint correction (as needed)
-3-year ceramic coating'
+       'Benefits of Ceramic Coating:
+Protects your vehicle''s paint from UV damage and oxidation
+Maintains long-term paint condition and resale value
+Creates a hydrophobic barrier that repels water & contaminants
+Enhances gloss, depth, and color clarity for a rich, polished finish
+Reduces maintenance time & makes cleaning effortless
+Pre-wash and 100% hand wash using spot-free water
+Thorough cleaning of wheels, wheel wells, tires, and gas cap area
+Remove bug splatters from exterior surfaces
+Remove bonded environmental fallout using a clay bar
+Chemically remove tar and road grime
+1-Step Paint Correction – removes 50–60% of light swirls
+Application of high-grade 3-year ceramic coating'
 FROM svc s WHERE s.slug = 'ceramic-coating'
 UNION ALL
 SELECT s.id, 2,
        '5 Year Ceramic Coating',
-       'Five-year ceramic coating protection.',
-       600,
-       699, 699, 799, 899,
-       769, 879, 989,
+       '5 Year ceramic coating',
+       540,
+       1200, 1200, 1300, 1400,
+       NULL, NULL, NULL,
        10,
-       'Full prep and correction
-5-year ceramic coating
-Multiple layers'
+       'Benefits of Ceramic Coating:
+Protects your vehicle''s paint from UV damage and oxidation
+Maintains long-term paint condition and resale value
+Creates a hydrophobic barrier that repels water & contaminants
+Enhances gloss, depth, and color clarity for a rich, polished finish
+Reduces maintenance time & makes cleaning effortless
+Pre-wash and 100% hand wash using spot-free water
+Thorough cleaning of wheels, wheel wells, tires, and gas cap area
+Remove bug splatters from exterior surfaces
+Remove bonded environmental fallout using a clay bar
+Chemically remove tar and road grime
+2-Step Paint Correction – removes 60–80% of light swirls
+Application of high-grade 5-year ceramic coating'
 FROM svc s WHERE s.slug = 'ceramic-coating'
 
 UNION ALL
--- Paint Correction (no booking after 10AM)
+-- Paint Correction (no booking after 10AM); UI shows "Starting from $600" / "$800" — tiered DB prices for cart/API
 SELECT s.id, 0,
        '1 Step paint correction',
-       '1 step paint correction.',
-       420,
-       500, 500, 600, 700,
-       500, 600, 700,
+       '1 Step paint correction',
+       360,
+       600, 600, 700, 800,
+       NULL, NULL, NULL,
        7,
-       'Pre-wash and hand wash
-Wheels and tires
-Paint correction'
+       'Pre-wash and 100% hand wash using spot-free water
+Thorough cleaning of wheels, wheel wells, tires, and gas cap area
+Remove bug splatters from exterior surfaces
+Remove bonded environmental fallout using a clay bar
+Chemically remove tar and road grime
+1 step paint correction - remove 50 - 60% of light swirls
+Upgrade Option:
+Our professional 1-Step Paint Correction removes up to 80% of visible scratches and defects, dramatically improving gloss, clarity and overall paint appearance.'
 FROM svc s WHERE s.slug = 'paint-correction'
 UNION ALL
 SELECT s.id, 1,
        '2 Step paint correction',
-       '2 step paint correction.',
-       600,
-       1000, 1000, 1200, 1300,
-       1000, 1200, 1300,
+       '2 Step paint correction',
+       570,
+       800, 800, 1000, 1200,
+       NULL, NULL, NULL,
        10,
-       'Pre-wash and hand wash
-Wheels and tires
-2 step correction'
+       'Pre-wash and 100% hand wash using spot-free water
+Cleaning of wheels, wheel wells, tires and gas cap area, including:
+Remove bug splatters from exterior surfaces
+Remove bonded environmental fallout using a clay bar
+Chemically remove tar and road grime
+2 Step Paint Correction (remove 60-80% of light swirls)
+With our 2 step paint correction service, you can get up to 80% of scratches and defects removed based on original condition. The process requires more time and energy than the 1 step enhancement polish, but benefits from a much higher level of scratch, defect and swirl removal.'
 FROM svc s WHERE s.slug = 'paint-correction'
 
 UNION ALL
 -- Monthly Maintenance (no booking after 4PM; Biweekly hidden in UI for now)
 SELECT s.id, 0,
        'Biweekly',
-       'Maintenance wash and interior tidy every two weeks.',
-       45,
-       79, 79, 99, 119,
-       87, 109, 131,
-       1,
-       'Exterior wash
-Interior vacuum and wipe
-Quick detail'
+       'Biweekly maintenance',
+       150,
+       350, 350, 370, 395,
+       NULL, NULL, NULL,
+       2,
+       'Interior Maintenance
+Complete vacuum of carpets and trunk area
+Wipe-down of vinyl or rubber floor mats
+Vacuum cloth seats
+Leather seat wipe-down and conditioning
+Dashboard cleaning with UV protection
+Cleaning of console, cup holders, vents, and tight areas
+Wipe-down of interior trim and plastics
+Door jamb cleaning
+Interior and exterior glass cleaned streak-free
+Protective treatment applied to leather and vinyl surfaces
+Exterior Maintenance
+Pre-rinse using spot-free water
+Complete hand wash using spot-free water
+Wheels and tires cleaned by hand
+Trim dressing applied
+No-sling tire shine
+Paint sealant application to maintain gloss and protection'
 FROM svc s WHERE s.slug = 'monthly-maintenance'
 UNION ALL
 SELECT s.id, 1,
        'Monthly',
-       'Monthly maintenance detail to keep your vehicle in top shape.',
-       180,
-       129, 129, 159, 189,
-       142, 175, 208,
+       '1 month maintenance',
+       165,
+       150, 150, 175, 190,
+       NULL, NULL, NULL,
        3,
-       'Full maintenance wash
-Interior deep tidy
-Tire and trim dressing'
+       'Interior Maintenance
+Full vacuum of carpets and trunk
+Light wipe-down of floor mats (vinyl/rubber)
+Vacuum cloth seats
+Wipe down leather seats
+Leather seat conditioning treatment
+Clean dashboard and apply UV protection
+Detailed wipe-down of trim, panels, console, vents, and cup holders
+Door jamb light wipe down
+Interior and exterior glass cleaning
+Protective treatment applied to leather and vinyl surfaces
+Exterior Maintenance
+Pre-rinse using spot-free water
+Complete hand wash using spot-free water
+Wheels and tires cleaned by hand
+No-sling tire shine
+Paint sealant applied to maintain protection and gloss
+Important Notes: The vehicle must first get full detailing by our team and be maintained on a 4-week schedule to qualify for maintenance pricing. Excessive buildup, heavy pet hair, or severe staining may require upgrade to a higher-level detail.'
 FROM svc s WHERE s.slug = 'monthly-maintenance'
 
 UNION ALL

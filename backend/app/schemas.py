@@ -168,6 +168,23 @@ class BookingWithDetails(BookingBase):
     model_config = ConfigDict(from_attributes=True)
 
 
+class DashboardRecentBooking(BaseModel):
+    id: int
+    scheduled_date: datetime
+    client_name: str
+    service_label: str
+    status: str
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DashboardStatsOut(BaseModel):
+    total_this_month: int
+    upcoming_next_7_days: int
+    cancelled_this_month: int
+    most_booked_service: Optional[str] = None
+    recent_appointments: list[DashboardRecentBooking]
+
+
 # Review Schemas
 class ReviewBase(BaseModel):
     rating: int

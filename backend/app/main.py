@@ -11,7 +11,7 @@ from app.database import engine, get_db, Base
 
 logger = logging.getLogger(__name__)
 from app import models  # noqa: F401 - register models with Base
-from app.routers import services, bookings, reviews, contact, blog, business, customers, availability, packages
+from app.routers import services, bookings, reviews, contact, blog, business, customers, availability, packages, admin
 
 _LAMBDA_TABLES_LOCK = threading.Lock()
 _LAMBDA_TABLES_ENSURED = False
@@ -141,6 +141,7 @@ app.include_router(contact.router, prefix="/api/contact", tags=["Contact"])
 app.include_router(blog.router, prefix="/api/blog", tags=["Blog"])
 app.include_router(business.router, prefix="/api/business", tags=["Business"])
 app.include_router(availability.router, prefix="/api/availability", tags=["Availability"])
+app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
 
 
 @app.exception_handler(Exception)
