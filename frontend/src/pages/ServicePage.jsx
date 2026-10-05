@@ -16,12 +16,8 @@ const EXTERIOR_LEVELS = {
     turnaround: '1-2 Hours',
     prices: { small: 140, medium: 160, large: 180 },
     items: [
-      <>
-        Gentle pre-rinse using <b>SPOT-FREE WATER</b>
-      </>,
-      <>
-      Complete hand wash using <b>SPOT-FREE WATER</b>
-      </>,
+      'Gentle pre-rinse using SPOT-FREE WATER',
+      'Complete hand wash using SPOT-FREE WATER',
       'Wheels, tires, and wheel wells cleaned by hand',
       'Gas cap area cleaned',
       'Tire dressing applied',
