@@ -16,8 +16,12 @@ const EXTERIOR_LEVELS = {
     turnaround: '1-2 Hours',
     prices: { small: 140, medium: 160, large: 180 },
     items: [
-      'Gentle pre-rinse using spot-free water',
-      'Complete hand wash using spot-free water',
+      <>
+        Gentle pre-rinse using <b>SPOT-FREE WATER</b>
+      </>,
+      <>
+      Complete hand wash using <b>SPOT-FREE WATER</b>
+      </>,
       'Wheels, tires, and wheel wells cleaned by hand',
       'Gas cap area cleaned',
       'Tire dressing applied',
@@ -33,11 +37,9 @@ const EXTERIOR_LEVELS = {
     prices: { small: 190, medium: 210, large: 230 },
     items: [
       'Includes everything in our Level 1 Detail, plus the following advanced services:',
-      'Deep shampoo of carpets in cabin and trunk',
       'Remove bug splatters from surfaces',
       'Remove environmental fallout with detailers clay from paint',
       'Chemically remove tar overspray and road grime',
-      'Pet hair and sand removal (if present)',
       'UV protection applied to dashboard and panels',
     ],
   },
@@ -109,8 +111,8 @@ const FULL_DETAILING_LEVEL_1_ITEMS = [
   'Windows and mirrors cleaned streak-free',
   'Exterior Items',
   'Your vehicle will receive a careful hand wash and protective finish for a clean, glossy look.',
-  'Gentle pre-rinse using spot-free water',
-  'Complete hand wash using spot-free water',
+  'Gentle pre-rinse using SPOT-FREE WATER',
+  'Complete hand wash using SPOT-FREE WATER',
   'Wheels, tires, and wheel wells cleaned by hand',
   'Gas cap area cleaned',
   'Tire dressing applied',
@@ -160,7 +162,6 @@ const FULL_DETAILING_LEVELS = {
     turnaround: '5-7 Hours',
     prices: { small: 470, medium: 520, large: 560 },
     items: FULL_DETAILING_LEVEL_3_ITEMS,
-    note: 'Important Notice: Final pricing is determined after in-person inspection. Vehicles with biohazard material (excessive bodily fluids, mold, etc.) may require specialized treatment and additional charges.',
   },
 };
 
@@ -178,8 +179,8 @@ const MAINTENANCE_MONTHLY_ITEMS = [
   'Interior and exterior glass cleaning',
   'Protective treatment applied to leather and vinyl surfaces',
   'Exterior Maintenance',
-  'Pre-rinse using spot-free water',
-  'Complete hand wash using spot-free water',
+  'Pre-rinse using SPOT-FREE WATER',
+  'Complete hand wash using SPOT-FREE WATER',
   'Wheels and tires cleaned by hand',
   'No-sling tire shine',
   'Paint sealant applied to maintain protection and gloss',
@@ -198,8 +199,8 @@ const MAINTENANCE_BIWEEKLY_ITEMS = [
   'Interior and exterior glass cleaned streak-free',
   'Protective treatment applied to leather and vinyl surfaces',
   'Exterior Maintenance',
-  'Pre-rinse using spot-free water',
-  'Complete hand wash using spot-free water',
+  'Pre-rinse using SPOT-FREE WATER',
+  'Complete hand wash using SPOT-FREE WATER',
   'Wheels and tires cleaned by hand',
   'Trim dressing applied',
   'No-sling tire shine',
@@ -235,7 +236,7 @@ const CERAMIC_BENEFITS = [
 
 const CERAMIC_1YEAR_ITEMS = [
   ...CERAMIC_BENEFITS,
-  'Pre-wash and 100% hand wash using spot-free water',
+  'Pre-wash and 100% hand wash using SPOT-FREE WATER',
   [
     'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
     [
@@ -249,7 +250,7 @@ const CERAMIC_1YEAR_ITEMS = [
 
 const CERAMIC_3YEAR_ITEMS = [
   ...CERAMIC_BENEFITS,
-  'Pre-wash and 100% hand wash using spot-free water',
+  'Pre-wash and 100% hand wash using SPOT-FREE WATER',
   [
     'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
     [
@@ -258,13 +259,13 @@ const CERAMIC_3YEAR_ITEMS = [
       'Chemically remove tar and road grime',
     ],
   ],
-  '1-Step Paint Correction – removes 50–60% of light swirls',
+  '2-Step Paint Correction – removes 50–60% of light swirls',
   'Application of high-grade 3-year ceramic coating',
 ];
 
 const CERAMIC_5YEAR_ITEMS = [
   ...CERAMIC_BENEFITS,
-  'Pre-wash and 100% hand wash using spot-free water',
+  'Pre-wash and 100% hand wash using SPOT-FREE WATER',
   [
     'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
     [
@@ -301,7 +302,7 @@ const CERAMIC_PACKAGES = {
 
 /** Paint Correction: custom content per package (from services.md). API names: "1 Step paint correction", "2 Step paint correction". */
 const PAINT_CORRECTION_1STEP_ITEMS = [
-  'Pre-wash and 100% hand wash using spot-free water',
+  'Pre-wash and 100% hand wash using SPOT-FREE WATER',
   [
     'Thorough cleaning of wheels, wheel wells, tires, and gas cap area',
     [
@@ -316,7 +317,7 @@ const PAINT_CORRECTION_1STEP_ITEMS = [
 ];
 
 const PAINT_CORRECTION_2STEP_ITEMS = [
-  'Pre-wash and 100% hand wash using spot-free water',
+  'Pre-wash and 100% hand wash using SPOT-FREE WATER',
   [
     'Cleaning of wheels, wheel wells, tires and gas cap area, including:',
     [
