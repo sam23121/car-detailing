@@ -86,7 +86,17 @@ def run_seed():
                 details=details,
             ))
 
-        # ----- Full detailing: Level 1, Level 2, Level 3 (matches frontend ServicePage.jsx) -----
+        # ----- Full detailing: Express, Level 1, Level 2, Level 3 (matches frontend ServicePage.jsx) -----
+        express_details = (
+            "Exterior Items\nComplete hand wash using SPOT-FREE WATER\n"
+            "Wheels, tires, and wheel wells cleaned by hand\nGas cap area cleaned\n"
+            "Tire dressing\nTire Shine\n"
+            "Interior items\nLight interior vacuum\nRubber matt cleaner\n"
+            "Wipe down dashboard and apply UV protection\n"
+            "Full wipe-down of all plastics and interior trim\n"
+            "Door panels and door storage pockets wiped down\n"
+            "Windows and mirrors cleaned streak-free\nCar Freshener"
+        )
         level1_details = (
             "Interior items\nComplete vacuum of floor and trunks area\nWash vinyl or rubber floor mats\n"
             "Vacuum cloth seats\nWipe down leather seats\nShampoo floor mats and carpets\n"
@@ -118,9 +128,10 @@ def run_seed():
             "Important Notice: Final pricing is determined after in-person inspection. "
             "Vehicles with biohazard material (excessive bodily fluids, mold, etc.) may require specialized treatment and additional charges."
         )
-        ensure_package("full-detailing", 0, "Level 1", "Full detailing", 270, 280, 320, 370, turnaround_hours=5, details=level1_details)
-        ensure_package("full-detailing", 1, "Level 2", "Deep Full Detailing Upgrade", 330, 330, 370, 390, turnaround_hours=6, details=level2_details)
-        ensure_package("full-detailing", 2, "Level 3", "Extreme Restoration", 390, 470, 520, 560, turnaround_hours=7, details=level3_details)
+        ensure_package("full-detailing", 0, "YMB Express Detail", "YMB Express Detail", 150, 170, 200, None, turnaround_hours=3, details=express_details)
+        ensure_package("full-detailing", 1, "Level 1", "Full detailing", 270, 280, 320, 370, turnaround_hours=5, details=level1_details)
+        ensure_package("full-detailing", 2, "Level 2", "Deep Full Detailing Upgrade", 330, 330, 370, 390, turnaround_hours=6, details=level2_details)
+        ensure_package("full-detailing", 3, "Level 3", "Extreme Restoration", 390, 470, 520, 560, turnaround_hours=7, details=level3_details)
 
         # ----- Interior detailing: Level 1, Level 2, Level 3 -----
         interior_l1 = (
