@@ -201,6 +201,29 @@ INSERT INTO packages (
 )
 -- Full Detailing (no booking after 1PM) — prices/copy aligned with frontend ServicePage.jsx
 SELECT s.id, 0,
+       'YMB Express Detail',
+       'YMB Express Detail',
+       150,
+       170, 170, 200, NULL,
+       NULL, NULL, NULL,
+       3,
+       'Exterior Items
+Complete hand wash using SPOT-FREE WATER
+Wheels, tires, and wheel wells cleaned by hand
+Gas cap area cleaned
+Tire dressing
+Tire Shine
+Interior items
+Light interior vacuum
+Rubber matt cleaner
+Wipe down dashboard and apply UV protection
+Full wipe-down of all plastics and interior trim
+Door panels and door storage pockets wiped down
+Windows and mirrors cleaned streak-free
+Car Freshener'
+FROM svc s WHERE s.slug = 'full-detailing'
+UNION ALL
+SELECT s.id, 1,
        'Level 1',
        'Full detailing',
        270,
@@ -230,7 +253,7 @@ Tire dressing applied
 Paint sealant applied for shine and protection'
 FROM svc s WHERE s.slug = 'full-detailing'
 UNION ALL
-SELECT s.id, 1,
+SELECT s.id, 2,
        'Level 2',
        'Deep Full Detailing Upgrade',
        330,
@@ -248,7 +271,7 @@ Chemically remove tar overspray and road grime
 Pet hair and sand removal (if present)'
 FROM svc s WHERE s.slug = 'full-detailing'
 UNION ALL
-SELECT s.id, 2,
+SELECT s.id, 3,
        'Level 3',
        'Extreme Restoration',
        390,
