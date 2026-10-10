@@ -85,7 +85,7 @@ export function getServiceImagePath(serviceSlug) {
  */
 export function getPackageImagePath(serviceSlug, displayOrder = 0) {
   const byService = {
-    'full-detailing': [PATHS.newFullDetailing, PATHS.newFullDetailingLevel1, PATHS.newFullDetailingLevel2, PATHS.newFullDetailingLevel3],
+    'full-detailing': [PATHS.newFullDetailingLevel1, PATHS.newFullDetailingLevel2, PATHS.newFullDetailingLevel3],
     'exterior-detailing': [PATHS.exterior1, PATHS.exterior2, PATHS.exterior3],
     'interior-detailing': [PATHS.interior1, PATHS.newInteriorLevel2, PATHS.newInteriorLevel3],
     'monthly-maintenance': [PATHS.newBiweeklyMaintenance, PATHS.newMonthlyMaintenance],

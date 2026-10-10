@@ -91,23 +91,6 @@ const INTERIOR_LEVELS = {
 };
 
 /** Full Detailing: custom content per level, shown inside package cards (from services.md) */
-const FULL_DETAILING_EXPRESS_ITEMS = [
-  'Exterior Items',
-  'Complete hand wash using SPOT-FREE WATER',
-  'Wheels, tires, and wheel wells cleaned by hand',
-  'Gas cap area cleaned',
-  'Tire dressing',
-  'Tire Shine',
-  'Interior items',
-  'Light interior vacuum',
-  'Rubber matt cleaner',
-  'Wipe down dashboard and apply UV protection',
-  'Full wipe-down of all plastics and interior trim',
-  'Door panels and door storage pockets wiped down',
-  'Windows and mirrors cleaned streak-free',
-  'Car Freshener',
-];
-
 const FULL_DETAILING_LEVEL_1_ITEMS = [
   'Interior items',
   'Complete vacuum of floor and trunks area',
@@ -158,11 +141,6 @@ const FULL_DETAILING_LEVEL_3_ITEMS = [
 
 /** Full Detailing. No booking after 1PM. */
 const FULL_DETAILING_LEVELS = {
-  'YMB Express Detail': {
-    turnaround: '2-3 Hours',
-    prices: { small: 170, medium: 200 },
-    items: FULL_DETAILING_EXPRESS_ITEMS,
-  },
   'Level 1': {
     subtitle: 'Full detailing',
     turnaround: '4-5 Hours',
@@ -502,23 +480,15 @@ function ServicePage() {
         // Do not show "Complete" or other legacy packages; for level-based services only show allowed names
         const levelSlugs = ['full-detailing', 'interior-detailing', 'exterior-detailing'];
         const levelNames = ['Level 1', 'Level 2', 'Level 3'];
-        const fullDetailingNames = ['YMB Express Detail', 'Level 1', 'Level 2', 'Level 3'];
         const exteriorNames = ['Level 1', 'Level 2', 'Level 3', 'Engine bay cleaning'];
         const ceramicNames = ['1 Year Ceramic Coating', '3 Year Ceramic Coating', '5 Year Ceramic Coating'];
         const list = (pkgRes.data || []).filter((p) => {
           if (!p?.name) return false;
           if (p.name.toLowerCase().includes('complete')) return false;
           if (slug === 'monthly-maintenance' && p.name.trim() === 'Biweekly') return false;
-          if (slug === 'full-detailing' && !fullDetailingNames.includes(p.name.trim())) return false;
           if (slug === 'exterior-detailing' && !exteriorNames.includes(p.name.trim())) return false;
           if (slug === 'ceramic-coating' && !ceramicNames.includes(p.name.trim())) return false;
-          if (
-            slug !== 'exterior-detailing' &&
-            slug !== 'ceramic-coating' &&
-            slug !== 'full-detailing' &&
-            levelSlugs.includes(slug) &&
-            !levelNames.includes(p.name.trim())
-          ) return false;
+          if (slug !== 'exterior-detailing' && slug !== 'ceramic-coating' && levelSlugs.includes(slug) && !levelNames.includes(p.name.trim())) return false;
           return true;
         });
         setPackages(list);
@@ -663,8 +633,8 @@ function ServicePage() {
             <div className="service-levels-list">
               {packages.map((pkg, index) => {
                 const sizeKey = selectedSizeByPkg[pkg.id] ?? 'small';
-                // "Most popular" is Level 2 by name (not display_order — Full Detailing has Express at order 0)
-                const isPopular = pkg.name && pkg.name.trim().toLowerCase() === 'level 2';
+                // "Most popular" is Level 2 (by name or display_order), not by array index
+                const isPopular = (pkg.name && pkg.name.trim().toLowerCase() === 'level 2') || pkg.display_order === 1;
                 const items = serviceListItems(pkg);
                 return (
                   <article key={pkg.id} className="service-level-block">
