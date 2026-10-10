@@ -505,7 +505,7 @@ function ServicePage() {
         const fullDetailingNames = ['YMB Express Detail', 'Level 1', 'Level 2', 'Level 3'];
         const exteriorNames = ['Level 1', 'Level 2', 'Level 3', 'Engine bay cleaning'];
         const ceramicNames = ['1 Year Ceramic Coating', '3 Year Ceramic Coating', '5 Year Ceramic Coating'];
-        const list = (pkgRes.data || []).filter((p) => {
+        let list = (pkgRes.data || []).filter((p) => {
           if (!p?.name) return false;
           if (p.name.toLowerCase().includes('complete')) return false;
           if (slug === 'monthly-maintenance' && p.name.trim() === 'Biweekly') return false;
@@ -521,6 +521,12 @@ function ServicePage() {
           ) return false;
           return true;
         });
+        // Keep Full Detailing in defined order (Express first) even if DB display_order is stale
+        if (slug === 'full-detailing') {
+          list = [...list].sort(
+            (a, b) => fullDetailingNames.indexOf(a.name.trim()) - fullDetailingNames.indexOf(b.name.trim())
+          );
+        }
         setPackages(list);
       } catch (err) {
         setError('Service not found');
